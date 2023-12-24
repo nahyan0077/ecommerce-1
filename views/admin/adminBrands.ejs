@@ -1,0 +1,156 @@
+<%- include('./partials/adminnav') %>
+
+
+    <div id="main">
+
+        <div class="head">
+            <div class="col-div-6">
+                <p class="nav"> Category</p>
+
+            </div>
+
+            <div class="col-div-6">
+                <i class="fa fa-search search-icon"></i>
+
+
+                <i class="fa fa-bell noti-icon"></i>
+                <div class="notification-div">
+                    <p class="noti-head">Notification <span>2</span></p>
+                    <hr class="hr" />
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                </div>
+                <div class="profile">
+
+                    <img src="/images/women-01.jpg" class="pro-img" />
+                    <p>Manoj Adhikari <i class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
+                    <div class="profile-div">
+                        <p><i class="fa fa-user"></i> Profile</p>
+                        <p><i class="fa fa-cogs"></i> Settings</p>
+                        <p><i class="fa fa-power-off"></i> Log Out</p>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+        <br />
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    
+                    <a href="/addbrandpage"  id="exampleModal" class="btn btn-primary p-2 m-3 float-end">Add Brands</a>
+                </div>
+            </div>
+        </div>
+
+
+          <h2>Brands</h2>
+
+          <div class="container" style="width: 1200px;">
+            <div class="row my-5">
+              <table id="example1" class="table bg-light table-striped text-center">
+                <thead class="thead-dark text-center">
+                  <tr>
+                    <th class="text-center" scope="col">Number</th>
+                    <th class="text-center" scope="col">Brands</th>
+                    <th class="text-center" scope="col">Edit</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+
+                    <% brandd.forEach((ele,index) => { %>
+                     
+                    
+                  <tr>
+                    <th  scope="row"><%-index+1-%></th>
+                    <td class="text-center"><%-ele.brandName-%></td>
+
+                    <td class="text-center">
+                      <a href=""><i class="fa-solid fa-pen-to-square fa-lg mx-1 text-success"></i></a>
+          
+                      <a href=""><i class="fa-solid fa-trash fa-lg mx-1 text-danger"></i></a>
+                    </td>
+                  </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+ 
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        $(".menu").click(function () {
+            $("#mySidenav").css('width', '70px');
+            $("#main").css('margin-left', '70px');
+            $(".logo").css('display', 'none');
+            $(".logo1").css('display', 'block');
+            $(".logo span").css('visibility', 'visible');
+            $(".logo span").css('margin-left', '-10px');
+            $(".icon-a").css('visibility', 'hidden');
+            $(".icon-a").css('height', '25px');
+            $(".icons").css('visibility', 'visible');
+            $(".icons").css('margin-left', '-8px');
+            $(".menu1").css('display', 'block');
+            $(".menu").css('display', 'none');
+        });
+
+        $(".menu1").click(function () {
+            $("#mySidenav").css('width', '300px');
+            $("#main").css('margin-left', '300px');
+            $(".logo").css('visibility', 'visible');
+            $(".logo").css('display', 'block');
+            $(".icon-a").css('visibility', 'visible');
+            $(".icons").css('visibility', 'visible');
+            $(".menu").css('display', 'block');
+            $(".menu1").css('display', 'none');
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".profile p").click(function () {
+                $(".profile-div").toggle();
+
+            });
+            $(".noti-icon").click(function () {
+                $(".notification-div").toggle();
+            });
+
+
+
+
+        });
+    </script>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+    let table = new DataTable('#example');
+    let table1 = new DataTable('#example1');
+  });
+</script>
+
+
+</body>
+
+
+</html>
+

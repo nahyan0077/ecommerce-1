@@ -11,6 +11,7 @@ const dbConnect = require('./config/dbConnect')
 dbConnect()
 
 const userRoute = require('./routes/authRoute')
+const adminRoute = require('./routes/adminRoute')
 
 app.use(nocache());
 
@@ -31,7 +32,7 @@ app.use(
   );
 
 app.use('/',userRoute)
-
+app.use('/',adminRoute)
 
 
 

@@ -1,0 +1,231 @@
+<!Doctype HTML>
+<html>
+
+<head>
+    <title></title>
+    <link rel="stylesheet" href="css/admin.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/65b842e152.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../css/addPrdct.css">
+
+</head>
+
+
+<body>
+
+
+
+
+    <div id="mySidenav" class="sidenav">
+        <p class="logo"><img src="/images/ds_wht.png" style="max-width: 120px;margin-left: 10px;"><span class="menu">☰</span></p>
+        <p class="logo1"> <span class="menu1">☰</span></p>
+        <a href="/admindash" class="icon-a"><i class="fa fa-dashboard icons"></i> Dashboard</a>
+        <a href="/adminproducts" class="icon-a"><i class="fa fa-pie-chart icons"></i> Products</a>
+        <a href="/admincategory" class="icon-a"><i class="fa fa-list-alt icons"></i> Category</a>
+        <a href="/admincustomers" class="icon-a"><i class="fa-solid fa-people-group"></i> Customers</a>
+        <a href="/adminbrand" class="icon-a"><i class="fa-solid fa-business-time"></i> Brands</a>
+        <a href="#" class="icon-a"><i class="fa fa-shopping-bag icons"></i> Orders</a>
+        <a href="#" class="icon-a"><i class="fa-solid fa-credit-card"></i> Payments</a>
+        <a href="#" class="icon-a"><i class="fa fa-user icons"></i> Banner</a>
+        <a href="#" class="icon-a"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
+        
+    </div>
+
+
+
+    <div id="main">
+
+        <div class="head">
+            <div class="col-div-6">
+                <p class="nav"> Add Products</p>
+
+            </div>
+
+            <div class="col-div-6">
+                <i class="fa fa-search search-icon"></i>
+
+
+                <i class="fa fa-bell noti-icon"></i>
+                <div class="notification-div">
+                    <p class="noti-head">Notification <span>2</span></p>
+                    <hr class="hr" />
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                </div>
+                <div class="profile">
+
+                    <img src="/images/women-01.jpg" class="pro-img" />
+                    <p>Manoj Adhikari <i class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
+                    <div class="profile-div">
+                        <p><i class="fa fa-user"></i> Profile</p>
+                        <p><i class="fa fa-cogs"></i> Settings</p>
+                        <p><i class="fa fa-power-off"></i> Log Out</p>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+        <br />
+
+
+        <div class="container justify-content-center">
+            <form>
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <input type="text" id="productName" placeholder="Do not exceed 20 characters">
+                </div>
+
+    
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" placeholder="Gender Do not exceed 100 characters. Male"></textarea>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="specification1">Specification 1</label>
+                                <input type="text" id="specification1" placeholder="Specification 1">
+                            </div>
+                            <div class="form-group">
+                                <label for="specification2">Specification 2</label>
+                                <input type="text" id="specification2" placeholder="Specification 2">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="specification3">Specification 3</label>
+                                <input type="text" id="specification3" placeholder="Specification 3">
+                            </div>
+                            <div class="form-group">
+                                <label for="specification4">Specification 4</label>
+                                <input type="text" id="specification4" placeholder="Specification 4">
+                            </div>
+                        </div>
+                    </div>
+    
+                <div class="size-dropdown">
+
+                    <div class="dropdown">
+                        <label for="category">Category</label>
+                        <select id="category">
+                            <% cat.forEach(ele => { %>
+                            <option value="blue"><%-ele.categoryName-%></option>
+                            <% }) %>
+                        </select>
+                    </div>
+    
+                    <div class="dropdown">
+                        <label for="brand">Brand</label>
+                        <select id="brand">
+                            <% brnd.forEach(ele => { %>
+                            <option value="blue"><%-ele.brandName-%></option>
+                            <% }) %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <input type="number" id="price" placeholder="Enter the price in dollars">
+                </div>
+    
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <input type="number" id="stock" placeholder="Enter the stock quantity">
+                </div>
+
+    
+                <div class="image-upload">
+                    <div class="dropzone">
+                        <label for="productImage1">Product Image 1</label>
+                        <input type="file" id="productImage1">
+                        <p>Drag & drop or click to select</p>
+                    </div>
+                    <div class="dropzone">
+                        <label for="productImage2">Product Image 2</label>
+                        <input type="file" id="productImage2">
+                        <p>Drag & drop or click to select</p>
+                    </div>
+                    <div class="dropzone">
+                        <label for="productImage3">Product Image 3</label>
+                        <input type="file" id="productImage3">
+                        <p>Drag & drop or click to select</p>
+                    </div>
+                    <div class="dropzone">
+                        <label for="productImage4">Product Image 4</label>
+                        <input type="file" id="productImage4">
+                        <p>Drag & drop or click to select</p>
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <input type="submit" value="Add Product" class="button">
+                </div>
+            </form>
+        </div>
+
+      
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        $(".menu").click(function () {
+            $("#mySidenav").css('width', '70px');
+            $("#main").css('margin-left', '70px');
+            $(".logo").css('display', 'none');
+            $(".logo1").css('display', 'block');
+            $(".logo span").css('visibility', 'visible');
+            $(".logo span").css('margin-left', '-10px');
+            $(".icon-a").css('visibility', 'hidden');
+            $(".icon-a").css('height', '25px');
+            $(".icons").css('visibility', 'visible');
+            $(".icons").css('margin-left', '-8px');
+            $(".menu1").css('display', 'block');
+            $(".menu").css('display', 'none');
+        });
+
+        $(".menu1").click(function () {
+            $("#mySidenav").css('width', '300px');
+            $("#main").css('margin-left', '300px');
+            $(".logo").css('visibility', 'visible');
+            $(".logo").css('display', 'block');
+            $(".icon-a").css('visibility', 'visible');
+            $(".icons").css('visibility', 'visible');
+            $(".menu").css('display', 'block');
+            $(".menu1").css('display', 'none');
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".profile p").click(function () {
+                $(".profile-div").toggle();
+
+            });
+            $(".noti-icon").click(function () {
+                $(".notification-div").toggle();
+            });
+
+
+
+
+        });
+    </script>
+
+
+
+
+</body>
+
+
+</html>
+

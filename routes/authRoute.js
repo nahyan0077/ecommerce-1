@@ -7,16 +7,16 @@ const userHelper= require('../controllers/userHelper')
 
 
 //guestHome page
-router.get('/',userController.renderHome)
+router.get('/',middleware.userExist,userController.renderHome)
 
 //user login page
-router.get('/userlogin',userController.userLogin)
+router.get('/userlogin',middleware.userExist,userController.userLogin)
 
 //user login post
 router.post('/userloginPost',userController.userLoginPost)
 
 //user signup page
-router.get('/usersignup',userController.renderSignup)
+router.get('/usersignup',middleware.userExist,userController.renderSignup)
 
 //otp page 
 router.post('/signupotp',userHelper.userSignupOtp)
@@ -28,13 +28,10 @@ router.get('/resentotp',userHelper.resendOtp)
 router.post('/signup',userHelper.postSignup)
 
 //empty cart while no user
-router.get('/nocart',userController.nocart)
+router.get('/nocart',userController.noCart)
 
-
-
-// router.get('/otp',userController.otp)
-
-// router.get('/signup',userHelper.getSignupOtp)
+//user exist home page 
+router.get('/userhome',middleware.verifyUser,userController.renderUserHome)
 
 
 
@@ -43,6 +40,9 @@ router.get('/nocart',userController.nocart)
 
 
 
+
+//user log out
+router.get('/logout',userController.logOut)
 
 
 module.exports = router

@@ -1,61 +1,115 @@
 const user = require('../models/userModels')
+const { hashData, verifyHashedData}=require('../util/bcryptCompare')
 
 module.exports = {
 
-
-    renderSignup : (req,res)=>{
+    //get sign up page
+    renderSignup: (req, res) => {
         try {
-            res.render('userSignup')
+            res.render('user/userSignup')
         } catch (error) {
             console.log(error);
         }
-        
+
     },
 
-
-    renderHome : (req,res)=>{
+    //get guest home page
+    renderHome: (req, res) => {
         try {
-            res.render('guestHome')
+            res.render('user/guestHome')
         } catch (error) {
             console.log(error);
         }
-        
+
     },
 
-
-
-    userLogin : (req,res)=>{
+    //get user home page
+    renderUserHome: (req,res) =>{
         try {
-            res.render('userLogin')
+            const login = true
+            res.render('user/userHome',{check:req.session.name,login})
         } catch (error) {
             console.log(error);
         }
     },
 
+    //get user login page
+    userLogin: (req, res) => {
+        try {
+            res.render('user/userLogin',{errorLogin1:req.session.errorLogin,blockeduser:req.session.blockedUsr})
+        } catch (error) {
+            console.log(error);
+        }
+    },
 
-
-    userLoginPost : async (req,res)=>{
-        const check = await user.findOne({ email: req.body.email });
-        req.session.user = req.body.email;
+    //post user login details
+    userLoginPost: async (req, res) => {
+        try {
+            const check = await user.findOne({ email: req.body.email });
         
-        if(check.email === req.body.email ){
-            res.render('userHome',{check})
+            req.session.name = check
+        if(check.status=="active"){    
+            if(check!=null){
+
+                const bcrtptPasswd = check.password
+                const isMatch = await verifyHashedData(req.body.password,bcrtptPasswd)
+        
+                if (check.email==req.body.email && isMatch) {
+                    req.session.user = req.body.email;
+                    req.session.userlogged = true
+                    res.redirect('/userhome')
+        
+                } else {
+                    const errorLogin = true
+                    req.session.errorLogin = errorLogin
+                    res.redirect('/userlogin')
+                }
+            }else{
+                const errorLogin = true
+                req.session.errorLogin = errorLogin
+                res.redirect('/userlogin')
+            }
         }else{
+            const blockedUser = true
+            req.session.blockedUsr = blockedUser
             res.redirect('/userlogin')
         }
-    },
 
-
-
-    nocart : (req,res)=>{
-        try {
-            res.render('nocart')
         } catch (error) {
             console.log(error);
         }
-        
     },
 
+
+    //get empty cart page
+    noCart: (req, res) => {
+        try {
+            res.render('user/nocart')
+        } catch (error) {
+            console.log(error);
+        }
+
+    },
+
+
+
+
+
     
+
+    //log out user
+    logOut : (req,res)=>{
+        req.session.destroy((err)=>{
+            if(err){
+                console.log(err);
+                res.send("logout error")
+            }else{
+                const logout = true
+                res.render('user/guestHome',{logout})
+            }
+        })
+    }
+
+
 }
 
