@@ -2,6 +2,9 @@
 
 module.exports = {
 
+
+    //------------------------user
+
     //after login
     verifyUser : (req,res,next)=>{
         if(req.session.userlogged){
@@ -20,9 +23,29 @@ module.exports = {
             next()
         }
     },
+    //-------------------------------admin
+
+    //after login
+    verifyAdmin : (req,res,next) => {
+        if(req.session.adminlogged){
+            next()
+        }else{
+            res.redirect('/adminlogin')
+        }
+    },
+
+    //before login 
+    adminExist : (req,res,next) => {
+        if(req.session.admin){
+            res.redirect('admindash')
+        }else{
+            next()
+        }
+    }
     
 
 }
+
 
 
 

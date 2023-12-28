@@ -70,6 +70,10 @@ var productSchema = new mongoose.Schema(
     Specification4: {
         type: String,
     },
+    displayStatus : {
+        type: String,
+        default :"Show"
+    }
 
     },
 

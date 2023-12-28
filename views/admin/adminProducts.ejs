@@ -30,12 +30,11 @@
                 </div>
                 <div class="profile">
 
-                    <img src="/images/women-01.jpg" class="pro-img" />
-                    <p>Manoj Adhikari <i class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
+                    <p><i class="fa-solid fa-user fa-xl" style="color: #7c4ff9;padding-right: 5px;margin-left: -15px;"></i>  ADMIN <i class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
                     <div class="profile-div">
                         <p><i class="fa fa-user"></i> Profile</p>
                         <p><i class="fa fa-cogs"></i> Settings</p>
-                        <p><i class="fa fa-power-off"></i> Log Out</p>
+                        <p><i class="fa fa-power-off"></i> <a href="/adminlogout" style="text-decoration: none;">Log Out</a></p>
                     </div>
                 </div>
             </div>
@@ -45,12 +44,12 @@
         <div class="clearfix"></div>
         <br />
 
-        
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end" style="margin-right: 30px;">
+            <a href="/addproductspage"><button  type="button" class="btn btn-primary float-right">Add Products</button></a>
+        </div>
 
-        <div class="container">
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <a href="/addproducts"><button  type="button" class="btn btn-primary float-right">Add Products</button></a>
-            </div>
+        <div class="container" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)">
+ 
             
             <div class="row my-5">
               <table id="example" class="table bg-light table-striped text-center">
@@ -63,32 +62,67 @@
                     <th class="text-center" scope="col">Category</th>
                     <th class="text-center" scope="col">Brand</th>
                     <th class="text-center" scope="col">Stock</th>
-                    <th class="text-center" scope="col">Block/Unblock</th>
+                    <th class="text-center" scope="col">Show/Hide</th>
                     <th class="text-center" scope="col">Edit</th>
                   </tr>
                 </thead>
                 <tbody>
-
+                    <% prdctData.forEach((data,index) => { %>
+                     
+                    
                   <tr>
-                    <th scope="row"></th>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
-                    <td>6</td>
-                    <td>7</td>
+                    <th class="text-center" scope="row"><%-index+1-%></th>
+                    <td><img src="/product_images/<%=data.images[0]%>" alt="" style="width: 80px;height: 80px;"></td>
+                    <td class="text-center"><%-data.productName-%></td>
+                    <td class="text-center">₹  <%-data.price-%></td>
+                    <td class="text-center"><%-data.category-%></td>
+                    <td class="text-center"><%-data.brandName-%></td>
+                    <td class="text-center"><%-data.stockQuantity-%></td>
+                    <%if(data.displayStatus=="Show"){%>
+                        <td class="text-center"><a ><button style="background-color: red; border-radius: 30px; border:none; width:90px; color: white;"  onclick="show_hide('<%-data._id-%>')">Hide</button></a></td>
+                      <% } else { %>
+                        <td class="text-center"><a ><button style="background-color: green; border-radius: 30px; border:none; width:90px; color: white;" onclick="show_hide('<%-data._id-%>')">Show</button></a></td>
+                       <% } %>
 
                     <td>
-                      <a href=""><i class="fa-solid fa-pen-to-square fa-lg mx-1 text-success"></i></a>
-                      <a href=""><i class="fa-solid fa-trash fa-lg mx-1 text-danger"></i></a>
+                      <a href="/editproducts/<%-data._id-%>"><i class="fa-solid fa-pen-to-square fa-lg mx-1 text-success"></i></a>
+                      <a href=""><i class="fa-solid fa-trash fa-lg mx-1 text-danger" onclick="deleteProduct('<%-data._id-%>')"></i></a>
                     </td>
                   </tr>
+
+                  <% }) %>
 
                 </tbody>
               </table>
             </div>
           </div>
+                          <!-- Add this within your form -->
+        <div class="modal" tabindex="-1" role="dialog" id="successModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Product Added</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Your product has been successfully added.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <% if (successModal) { %>
+            <script>
+                $(document).ready(function () {
+                    $('#successModal').modal('show');
+                });
+            </script>
+        <% } %>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

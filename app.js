@@ -6,6 +6,7 @@ const path = require('path');
 const session = require('express-session');
 const { v4: uuidv4 } = require("uuid");
 const nocache = require('nocache');
+const morgan = require("morgan");
 
 const dbConnect = require('./config/dbConnect')
 dbConnect()
@@ -30,6 +31,7 @@ app.use(
       saveUninitialized: true,
     })
   );
+  app.use(morgan("tiny"));
 
 app.use('/',userRoute)
 app.use('/',adminRoute)

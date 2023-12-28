@@ -1,0 +1,157 @@
+<!Doctype HTML>
+<html>
+
+<head>
+    <title></title>
+    <link rel="stylesheet" href="/css/admin.css" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/65b842e152.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            /* align-items: center; */
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 600px; /* Adjusted width to 400px */
+            margin-left: 550px;
+            margin-top: 50px;
+            height: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        button {
+            background-color: rgb(47, 47, 220);
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <title>Category Input Form</title>
+</head>
+
+
+    <%- include('./partials/adminsidenav') %>
+
+    <body>
+        <div class="container mt-5">
+
+
+
+
+    <!-- brand name -->
+        <br>
+        <br>
+
+        <h3 class="mb-4">Add Brand</h3>
+        <p style="color: red; text-align: center;" id="err1"><%- locals.err1 ? "This brand already exists" : "" -%></p>
+        <p style="color: rgb(27, 161, 9); text-align: center;" id="err1"><%- locals.added1 ? "The brand has been added" : "" -%></p>
+        <form id="brandForm" action="/updatebrand" method="post">
+            <div class="form-group">
+                <label for="brandName">Brand Name:</label>
+                <input type="text" class="form-control" id="categoryName1" name="brandName" placeholder="Enter brand name" required oninput="validateBrandName()" value="<%-brnd.brandName-%>">
+                <div id="categoryNameError1" class="error-message text-danger"></div>
+            </div>
+            <input type="hidden" name="id" value="<%-brnd._id-%>">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button id="submit1" type="submit" class="btn btn-primary float-right" onclick="validateForm()" disabled>Update Brand</button>
+            </div>
+        </form>
+
+    </div>
+
+
+
+<script>
+    function validateBrandName() {
+        const brandNameInput = document.getElementById('categoryName1');
+        const brandNameError = document.getElementById('categoryNameError1');
+        const submitButton = document.getElementById('submit1');
+
+        // Reset error message
+        brandNameError.textContent = '';
+
+        // Check for minimum 2 letters
+        if (brandNameInput.value.length < 2) {
+            brandNameError.textContent = 'Minimum 2 letters required';
+            submitButton.disabled = true;
+            return;
+        }
+
+        // Check for spaces
+        if (brandNameInput.value.includes(' ')) {
+            brandNameError.textContent = 'No spaces allowed';
+            submitButton.disabled = true;
+            return;
+        }
+
+        // Check for numbers
+        if (/\d/.test(brandNameInput.value)) {
+            brandNameError.textContent = 'No numbers allowed';
+            submitButton.disabled = true;
+            return;
+        }
+
+        // If no errors, enable the button
+        submitButton.disabled = false;
+    }
+
+    function validateForm() {
+        // You can perform additional form-level validation here
+        // If no errors, submit the form (you can add an AJAX call here)
+        document.getElementById('categoryForm1').submit();
+    }
+</script>
+
+            
+
+    
+        <!-- Bootstrap JS and Popper.js -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+    </html>

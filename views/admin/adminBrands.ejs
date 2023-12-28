@@ -5,7 +5,7 @@
 
         <div class="head">
             <div class="col-div-6">
-                <p class="nav"> Category</p>
+                <p class="nav"> Brands</p>
 
             </div>
 
@@ -29,12 +29,11 @@
                 </div>
                 <div class="profile">
 
-                    <img src="/images/women-01.jpg" class="pro-img" />
-                    <p>Manoj Adhikari <i class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
+                    <p><i class="fa-solid fa-user fa-xl" style="color: #7c4ff9;padding-right: 5px;margin-left: -15px;"></i>  ADMIN <i class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
                     <div class="profile-div">
                         <p><i class="fa fa-user"></i> Profile</p>
                         <p><i class="fa fa-cogs"></i> Settings</p>
-                        <p><i class="fa fa-power-off"></i> Log Out</p>
+                        <p><i class="fa fa-power-off"></i> <a href="/adminlogout" style="text-decoration: none;">Log Out</a></p>
                     </div>
                 </div>
             </div>
@@ -54,9 +53,9 @@
         </div>
 
 
-          <h2>Brands</h2>
 
-          <div class="container" style="width: 1200px;">
+
+          <div class="container" style="width: 1200px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
             <div class="row my-5">
               <table id="example1" class="table bg-light table-striped text-center">
                 <thead class="thead-dark text-center">
@@ -77,9 +76,9 @@
                     <td class="text-center"><%-ele.brandName-%></td>
 
                     <td class="text-center">
-                      <a href=""><i class="fa-solid fa-pen-to-square fa-lg mx-1 text-success"></i></a>
+                      <a href="/editbrand/<%-ele._id-%>"><i class="fa-solid fa-pen-to-square fa-lg mx-1 text-success"></i></a>
           
-                      <a href=""><i class="fa-solid fa-trash fa-lg mx-1 text-danger"></i></a>
+                      <a href=""><i class="fa-solid fa-trash fa-lg mx-1 text-danger" onclick="delete_Brand('<%-ele._id-%>')"></i></a>
                     </td>
                   </tr>
                   <% }) %>

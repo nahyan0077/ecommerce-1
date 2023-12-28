@@ -1,5 +1,9 @@
 const user = require('../models/userModels')
-const { hashData, verifyHashedData}=require('../util/bcryptCompare')
+const { hashData, verifyHashedData } = require('../util/bcryptCompare')
+const product = require('../models/productModels')
+const banner = require('../models/bannerModels')
+const brand = require('../models/brandModels')
+const category = require('../models/categoryModels')
 
 module.exports = {
 
@@ -14,9 +18,15 @@ module.exports = {
     },
 
     //get guest home page
-    renderHome: (req, res) => {
+    renderHome: async (req, res) => {
         try {
-            res.render('user/guestHome')
+            let mensData = await product.find({ category: "MENS", displayStatus: "Show" })
+            let womensData = await product.find({ category: "WOMENS", displayStatus: "Show" })
+            let kidsData = await product.find({ category: "KIDS", displayStatus: "Show" })
+
+            const banners = await banner.find()
+            const sbanners = await banner.find({ bannerName: "s-banner-1" })
+            res.render('user/guestHome', { mensData, womensData, kidsData, banners, sbanners })
         } catch (error) {
             console.log(error);
         }
@@ -24,10 +34,16 @@ module.exports = {
     },
 
     //get user home page
-    renderUserHome: (req,res) =>{
+    renderUserHome: async (req, res) => {
         try {
             const login = true
-            res.render('user/userHome',{check:req.session.name,login})
+            let mensData = await product.find({ category: "MENS", displayStatus: "Show" })
+            let womensData = await product.find({ category: "WOMENS", displayStatus: "Show" })
+            let kidsData = await product.find({ category: "KIDS", displayStatus: "Show" })
+
+            const banners = await banner.find()
+            const sbanners = await banner.find({ bannerName: "s-banner-1" })
+            res.render('user/userHome', { check: req.session.name, login, mensData, womensData, kidsData, banners, sbanners })
         } catch (error) {
             console.log(error);
         }
@@ -36,44 +52,50 @@ module.exports = {
     //get user login page
     userLogin: (req, res) => {
         try {
-            res.render('user/userLogin',{errorLogin1:req.session.errorLogin,blockeduser:req.session.blockedUsr})
+            res.render('user/userLogin', { errorLogin1: req.session.errorLogin, blockeduser: req.session.blockedUsr })
         } catch (error) {
             console.log(error);
         }
     },
 
+
+
     //post user login details
     userLoginPost: async (req, res) => {
         try {
             const check = await user.findOne({ email: req.body.email });
-        
-            req.session.name = check
-        if(check.status=="active"){    
-            if(check!=null){
 
-                const bcrtptPasswd = check.password
-                const isMatch = await verifyHashedData(req.body.password,bcrtptPasswd)
-        
-                if (check.email==req.body.email && isMatch) {
-                    req.session.user = req.body.email;
-                    req.session.userlogged = true
-                    res.redirect('/userhome')
-        
+            //to display name in userhome
+            req.session.name = check
+            
+            if (check != null) {
+                console.log("aa");
+                if (check.status == "active") {
+
+                    const bcrtptPasswd = check.password
+                    const isMatch = await verifyHashedData(req.body.password, bcrtptPasswd)
+
+                    if (check.email == req.body.email && isMatch) {
+
+                        req.session.user = req.body.email;
+                        req.session.userlogged = true
+                        res.redirect('/userhome')
+
+                    } else {
+
+                        const errorLogin1 = true
+                        res.render('user/userLogin', { errorLogin1})
+                    }
                 } else {
-                    const errorLogin = true
-                    req.session.errorLogin = errorLogin
-                    res.redirect('/userlogin')
+                    
+                    const blockeduser = true
+                    res.render('user/userLogin', { blockeduser })
                 }
-            }else{
-                const errorLogin = true
-                req.session.errorLogin = errorLogin
-                res.redirect('/userlogin')
+            } else {
+                
+                const errorLogin1 = true
+                res.render('user/userLogin', { errorLogin1})
             }
-        }else{
-            const blockedUser = true
-            req.session.blockedUsr = blockedUser
-            res.redirect('/userlogin')
-        }
 
         } catch (error) {
             console.log(error);
@@ -88,24 +110,70 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
+    },
 
+
+
+    singleProduct: async (req, res) => {
+        try {
+            let id = req.params.id
+            let prdkt = await product.find({ _id: id })
+            res.render('user/singleProduct', { data: prdkt[0] })
+        } catch (error) {
+            console.log(error);
+        }
     },
 
 
 
 
 
-    
+
+
+
+    //searching products
+    searchProduct: async (req, res) => {
+        try {
+            console.log(req.body)
+            const prdct = await product.find({
+                productName: { $regex: "^" + req.body.search, $options: "i" }, status: "Active"
+            })
+            res.render('user/allProducts', { prdct })
+        } catch (err) {
+            console.log(err);
+        }
+    },
+
+
+    //all product listing
+    allproducts: async (req, res) => {
+        try {
+            const allPro = await product.find()
+            const allproCount = await product.find().count()
+            console.log(allproCount);
+            const count = await product.aggregate([{ $group: { _id: "$brandName", count: { $sum: 1 } } }])
+            const catgry = await category.find()
+            res.render('user/allProducts', { allPro, count, catgry, allproCount })
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+
+
+
+
+
 
     //log out user
-    logOut : (req,res)=>{
-        req.session.destroy((err)=>{
-            if(err){
+    logOut: (req, res) => {
+        req.session.destroy((err) => {
+            if (err) {
                 console.log(err);
                 res.send("logout error")
-            }else{
+            } else {
                 const logout = true
-                res.render('user/guestHome',{logout})
+                res.redirect('/')
             }
         })
     }

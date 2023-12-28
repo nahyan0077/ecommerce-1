@@ -793,13 +793,13 @@ Men
 
 #men .item .down-content span {
   font-size: 18px;
-  color: #a1a1a1;
+  color: grey;
   font-weight: 500;
   display: block;
 }
 
 #men .item .down-content ul.stars {
-  position: absolute;
+  
   right: 0;
   top: 30px;
 }
@@ -954,13 +954,12 @@ Women
 
 #women .item .down-content span {
   font-size: 18px;
-  color: #a1a1a1;
+  color: grey;
   font-weight: 500;
   display: block;
 }
 
 #women .item .down-content ul.stars {
-  position: absolute;
   right: 0;
   top: 30px;
 }
@@ -1114,13 +1113,12 @@ Kids
 
 #kids .item .down-content span {
   font-size: 18px;
-  color: #a1a1a1;
+  color: grey;
   font-weight: 500;
   display: block;
 }
 
 #kids .item .down-content ul.stars {
-  position: absolute;
   right: 0;
   top: 30px;
 }

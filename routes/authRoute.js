@@ -33,10 +33,15 @@ router.get('/nocart',userController.noCart)
 //user exist home page 
 router.get('/userhome',middleware.verifyUser,userController.renderUserHome)
 
+//user single product page render
+router.get('/singleproduct/:id',middleware.verifyUser,userController.singleProduct)
 
 
+//search product
+router.get('/search',userController.searchProduct)
 
-
+//all products
+router.get('/allproducts',middleware.verifyUser,userController.allproducts)
 
 
 
