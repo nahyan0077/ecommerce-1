@@ -10,7 +10,6 @@ module.exports = {
         if(req.session.userlogged){
             next()
         }else{
-            console.log("sds");
             res.redirect('/')
         }
     },

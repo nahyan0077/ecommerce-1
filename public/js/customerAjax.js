@@ -1,4 +1,6 @@
 
+
+
 //to block or unblock user in admin panel
 
 function block_unblock(id){
@@ -104,3 +106,181 @@ function deleteProduct(id){
         })
     }    
 }
+
+
+//to delete address in user profile
+function deleteAddress(id){
+    let cnfrm = confirm("Are you sure want to remove this Address?")
+    if(cnfrm == true){
+        console.log("ajjaxxxxx");
+        $.ajax({
+            url:"/deleteaddress/"+id,
+
+            method:"get",
+            success: function (response){
+                location.reload()
+                alert(response.msg)
+            },
+            error:function (err){
+                alert("Something Error")
+        
+            }
+        })
+    }
+}
+
+//add to cart 
+function addToCart(id){
+    console.log("ajax working ");
+    $.ajax({
+        
+        url:"/addtocart/"+`${id}`,
+        
+        method:"get",
+        success:function (response){
+            window.location.reload()
+            alert(response.msg)
+
+        },
+        error:function (err){
+            alert("Something Error")
+            console.log(err);
+        }
+    })
+}
+
+
+//update quantity count in cart
+function updateQuantity(count,prodId,qty,usrId){
+    console.log("ajax okkk");
+    $.ajax({
+        
+        url:"/updatequantity/"+`${count}/${prodId}/${qty}/${usrId}`,
+        
+        method:"get",
+        success:function (response){
+            window.location.reload()
+            alert(response.msg)
+           
+            
+        },
+        error:function (err){
+            alert("Something Error")
+            console.log(err);
+        }
+    })
+}
+
+
+//remove product from cart
+function removeCart(prdktId){
+    console.log("rmv crt");
+    $.ajax({
+        
+        url:"/removecart/"+`${prdktId}`,
+        
+        method:"get",
+        success:function (response){
+            window.location.reload()
+            alert(response.msg)
+           
+            
+        },
+        error:function (err){
+            alert("Something Error")
+            console.log(err);
+        }
+    })
+}
+
+
+//clear all cart products
+function clearCart(prdktid){
+    console.log("clr crt");
+    let cnfrm = confirm("Are you sure want to clear cart?")
+    if(cnfrm==true){
+        $.ajax({
+            url:"/clearcart/"+`${prdktid}`,
+            
+            method:"get",
+            success:function (response){
+                window.location.reload()
+                alert(response.msg)
+               
+                
+            },
+            error:function (err){
+                alert("Something Error")
+                console.log(err);
+            }
+        })
+    }
+}
+
+
+//select an address to order a product
+function selectAddress(adrsid){
+    console.log("select address");
+    console.log(adrsid);
+    $.ajax({
+        
+        url:"/selectaddress/"+`${adrsid}`,
+        
+        method:"get",
+        success:function (response){
+            window.location.reload()
+            alert(response.msg)
+        },
+        error:function (err){
+            alert("Something Error")
+            console.log(err);
+        }
+    })
+}
+
+
+//select an address to order a product
+function confirmOrder(type){
+    console.log("order type",type);
+
+    $.ajax({
+        
+        url:"/confirmorder/"+`${type}`,
+        
+        method:"get",
+        success:function (response){
+            window.location.reload()
+            alert(response.msg)
+        },
+        error:function (err){
+            alert("Something Error")
+            console.log(err);
+        }
+    })
+}
+
+
+//update order status in admin side 
+function updateOrderStatus(orderid,status){
+    console.log("update");
+    let cnfrm = confirm(`Are you sure want to upadte order status to ${status}?`)
+    if(cnfrm==true){
+        $.ajax({
+            url:"/updateorderstatus/"+`${orderid}/${status}`,
+            
+            method:"get",
+            success:function (response){
+                window.location.reload()
+                alert(response.msg)
+               
+                
+            },
+            error:function (err){
+                alert("Something Error")
+                console.log(err);
+            }
+        })
+    }
+}
+
+

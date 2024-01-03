@@ -3,6 +3,7 @@
 }
 .zoom-box img{
     vertical-align: bottom;
+
 }
 .zoom-box .zoom-selector{
     position: absolute;
@@ -10,6 +11,7 @@
     background-repeat: repeat;
     display: none;
     cursor: crosshair;
+
 }
 .zoom-box .viewer-box{
     position: absolute;

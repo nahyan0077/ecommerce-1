@@ -46,6 +46,7 @@
             justify-content: center;
             align-items: center;
             border-color: black;
+            
         }
 
 
@@ -218,86 +219,43 @@
         </div>
         <div class="container">
             <div class="row images" style="grid-gap: 44px;">
+
+
+                <% bstdl.forEach(data => { %>
+                 
+
+
                 <div class="col-2">
                     <div class="thumb">
                         <div class="icon">
-                            <a href="">
-                                <h6>Buy Now</h6>
+                            <a href="/singleproduct/<%-data._id-%>">
+                                <h6>View</h6>
                             </a>
                         </div>
-                        <button type="button" class="btn btn-danger"
-                            style="position: absolute;border-radius: 0px;font-size: x-small;">40%</button>
-                        <img src="/images/shoe9.webp" alt="">
+
+                            <button type="button" class="btn btn-danger"
+                            style="position: absolute; border-radius: 0px; font-size: x-small;">
+                            <% const discountPercentage = Math.round(((data.price - data.DiscountAmount) / data.price) * 100); %>
+                            <%= discountPercentage %>% OFF
+                        </button>
+                
+
+                        <img src="/product_images/<%=data.images[0]%>" alt="">
                     </div>
                     <br>
-                    <h6>Nike Air Max 270</h6>
-                    <p>Men's Shoes</p>
-                    <p class="text-danger fw-bold">₹ 6999</p>
+                    <h6><%-data.productName-%></h6>
+                    <p><%-data.category-%> SHOES</p>
+                    <p class="text-danger fw-bold">₹ <%-data.DiscountAmount-%></p>
+                    <span class="me-1">
+                        <del style="font-size: small;">₹ <%-data.price-%></del>
+                    </span>
+                    
                 </div>
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="">
-                                <h6>Buy Now</h6>
-                            </a>
-                        </div>
-                        <button type="button" class="btn btn-danger"
-                            style="position: absolute;border-radius: 0px;font-size: x-small;">40%</button>
-                        <img src="/images/puma1.1.avif" alt="">
-                    </div>
-                    <br>
-                    <h6>Aviator Unisex Running</h6>
-                    <p>Men's Shoes</p>
-                    <p class="text-danger fw-bold">₹ 3499</p>
-                </div>
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="">
-                                <h6>Buy Now</h6>
-                            </a>
-                        </div>
-                        <button type="button" class="btn btn-danger"
-                            style="position: absolute;border-radius: 0px;font-size: x-small;">40%</button>
-                        <img src="/images/adi1.1.avif" alt="">
-                    </div>
-                    <br>
-                    <h6>Fluid flow 2.0 Running</h6>
-                    <p>Men's Shoes</p>
-                    <p class="text-danger fw-bold">₹ 3499</p>
-                </div>
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="">
-                                <h6>Buy Now</h6>
-                            </a>
-                        </div>
-                        <button type="button" class="btn btn-danger"
-                            style="position: absolute;border-radius: 0px;font-size: x-small;">40%</button>
-                        <img src="/images/shoe8.webp" alt="">
-                    </div>
-                    <br>
-                    <h6>Nike Air Force 1 LV8</h6>
-                    <p>Kid's Shoes</p>
-                    <p class="text-danger fw-bold">₹ 3499</p>
-                </div>
-                <div class="col-2">
-                    <div class="thumb">
-                        <div class="icon">
-                            <a href="">
-                                <h6>Buy Now</h6>
-                            </a>
-                        </div>
-                        <button type="button" class="btn btn-danger"
-                            style="position: absolute;border-radius: 0px;font-size: x-small;">40%</button>
-                        <img src="/images/wmn_1.1c.jpeg" alt="">
-                    </div>
-                    <br>
-                    <h6>Nike Air Force 1 '07</h6>
-                    <p>Men's Shoes</p>
-                    <p class="text-danger fw-bold">₹ 6799</p>
-                </div>
+
+                <% }) %>
+
+
+
             </div>
         </div>
     </section>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login</title>
+    <title>UserLogin</title>
     <link rel="stylesheet" href="/css/userLogin.css">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     <script src="https://kit.fontawesome.com/65b842e152.js" crossorigin="anonymous"></script>
@@ -43,7 +43,9 @@
                 <p id="email-error" class="error-message" style="color: red; margin-bottom: 10px;font-size: small;"></p>
 
                 <input id="password" type="password" placeholder="password" name="password" oninput="validatePassword()" required/>
+                <a href="/verifyemail" style="color: #4CAF50;font-size: smaller;">Forgot Password? </a>
                 <p id="password-error" class="error-message" style="color: red; margin-bottom: 10px;font-size: smaller;"></p>
+                
                 
                 <button id="create-button" type="submit" disabled>login</button>
                 <p class="message">Not registered? <a href="/usersignup">Create an account</a></p>

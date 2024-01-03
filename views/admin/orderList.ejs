@@ -1,0 +1,206 @@
+<%- include('./partials/adminnav') %>
+
+  <div class="container-fluid">
+
+    <div class="container" style="margin-left: 321px;margin-top: 90px;">
+
+
+
+      <!-- Title -->
+      <div class="d-flex justify-content-between align-items-center py-3">
+        <h2 class="h5 mb-0"><a href="#" class="text-muted"></a># <%= ordrs._id %>
+        </h2>
+      </div>
+
+      <!-- Main content -->
+      <div class="row">
+        <div class="col-lg-8">
+          <!-- Details -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="mb-3 d-flex justify-content-between">
+                <div>
+                  <span style="font-weight: bolder;" class="me-3"><%- ordrs.orderDate.toLocaleString('en-IN', {
+                      timeZone: 'Asia/Kolkata' , dateStyle: 'short' , timeStyle: 'short' }) %></span>
+
+                  <span class="me-3"></span>
+
+                </div>
+                <div class="d-flex">
+
+                  <div class="dropdown">
+                    <button class="btn btn-link p-0 text-muted" type="button" data-bs-toggle="dropdown">
+                      <i class="bi bi-three-dots-vertical"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-pencil"></i> Edit</a></li>
+                      <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a></li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <table class="table table-borderless">
+                <tbody>
+
+                  <% ordrs.products.forEach(prdkt=> { %>
+
+
+
+                    <tr style="background-color: white;">
+                      <td>
+                        <div class="d-flex mb-2">
+                          <div class="flex-shrink-0">
+                            <img src="/product_images/<%=prdkt.productid.images[0]%>" style="width: 100px;" alt=""
+                              width="35" class="img-fluid">
+                          </div>
+                          <div class="flex-lg-grow-1 ms-3" style="margin-top: 20px;">
+                            <h6 class="" style="font-weight: 600;">
+                              <%= prdkt.productid.productName %>
+                            </h6>
+
+                            <span class="small">Category: <%= prdkt.productid.category %></span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>Qty: <%= prdkt.quantity %>
+                      </td>
+                      <td class="text-end">₹ <%= prdkt.productid.price %>
+                      </td>
+                    </tr>
+
+
+                    <% }) %>
+
+
+                </tbody>
+                <tfoot>
+
+                  <tr>
+                    <td colspan="2">Shipping</td>
+                    <td style="font-style: italic;" class="text-end">Free</td>
+                  </tr>
+                  <tr style="background-color: white;">
+                    <td colspan="2">Discount Amount</td>
+                    <td class="text-danger text-end">- ₹ <%= ordrs.discountAmount %>
+                    </td>
+                  </tr>
+                  <tr style="background-color: rgb(208, 207, 207);" class="fw-bold">
+                    <td colspan="2">TOTAL</td>
+                    <td class="text-end">₹ <%= ordrs.totalAmount %>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          <!-- Payment -->
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+
+                <div class="col-lg-6">
+                  <h3 class="h6" style="font-weight: bolder;">Order Information</h3>
+
+                  <h6>Order Status: <span class="badge rounded-pill bg-info" style="font-weight: 400;">
+                      <%= ordrs.orderStatus %>
+                    </span></h6>
+                  <h6>Ordered Date & Time: <span style="font-weight: 400;"><%- ordrs.orderDate.toLocaleString('en-IN', {
+                        timeZone: 'Asia/Kolkata' , dateStyle: 'short' , timeStyle: 'short' }) %></span></h6>
+                  <h6>Expected Delivery Date & Time: <span style="font-weight: 400;"><%-
+                        ordrs.expectedDeliveryDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' ,
+                        dateStyle: 'short' , timeStyle: 'short' }) %></span></h6>
+                </div>
+
+                <div class="col-lg-6">
+                  <h3 class="h6">Shipping address</h3>
+
+                  <address>
+                    <strong>
+                      <%= ordrs.address.name%>
+                    </strong><br>
+    
+                    <%= ordrs.address.address%>
+                      <%= ordrs.address.locality%><br>
+                        <%= ordrs.address.city%>
+                          <span> <%= ordrs.address.district%> </span> <br>
+                            <span title="Phone">PIN:</span>
+                            <%= ordrs.address.pincode%>
+                  </address>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4">
+
+          <div class="card mb-4">
+            <!-- Shipping information -->
+            <div class="card-body">
+
+              <h4>Billing Address</h4>
+
+                  <address>
+                    <strong>DropShip</strong><br>
+                    1355 Market St, Suite 900<br>
+                    Kerala, CA 94103<br>
+                    <span title="Phone">P:</span> (123) 456-7890
+                  </address>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+  <script>
+    $(".menu").click(function () {
+      $("#mySidenav").css('width', '70px');
+      $("#main").css('margin-left', '70px');
+      $(".logo").css('display', 'none');
+      $(".logo1").css('display', 'block');
+      $(".logo span").css('visibility', 'visible');
+      $(".logo span").css('margin-left', '-10px');
+      $(".icon-a").css('visibility', 'hidden');
+      $(".icon-a").css('height', '25px');
+      $(".icons").css('visibility', 'visible');
+      $(".icons").css('margin-left', '-8px');
+      $(".menu1").css('display', 'block');
+      $(".menu").css('display', 'none');
+    });
+
+    $(".menu1").click(function () {
+      $("#mySidenav").css('width', '300px');
+      $("#main").css('margin-left', '300px');
+      $(".logo").css('visibility', 'visible');
+      $(".logo").css('display', 'block');
+      $(".icon-a").css('visibility', 'visible');
+      $(".icons").css('visibility', 'visible');
+      $(".menu").css('display', 'block');
+      $(".menu1").css('display', 'none');
+    });
+  </script>
+  <script>
+    $(document).ready(function () {
+      $(".profile p").click(function () {
+        $(".profile-div").toggle();
+      });
+      $(".noti-icon").click(function () {
+        $(".notification-div").toggle();
+      });
+    });
+  </script>
+  <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      let table = new DataTable('#example');
+    });
+  </script>
+  </body>
+
+  </html>

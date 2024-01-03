@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title></title>
+    <title>Admin</title>
     <link rel="stylesheet" href="/css/admin.css" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
@@ -129,7 +129,7 @@
                         <label for="category">Category</label>
                         <select id="category" name="category" required oninput="validateCategory()">
                             <% cat.forEach(ele => { %>
-                                <option value="<%-ele.categoryName-%>" selected><%-ele.categoryName-%></option>
+                                <option <%-pdktDtls.category==ele.categoryName?'selected':""-%>><%-ele.categoryName-%></option>
                             <% }) %>
                         </select>
                         <div class="error-message text-danger" id="categoryError"></div>
@@ -139,7 +139,7 @@
                         <label for="brand">Brand</label>
                         <select id="brand" name="brandName" required oninput="validateBrand()">
                             <% brnd.forEach(ele => { %>
-                                <option value="<%-ele.brandName-%>" selected><%-ele.brandName-%></option>
+                                <option <%-pdktDtls.brandName==ele.brandName?'selected':""-%>><%-ele.brandName-%></option>
                             <% }) %>
                         </select>
                         <div class="error-message text-danger" id="brandError"></div>
@@ -154,7 +154,7 @@
         
                 <div class="form-group">
                     <label for="discountPrice">Discount Price</label>
-                    <input type="number" id="discountPrice" placeholder="Enter the discount price in rupees" name="DiscountAmount" required min="0" oninput="validateDiscountPrice()" value="<%-pdktDtls.price-%>">
+                    <input type="number" id="discountPrice" placeholder="Enter the discount price in rupees" name="DiscountAmount" required min="0" oninput="validateDiscountPrice()" value="<%-pdktDtls.DiscountAmount-%>">
                     <div class="error-message text-danger" id="discountPriceError"></div>
                 </div>
                 
@@ -163,23 +163,30 @@
                     <input type="number" id="stock" placeholder="Enter the stock quantity" name="stockQuantity" required min="0" oninput="validateStock()" value="<%-pdktDtls.stockQuantity-%>">
                     <div class="error-message text-danger" id="stockError"></div>
                 </div>
+
+                <div class="form-group">
+                    <label for="description">Tags</label>
+                    <textarea id="description" placeholder="Tags Do not exceed 50 characters"
+                        name="Tags"  maxlength="50" oninput="validateDescription()"><%-pdktDtls.Tags-%></textarea>
+                    <div class="error-message text-danger" id="descriptionError"></div>
+                </div>
                 
                 <label for="brand">Upload Images</label><br><br>
                 <div class="image-upload">
                     <div class="dropzone">
-                        <input type="file" id="productImage1"  onchange="displayImage(this)">
+                        <input type="file" id="productImage1" name="image1"  onchange="displayImage(this)">
                         <img id="previewImage1" class="preview-image" alt="Drag & drop or click to select image-1" src="/product_images/<%=pdktDtls?.images[0]%>">
                     </div>
                     <div class="dropzone">
-                        <input type="file" id="productImage2"  onchange="displayImage(this)">
+                        <input type="file" id="productImage2" name="image2" onchange="displayImage(this)">
                         <img id="previewImage2" class="preview-image" alt="Drag & drop or click to select image-2" src="/product_images/<%=pdktDtls?.images[1]%>">
                     </div>
                     <div class="dropzone">
-                        <input type="file" id="productImage3"  onchange="displayImage(this)">
+                        <input type="file" id="productImage3" name="image3" onchange="displayImage(this)">
                         <img id="previewImage3" class="preview-image" alt="Drag & drop or click to select image-3" src="/product_images/<%=pdktDtls?.images[2]%>">
                     </div>
                     <div class="dropzone">
-                        <input type="file" id="productImage4"  onchange="displayImage(this)">
+                        <input type="file" id="productImage4" name="image4" onchange="displayImage(this)">
                         <img id="previewImage4" class="preview-image" alt="Drag & drop or click to select image-4" src="/product_images/<%=pdktDtls?.images[3]%>">
                     </div>
                 </div>

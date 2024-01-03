@@ -3,6 +3,7 @@ const products = require('../models/productModels')
 const category = require('../models/categoryModels')
 const brand = require('../models/brandModels')
 const banner = require('../models/bannerModels')
+const order = require('../models/orderModels');
 
 
 module.exports = {
@@ -42,120 +43,6 @@ module.exports = {
             console.log(error);
         }
     },
-
-
-
-
-
-    adminProducts : async (req,res) =>{
-        try {
-            let prdctData = await products.find()
-            res.render('admin/adminProducts',{prdctData,successModal: req.session.modal1})
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
-
-    adminAddProducts : async (req,res) =>{
-        try {
-            const brnd = await brand.find()
-            const cat = await category.find()
-            res.render('admin/addProduct',{brnd,cat})
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
-    postAddProducts : async (req,res) =>{
-        try {
-            const imgFiles = req?.files
-            const prdctDtls = req.body
-            let images=[imgFiles.image1[0].filename,imgFiles.image2[0].filename,imgFiles.image3[0].filename,imgFiles.image4[0].filename]
-            const prdcts = {...prdctDtls,images}
-            await products.create(prdcts)
-            res.redirect('/adminproducts')
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
-    showHideProduct : async (req,res) =>{
-        try {
-            const id = req.params.id
-            const prdctStatus = await products.findOne({_id:id})
-            var msg 
-            if(prdctStatus.displayStatus=="Show"){
-                await products.updateOne({_id:id},{$set:{displayStatus:"Hide"}})
-                msg = "Product display status changed to Hidden"
-            }else{
-                await products.updateOne({_id:id},{$set:{displayStatus:"Show"}})
-                msg = "Product display status changed to Show"
-            }
-            res.json({msg:`${msg} successfully...!`})
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
-    deleteProduct : async (req,res) => {
-        try {
-            let id = req.params.id
-            console.log(id);
-            await products.deleteOne({_id:id})
-            res.json({msg:"Product Deleted Successfully"})
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
-    editProduct : async (req,res) => {
-        try {
-            let id = req.params.id
-            let edtPrdkt = await products.find({_id:id})
-            const brnd = await brand.find()
-            const cat = await category.find()
-            console.log(edtPrdkt);
-            res.render('admin/editProducts',{pdktDtls:edtPrdkt[0],brnd,cat})
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
-    postEditProducts : async (req,res) => {
-        try {
-            let id = req.params.id
-            let prdktImg = await products.find({_id:id})
-            let imgs
-            if(prdktImg){
-                imgs = [...prdktImg[0].images]
-            }
-            console.log(req?.files);
-
-            for(let i = 0; i <= 4; i++){
-                if(req?.files[i]){
-                    console.log("okkkk")
-                   let position = req.files[i].fieldname.split('')
-                   imgs[position[5]-1] = req.files[i].filename
-                }
-            }
-
-            let updtPrdkts = req.body
-            updtPrdkts.images = imgs
-
-
-
-            const update = await products.updateOne({_id:id},{$set:{...updtPrdkts}})
-            if (update) {
-                res.redirect("/adminproducts");
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
-
 
 
 
@@ -386,6 +273,99 @@ module.exports = {
             const bannerDtls = {...details,bannerImage}
             await banner.create(bannerDtls)
             res.redirect('/adminbanner')
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+
+
+
+    //admin orders
+
+    adminOrders : async (req,res) => {
+        try {
+
+  
+            const orders = await order.aggregate([
+                {
+                    $lookup: {
+                        from: 'users',  
+                        localField: 'userid',
+                        foreignField: '_id',
+                        as: 'userName'
+                    }
+                },
+                {
+                    $unwind: '$userName'
+                },
+                {
+                    $sort: {
+                        orderDate: -1 // Sort by orderDate in descending order
+                    }
+                },
+                {
+                    $project:{username:"$userName.username",
+                    'userid' : 1,
+                    'products': 1,                   
+                    'address': 1,
+                    'orderDate': 1,
+                    'expectedDeliveryDate': 1,
+                    'paymentMethod': 1,
+                    'PaymentStatus': 1,
+                    'totalAmount': 1,
+                    'deliveryDate': 1,
+                    'orderStatus': 1,
+                    'couponDiscount': 1,
+                    'couponCode': 1,
+                    'discountAmount': 1
+                    }
+                }
+            ]);
+
+            console.log(orders);
+
+            res.render('admin/adminOrders',{orders})
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+
+    //list all order details in the admin side
+    orderList : async (req,res) => {
+        try {
+            const odrId = req.params.ids
+            const ordrs = await order.findOne({_id:odrId}).populate("products.productid")
+
+            console.log("ujguj",odrId);
+            console.log("addtaa",ordrs);
+
+            res.render('admin/orderList',{ordrs}) 
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    //update order status by admin
+
+    orderStatus : async (req,res) => {
+        try {
+            const orderId = req.params.orderid
+            const status = req.params.status
+            console.log(orderId,status);   
+            
+            const currentDate=new Date().toLocaleString("en-US", {
+                timeZone: "Asia/Kolkata",
+              });
+
+            if(status=="Order Delivered"){
+                await order.updateOne({_id:orderId.trim()},{$set:{orderStatus:status.trim(),deliveryDate:currentDate}})
+            }else{
+                await order.updateOne({_id:orderId.trim()},{$set:{orderStatus:status.trim()}})
+            }
+            res.json({msg:"Order status updated"})
+            
         } catch (error) {
             console.log(error);
         }

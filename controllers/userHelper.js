@@ -1,4 +1,4 @@
-const User = require("../models/userModels");
+
 const otp = require("../models/otpModels");
 const { sendEmail } = require('../auth/nodemailer')
 const { generateOTP } = require('../util/generateOtp')
@@ -67,7 +67,7 @@ module.exports = {
         const otp_ = await otp.findOne({ email: req.session.otpuser.email })
         console.log(otp_)
         if (otp_?.otp == userotp && otp_ != null) {
-            User.create(req.session.otpuser).then((data) => {
+            user.create(req.session.otpuser).then((data) => {
                 res.render('user/userLogin', { msg: "SignUp Successfully..!" });
             })
         } else {

@@ -37,7 +37,7 @@ async function sendEmail(recipientEmail) {
         from: process.env.email_,
         to: recipientEmail,
         subject: 'DropShip e-commerce pvt ltd ',
-        text: `Your Singn Up OTP code is:${OTP}` // Fix: Use backticks for template literals
+        text: `Your Sign Up OTP code is:${OTP}` // Fix: Use backticks for template literals
     };
 
 

@@ -5,6 +5,8 @@ const adminController = require('../controllers/adminController')
 const middleware = require('../middlewares/session')
 const multerUpload = require('../middlewares/multer');
 const upload = require('../middlewares/multer');
+const productController = require('../controllers/productsController');
+const orderController = require('../controllers/orderController');
 
 
 
@@ -97,25 +99,40 @@ const uploadFields = [
 
 
 //admin products page render
-router.get('/adminproducts',adminController.adminProducts)
+router.get('/adminproducts',productController.adminProducts)
 
 //admin add products page render
-router.get('/addproductspage',adminController.adminAddProducts)
+router.get('/addproductspage',productController.adminAddProducts)
 
 //admin post products details
-router.post('/addproducts',multerUpload.fields(uploadFields),adminController.postAddProducts) 
+router.post('/addproducts',multerUpload.fields(uploadFields),productController.postAddProducts) 
 
 //show or hide product for the list of products
-router.get('/showorhide/:id',adminController.showHideProduct)
+router.get('/showorhide/:id',productController.showHideProduct)
 
 //delete product 
-router.get('/deleteproduct/:id',adminController.deleteProduct)
+router.get('/deleteproduct/:id',productController.deleteProduct)
 
 //edit product details page
-router.get('/editproducts/:id',adminController.editProduct)
+router.get('/editproducts/:id',productController.editProduct)
 
 //update product
-router.post('/updateproducts/:id',multerUpload.any(),adminController.postEditProducts)
+router.post('/updateproducts/:id',multerUpload.any(),productController.postEditProducts)
+
+
+
+//-----------------orders----------------
+
+//get admin orders
+router.get('/adminorders',adminController.adminOrders)
+
+//list orders
+router.get('/orderlist1/:ids/:idk',adminController.orderList)
+
+//update order status by admin
+router.get('/updateorderstatus/:orderid/:status',adminController.orderStatus)
+
+
 
 
 
@@ -134,6 +151,8 @@ router.get('/addbannerpage',adminController.getAddBanner)
 
 //add banner post 
 router.post('/addbanner',multerUpload.fields(uploadBanner),adminController.postBanner)
+
+
 
 
 

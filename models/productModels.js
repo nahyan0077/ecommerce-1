@@ -73,7 +73,12 @@ var productSchema = new mongoose.Schema(
     displayStatus : {
         type: String,
         default :"Show"
+    },
+    
+    Tags : {
+        type : String
     }
+    
 
     },
 

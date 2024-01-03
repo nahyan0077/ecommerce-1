@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title></title>
+    <title>Admin</title>
     <link rel="stylesheet" href="css/admin.css" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
@@ -138,7 +138,7 @@
                         <label for="category">Category</label>
                         <select id="category" name="category" required oninput="validateCategory()">
                             <% cat.forEach(ele=> { %>
-                                <option value="<%-ele.categoryName-%>"><%-ele.categoryName-%></option>
+                                <option><%-ele.categoryName-%></option>
                                 <% }) %>
                         </select>
                         <div class="error-message text-danger" id="categoryError"></div>
@@ -148,7 +148,7 @@
                         <label for="brand">Brand</label>
                         <select id="brand" name="brandName" required oninput="validateBrand()">
                             <% brnd.forEach(ele=> { %>
-                                <option value="<%-ele.brandName-%>"><%-ele.brandName-%></option>
+                                <option><%-ele.brandName-%></option>
                                 <% }) %>
                         </select>
                         <div class="error-message text-danger" id="brandError"></div>
@@ -176,25 +176,39 @@
                     <div class="error-message text-danger" id="stockError"></div>
                 </div>
 
+                <div class="form-group">
+                    <label for="tags">Tags</label>
+                    <textarea id="tags" placeholder="Tags Do not exceed 50 characters" name="Tags" maxlength="50"
+                        oninput="validateTags()"></textarea>
+                    <div class="error-message text-danger" id="tagsError"></div>
+                </div>
+
                 <label for="brand">Upload Images</label><br><br>
                 <div class="image-upload">
                     <div class="dropzone">
-                        <input type="file" id="productImage1" name="image1" onchange="displayImage(this)">
+                        <input type="file" id="productImage1" accept="image/*" name="image1"
+                            onchange="displayImage(this)">
                         <img id="previewImage1" class="preview-image" alt="Drag & drop or click to select image-1">
                     </div>
                     <div class="dropzone">
-                        <input type="file" id="productImage2" name="image2" onchange="displayImage(this)">
+                        <input type="file" id="productImage2" accept="image/*" name="image2"
+                            onchange="displayImage(this)">
                         <img id="previewImage2" class="preview-image" alt="Drag & drop or click to select image-2">
                     </div>
                     <div class="dropzone">
-                        <input type="file" id="productImage3" name="image3" onchange="displayImage(this)">
+                        <input type="file" id="productImage3" accept="image/*" name="image3"
+                            onchange="displayImage(this)">
                         <img id="previewImage3" class="preview-image" alt="Drag & drop or click to select image-3">
                     </div>
                     <div class="dropzone">
-                        <input type="file" id="productImage4" name="image4" onchange="displayImage(this)">
+                        <input type="file" id="productImage4" accept="image/*" name="image4"
+                            onchange="displayImage(this)">
                         <img id="previewImage4" class="preview-image" alt="Drag & drop or click to select image-4">
                     </div>
                 </div>
+
+                <div id="allImagesError" class="error-message text-danger"></div>
+
 
 
                 <div class="form-group d-grid gap-2">
@@ -205,185 +219,222 @@
 
     </div>
 
-        <script>
-            function displayImage(input) {
-                const previewId = input.id.replace('productImage', 'previewImage');
-                const previewImage = document.getElementById(previewId);
+    <script>
+    function displayImage(input) {
+        const previewId = input.id.replace('productImage', 'previewImage');
+        const previewImage = document.getElementById(previewId);
 
-                const file = input.files[0];
+        const file = input.files[0];
 
-                if (file) {
-                    const reader = new FileReader();
+        if (file) {
+            const reader = new FileReader();
 
-                    reader.onload = function (e) {
-                        previewImage.src = e.target.result;
-                    };
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+            };
 
-                    reader.readAsDataURL(file);
-                } else {
-                    // Clear the preview if no file is selected
-                    previewImage.src = '';
-                }
+            reader.readAsDataURL(file);
+
+            // Call validateImageFormat to check the file format
+            validateImageFormat(file, input);
+        } else {
+            // Clear the preview if no file is selected
+            previewImage.src = '';
+
+            // Clear any existing error message
+            const errorElement = document.getElementById(input.id + 'Error');
+            errorElement.textContent = '';
+
+            // Update submit button status
+            updateSubmitButton();
+        }
+    }
+
+    function validateImageFormat(file, input) {
+        const allowedFormats = ['jpg', 'jpeg', 'png'];
+        const fileFormat = file.name.split('.').pop().toLowerCase();
+
+        const isValidFormat = allowedFormats.includes(fileFormat);
+
+        const errorElement = document.getElementById(input.id + 'Error');
+        errorElement.textContent = isValidFormat ? '' : 'Invalid file format. Supported formats: ' + allowedFormats.join(', ');
+        updateSubmitButton();
+    }
+
+    function checkAllImagesInputted() {
+        const imageInputs = ['productImage1', 'productImage2', 'productImage3', 'productImage4'];
+
+        const allImagesInputted = imageInputs.every(inputId => {
+            const fileInput = document.getElementById(inputId);
+            return fileInput.files.length > 0;
+        });
+
+        const allImagesError = document.getElementById('allImagesError');
+        allImagesError.textContent = allImagesInputted ? '' : 'Please upload all four images.';
+
+        updateSubmitButton();
+    }
+
+
+
+    </script>
+
+    <script>
+
+
+        function validateProductName() {
+            const productName = document.getElementById('productName').value;
+            const productNameError = document.getElementById('productNameError');
+            if (!productName || productName.length > 50) {
+                productNameError.textContent = 'Product Name is required and should not exceed 20 characters.';
+            } else {
+                productNameError.textContent = '';
             }
-        </script>
+            updateSubmitButton()
+        }
 
-        <script>
-            // document.getElementById('productForm').addEventListener('submit', function (event) {
-
-            //     if (validateForm()) {
-            //         // Submit the form
-            //         alert('Form submitted successfully!');
-            //     } else {
-            //         alert('Please fix the errors in the form before submitting.');
-            //     }
-            // });
-
-
-            function validateProductName() {
-                const productName = document.getElementById('productName').value;
-                const productNameError = document.getElementById('productNameError');
-                if (!productName || productName.length > 50) {
-                    productNameError.textContent = 'Product Name is required and should not exceed 20 characters.';
-                } else {
-                    productNameError.textContent = '';
-                }
-                updateSubmitButton()
+        function validateDescription() {
+            const description = document.getElementById('description').value;
+            const descriptionError = document.getElementById('descriptionError');
+            if (!description || description.length > 500) {
+                descriptionError.textContent = 'Description is required and should not exceed 100 characters.';
+            } else {
+                descriptionError.textContent = '';
             }
+            updateSubmitButton()
+        }
 
-            function validateDescription() {
-                const description = document.getElementById('description').value;
-                const descriptionError = document.getElementById('descriptionError');
-                if (!description || description.length > 500) {
-                    descriptionError.textContent = 'Description is required and should not exceed 100 characters.';
-                } else {
-                    descriptionError.textContent = '';
-                }
-                updateSubmitButton()
-            }
+        function validateSpecifications() {
+            const specification1 = document.getElementById('specification1').value;
+            const specification2 = document.getElementById('specification2').value;
+            const specification3 = document.getElementById('specification3').value;
+            const specification4 = document.getElementById('specification4').value;
 
-            function validateSpecifications() {
-                const specification1 = document.getElementById('specification1').value;
-                const specification2 = document.getElementById('specification2').value;
-                const specification3 = document.getElementById('specification3').value;
-                const specification4 = document.getElementById('specification4').value;
+            document.getElementById('specificationError1').textContent = !specification1 ? 'Specification 1 is required.' : '';
+            document.getElementById('specificationError2').textContent = !specification2 ? 'Specification 2 is required.' : '';
+            document.getElementById('specificationError3').textContent = !specification3 ? 'Specification 3 is required.' : '';
+            document.getElementById('specificationError4').textContent = !specification4 ? 'Specification 4 is required.' : '';
+            updateSubmitButton()
 
-                document.getElementById('specificationError1').textContent = !specification1 ? 'Specification 1 is required.' : '';
-                document.getElementById('specificationError2').textContent = !specification2 ? 'Specification 2 is required.' : '';
-                document.getElementById('specificationError3').textContent = !specification3 ? 'Specification 3 is required.' : '';
-                document.getElementById('specificationError4').textContent = !specification4 ? 'Specification 4 is required.' : '';
-                updateSubmitButton()
+        }
 
-            }
+        function validateCategory() {
+            const category = document.getElementById('category').value;
+            const categoryError = document.getElementById('categoryError');
+            categoryError.textContent = !category ? 'Category is required.' : '';
+            updateSubmitButton()
+        }
 
-            function validateCategory() {
-                const category = document.getElementById('category').value;
-                const categoryError = document.getElementById('categoryError');
-                categoryError.textContent = !category ? 'Category is required.' : '';
-                updateSubmitButton()
-            }
+        function validateBrand() {
+            const brand = document.getElementById('brand').value;
+            const brandError = document.getElementById('brandError');
+            brandError.textContent = !brand ? 'Brand is required.' : '';
+            updateSubmitButton()
+        }
 
-            function validateBrand() {
-                const brand = document.getElementById('brand').value;
-                const brandError = document.getElementById('brandError');
-                brandError.textContent = !brand ? 'Brand is required.' : '';
-                updateSubmitButton()
-            }
+        function validatePrice() {
+            const price = document.getElementById('price').value;
+            const priceError = document.getElementById('priceError');
+            priceError.textContent = isNaN(price) || price < 0 || /\s/.test(price) ? 'Price should be a non-negative number without spaces.' : '';
+            updateSubmitButton()
+        }
 
-            function validatePrice() {
-                const price = document.getElementById('price').value;
-                const priceError = document.getElementById('priceError');
-                priceError.textContent = isNaN(price) || price < 0 || /\s/.test(price) ? 'Price should be a non-negative number without spaces.' : '';
-                updateSubmitButton()
-            }
+        function validateDiscountPrice() {
+            const discountPrice = document.getElementById('discountPrice').value;
+            const discountPriceError = document.getElementById('discountPriceError');
+            discountPriceError.textContent = isNaN(discountPrice) || discountPrice < 0 || /\s/.test(discountPrice) ? 'Discount Price should be a non-negative number without spaces.' : '';
+            updateSubmitButton()
+        }
 
-            function validateDiscountPrice() {
-                const discountPrice = document.getElementById('discountPrice').value;
-                const discountPriceError = document.getElementById('discountPriceError');
-                discountPriceError.textContent = isNaN(discountPrice) || discountPrice < 0 || /\s/.test(discountPrice) ? 'Discount Price should be a non-negative number without spaces.' : '';
-                updateSubmitButton()
-            }
+        function validateStock() {
+            const stock = document.getElementById('stock').value;
+            const stockError = document.getElementById('stockError');
+            stockError.textContent = isNaN(stock) || stock < 0 || /\s/.test(stock) ? 'Stock should be a non-negative number without spaces.' : '';
+            updateSubmitButton()
+        }
 
-            function validateStock() {
-                const stock = document.getElementById('stock').value;
-                const stockError = document.getElementById('stockError');
-                stockError.textContent = isNaN(stock) || stock < 0 || /\s/.test(stock) ? 'Stock should be a non-negative number without spaces.' : '';
-                updateSubmitButton()
-            }
+        function updateSubmitButton() {
+            const isValid = validateForm();
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = !isValid;
+        }
+        function validateTags() {
+            const tags = document.getElementById('tags').value;
+            const tagsError = document.getElementById('tagsError');
+            tagsError.textContent = tags.length > 50 ? 'Tags should not exceed 50 characters.' : '';
+            updateSubmitButton();
+        }
 
-            function updateSubmitButton() {
-                const isValid = validateForm();
-                const submitButton = document.getElementById('submitButton');
-                submitButton.disabled = !isValid;
-            }
+        function validateForm() {
+            const isValidProductName = document.getElementById('productNameError').textContent.trim() === '';
+            const isValidDescription = document.getElementById('descriptionError').textContent.trim() === '';
+            const isValidSpecification1 = document.getElementById('specificationError1').textContent.trim() === '';
+            const isValidSpecification2 = document.getElementById('specificationError2').textContent.trim() === '';
+            const isValidSpecification3 = document.getElementById('specificationError3').textContent.trim() === '';
+            const isValidSpecification4 = document.getElementById('specificationError4').textContent.trim() === '';
+            const isValidCategory = document.getElementById('categoryError').textContent.trim() === '';
+            const isValidBrand = document.getElementById('brandError').textContent.trim() === '';
+            const isValidPrice = document.getElementById('priceError').textContent.trim() === '';
+            const isValidDiscountPrice = document.getElementById('discountPriceError').textContent.trim() === '';
+            const isValidStock = document.getElementById('stockError').textContent.trim() === '';
+            const isValidTags = document.getElementById('tagsError').textContent.trim() === '';
 
-            function validateForm() {
-                const isValidProductName = document.getElementById('productNameError').textContent.trim() === '';
-                const isValidDescription = document.getElementById('descriptionError').textContent.trim() === '';
-                const isValidSpecification1 = document.getElementById('specificationError1').textContent.trim() === '';
-                const isValidSpecification2 = document.getElementById('specificationError2').textContent.trim() === '';
-                const isValidSpecification3 = document.getElementById('specificationError3').textContent.trim() === '';
-                const isValidSpecification4 = document.getElementById('specificationError4').textContent.trim() === '';
-                const isValidCategory = document.getElementById('categoryError').textContent.trim() === '';
-                const isValidBrand = document.getElementById('brandError').textContent.trim() === '';
-                const isValidPrice = document.getElementById('priceError').textContent.trim() === '';
-                const isValidDiscountPrice = document.getElementById('discountPriceError').textContent.trim() === '';
-                const isValidStock = document.getElementById('stockError').textContent.trim() === '';
 
-                return isValidProductName && isValidDescription && isValidSpecification1 && isValidSpecification2 && isValidSpecification3 && isValidSpecification4 && isValidCategory && isValidBrand && isValidPrice && isValidDiscountPrice && isValidStock;
-            }
-        </script>
-
+            return isValidProductName && isValidDescription && isValidSpecification1 && isValidSpecification2 && isValidSpecification3 && isValidSpecification4 && isValidCategory && isValidBrand && isValidPrice && isValidDiscountPrice && isValidStock && isValidTags;
+        }
+    </script>
 
 
 
 
 
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>
 
-            $(".menu").click(function () {
-                $("#mySidenav").css('width', '70px');
-                $("#main").css('margin-left', '70px');
-                $(".logo").css('display', 'none');
-                $(".logo1").css('display', 'block');
-                $(".logo span").css('visibility', 'visible');
-                $(".logo span").css('margin-left', '-10px');
-                $(".icon-a").css('visibility', 'hidden');
-                $(".icon-a").css('height', '25px');
-                $(".icons").css('visibility', 'visible');
-                $(".icons").css('margin-left', '-8px');
-                $(".menu1").css('display', 'block');
-                $(".menu").css('display', 'none');
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        $(".menu").click(function () {
+            $("#mySidenav").css('width', '70px');
+            $("#main").css('margin-left', '70px');
+            $(".logo").css('display', 'none');
+            $(".logo1").css('display', 'block');
+            $(".logo span").css('visibility', 'visible');
+            $(".logo span").css('margin-left', '-10px');
+            $(".icon-a").css('visibility', 'hidden');
+            $(".icon-a").css('height', '25px');
+            $(".icons").css('visibility', 'visible');
+            $(".icons").css('margin-left', '-8px');
+            $(".menu1").css('display', 'block');
+            $(".menu").css('display', 'none');
+        });
+
+        $(".menu1").click(function () {
+            $("#mySidenav").css('width', '300px');
+            $("#main").css('margin-left', '300px');
+            $(".logo").css('visibility', 'visible');
+            $(".logo").css('display', 'block');
+            $(".icon-a").css('visibility', 'visible');
+            $(".icons").css('visibility', 'visible');
+            $(".menu").css('display', 'block');
+            $(".menu1").css('display', 'none');
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".profile p").click(function () {
+                $(".profile-div").toggle();
+
+            });
+            $(".noti-icon").click(function () {
+                $(".notification-div").toggle();
             });
 
-            $(".menu1").click(function () {
-                $("#mySidenav").css('width', '300px');
-                $("#main").css('margin-left', '300px');
-                $(".logo").css('visibility', 'visible');
-                $(".logo").css('display', 'block');
-                $(".icon-a").css('visibility', 'visible');
-                $(".icons").css('visibility', 'visible');
-                $(".menu").css('display', 'block');
-                $(".menu1").css('display', 'none');
-            });
-
-        </script>
-        <script>
-            $(document).ready(function () {
-                $(".profile p").click(function () {
-                    $(".profile-div").toggle();
-
-                });
-                $(".noti-icon").click(function () {
-                    $(".notification-div").toggle();
-                });
 
 
 
-
-            });
-        </script>
+        });
+    </script>
 
 
 

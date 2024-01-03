@@ -1,0 +1,212 @@
+<%- include('./partials/adminnav') %>
+
+
+
+    <div id="main">
+
+        <div class="head">
+            <div class="col-div-6">
+                <p class="nav"> Orders</p>
+
+            </div>
+
+            <div class="col-div-6">
+                <i class="fa fa-search search-icon"></i>
+
+
+                <i class="fa fa-bell noti-icon"></i>
+                <div class="notification-div">
+                    <p class="noti-head">Notification <span>2</span></p>
+                    <hr class="hr" />
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                </div>
+                <div class="profile">
+
+                    <p><i class="fa-solid fa-user fa-xl" style="color: #7c4ff9;padding-right: 5px;margin-left: -15px;"></i>  ADMIN <i class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
+                    <div class="profile-div">
+                        <p><i class="fa fa-user"></i> Profile</p>
+                        <p><i class="fa fa-cogs"></i> Settings</p>
+                        <p><i class="fa fa-power-off"></i> <a href="/adminlogout" style="text-decoration: none;">Log Out</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+        <br />
+
+
+
+        <div class="container" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1)">
+ 
+            
+             
+
+            <div class="row my-5">
+              <table id="example" class="table bg-light table-striped text-center">
+                <thead class="thead-dark text-center">
+                  <tr>
+                    <th class="text-center" scope="col">Si.No</th>
+                    <th class="text-center" scope="col">User Name</th>
+                    <th class="text-center" scope="col">Order Id</th>
+                    <th class="text-center" scope="col">Purchase Date</th>
+                    <th class="text-center" scope="col">Payment Method</th>
+                    <th class="text-center" scope="col">Total Price</th>
+                    <th class="text-center" scope="col">Order Status</th>
+                    <th class="text-center" scope="col">Update Status</th>
+                    <th class="text-center" scope="col">View</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+               
+              <% orders.forEach((data, index) => { %>                
+                    
+                  <tr>
+                    <td class="text-center" scope="row"><%= index + 1%></td>
+                    <td class="text-center"><%-data.username-%></td>
+                    <td class="text-center"><%-data._id-%></td>
+                    <td class="text-center"><%- data.orderDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' }) %></td>
+                    <td class="text-center"><%-data.paymentMethod-%></td>
+                    <td class="text-center">₹  <%-data.totalAmount-%></td>
+                    
+
+                    <td class="text-center">
+                        <% if (data.orderStatus === 'Order Processed') { %>
+                            <span class="badge rounded-pill bg-warning" style="font-weight: 400;"><%= data.orderStatus %></span>
+                        <% } else if (data.orderStatus === 'Order Confirmed') { %>
+                            <span class="badge rounded-pill bg-primary" style="font-weight: 400;"><%= data.orderStatus %></span>
+                        <% } else if (data.orderStatus === 'Order Shipped') { %>
+                            <span class="badge rounded-pill bg-info" style="font-weight: 400;"><%= data.orderStatus %></span>
+                        <% } else if (data.orderStatus === 'Order Delivered') { %>
+                            <span class="badge rounded-pill bg-success" style="font-weight: 400;"><%= data.orderStatus %></span>
+                        <% } else if (data.orderStatus === 'Order Rejected'){ %>
+                            <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= data.orderStatus %></span>
+                        <% } else if (data.orderStatus === 'Cancelled'){ %>
+                            <span class="badge rounded-pill bg-danger" style="font-weight: 400;">Cancelled</span>
+                        <% } %>
+                      </td>
+
+                    
+
+
+                      <td class="text-center">
+                        <% if (data.orderStatus !== 'Cancelled') { %>
+
+                            <% if (data.orderStatus === 'Order Processed') { %>
+                            <select class="form-select" id="statusSelect<%= data._id %>" onchange="updateOrderStatus('<%= data._id %>', this.value)">
+                                <option value="" selected disabled>Select</option>
+                                <option value="Order Confirmed">Order Confirmed</option>
+                                <option value="Order Rejected">Order Rejected</option>
+                            </select>
+                            <% } else if (data.orderStatus === 'Order Confirmed') { %>
+                            <select class="form-select" id="statusSelect<%= data._id %>" onchange="updateOrderStatus('<%-data._id-%>', this.value)">
+                                <option value="" selected disabled>Select</option>
+                                <option value="Order Shipped">Order Shipped</option>
+                                <option value="Order Rejected">Order Rejected</option>
+                            </select>
+                            <% } else if (data.orderStatus === 'Order Shipped') { %>
+                            <select class="form-select" id="statusSelect<%= data._id %>" onchange="updateOrderStatus('<%= data._id %>', this.value)">
+                                <option value="" selected disabled>Select</option>
+                                <option value="Order Delivered">Order Delivered</option>
+                                <option value="Order Rejected">Order Rejected</option>
+                            </select>
+                            <% } else if (data.orderStatus === 'Order Delivered') { %>
+                                <span  style="font-weight: 400;color: green;">Success</span>
+                            <% } else if (data.orderStatus === 'Order Rejected') { %>
+                                <span  style="font-weight: 400;color: red;">Rejected</span>
+                            <% } %>
+                        <% } else { %>
+                            <span class="badge rounded-pill bg-danger" style="font-weight: 400;">Cancelled</span>
+                        <% } %>
+                         
+                      </td>
+
+                    <td>
+
+                        <a href="/orderlist1/<%-data._id-%>/<%-data._id-%>" class="btn btn-success">view</a>                                                                                 
+
+                      <!-- <a href=""><i class="fa-solid fa-trash fa-lg mx-1 text-danger" onclick=""></i></a> -->
+                    </td>
+                  </tr>
+
+            <% }) %> 
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        $(".menu").click(function () {
+            $("#mySidenav").css('width', '70px');
+            $("#main").css('margin-left', '70px');
+            $(".logo").css('display', 'none');
+            $(".logo1").css('display', 'block');
+            $(".logo span").css('visibility', 'visible');
+            $(".logo span").css('margin-left', '-10px');
+            $(".icon-a").css('visibility', 'hidden');
+            $(".icon-a").css('height', '25px');
+            $(".icons").css('visibility', 'visible');
+            $(".icons").css('margin-left', '-8px');
+            $(".menu1").css('display', 'block');
+            $(".menu").css('display', 'none');
+        });
+
+        $(".menu1").click(function () {
+            $("#mySidenav").css('width', '300px');
+            $("#main").css('margin-left', '300px');
+            $(".logo").css('visibility', 'visible');
+            $(".logo").css('display', 'block');
+            $(".icon-a").css('visibility', 'visible');
+            $(".icons").css('visibility', 'visible');
+            $(".menu").css('display', 'block');
+            $(".menu1").css('display', 'none');
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".profile p").click(function () {
+                $(".profile-div").toggle();
+
+            });
+            $(".noti-icon").click(function () {
+                $(".notification-div").toggle();
+            });
+
+
+
+
+        });
+    </script>
+
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+    let table = new DataTable('#example');
+  });
+</script>
+
+
+</body>
+
+
+</html>
+
