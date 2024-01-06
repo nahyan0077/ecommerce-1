@@ -1,4 +1,4 @@
-
+const user = require('../models/userModels')
 
 module.exports = {
 
@@ -6,8 +6,14 @@ module.exports = {
     //------------------------user
 
     //after login
-    verifyUser : (req,res,next)=>{
+    verifyUser : async (req,res,next)=>{
         if(req.session.userlogged){
+            const usr = await user.findOne({email:req.session.user})
+            //to logOut the blocked user
+            if(usr.status=="inactive"){
+                req.session.user = false
+                res.redirect('/')
+            }
             next()
         }else{
             res.redirect('/')

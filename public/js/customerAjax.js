@@ -249,7 +249,7 @@ function confirmOrder(type){
         
         method:"get",
         success:function (response){
-            window.location.reload()
+            // window.location.reload()
             alert(response.msg)
         },
         error:function (err){
@@ -282,5 +282,30 @@ function updateOrderStatus(orderid,status){
         })
     }
 }
+
+
+//cancel an order from the user side
+function cancelOrder(orderid){
+    console.log("update");
+    let cnfrm = confirm(`Are you sure want to cancel this order?`)
+    if(cnfrm==true){
+        $.ajax({
+            url:"/cancelorder/"+`${orderid}`,
+            
+            method:"get",
+            success:function (response){
+                window.location.reload()
+                alert(response.msg)
+               
+                
+            },
+            error:function (err){
+                alert("Something Error")
+                console.log(err);
+            }
+        })
+    }
+}
+
 
 

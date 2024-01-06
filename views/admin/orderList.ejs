@@ -106,9 +106,19 @@
                     </span></h6>
                   <h6>Ordered Date & Time: <span style="font-weight: 400;"><%- ordrs.orderDate.toLocaleString('en-IN', {
                         timeZone: 'Asia/Kolkata' , dateStyle: 'short' , timeStyle: 'short' }) %></span></h6>
+
+                <% if (ordrs.orderStatus!="Order Delivered") { %>
+                     
+
                   <h6>Expected Delivery Date & Time: <span style="font-weight: 400;"><%-
                         ordrs.expectedDeliveryDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' ,
                         dateStyle: 'short' , timeStyle: 'short' }) %></span></h6>
+                <% } else { %>
+                  <h6>Delivered Date & Time: <span style="font-weight: 400;"><%-
+                    ordrs.deliveryDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' ,
+                    dateStyle: 'short' , timeStyle: 'short' }) %></span></h6>
+                <% } %>
+
                 </div>
 
                 <div class="col-lg-6">

@@ -1,121 +1,78 @@
-<%- include('./partials/adminnav') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 
-<div id="main">
-    <div class="head">
-        <div class="col-div-6">
-            <p class="nav"> Orders</p>
-        </div>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
-        <div class="col-div-6">
-            <i class="fa fa-search search-icon"></i>
-            <i class="fa fa-bell noti-icon"></i>
+    <style>
+        .page_404 {
+            padding: 40px 0;
+            background: #fff;
+            font-family: 'Arvo', serif;
+        }
 
-            <div class="notification-div">
-                <p class="noti-head">Notification <span>2</span></p>
-                <hr class="hr" />
-                <p>Your Order is Placed <span>Lorem Ipsum is simply dummy </span></p>
-                <p>Your Order is Placed <span>Lorem Ipsum is simply dummy </span></p>
-                <p>Your Order is Placed <span>Lorem Ipsum is simply dummy </span></p>
-            </div>
+        .page_404 img {
+            width: 100%;
+        }
 
-            <div class="profile">
-                <p><i class="fa-solid fa-user fa-xl" style="color: #7c4ff9;padding-right: 5px;margin-left: -15px;"></i> ADMIN
-                    <i class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
-                <div class="profile-div">
-                    <p><i class="fa fa-user"></i> Profile</p>
-                    <p><i class="fa fa-cogs"></i> Settings</p>
-                    <p><i class="fa fa-power-off"></i> <a href="/adminlogout" style="text-decoration: none;">Log Out</a></p>
+        .four_zero_four_bg {
+            background-image: url(https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif);
+            height: 400px;
+            background-position: center;
+        }
+
+        .four_zero_four_bg h1 {
+            font-size: 80px;
+        }
+
+        .four_zero_four_bg h3 {
+            font-size: 80px;
+        }
+
+        .link_404 {
+            color: #fff!important;
+            padding: 10px 20px;
+            background: #39ac31;
+            margin: 20px 0;
+            display: inline-block;
+        }
+
+        .contant_box_404 {
+            margin-top: -50px;
+        }
+    </style>
+</head>
+<body>
+    <section class="page_404" style="margin-left: 150px;">
+        <div class="container">
+            <div class="row"> 
+                <div class="col-sm-12 ">
+                    <div class="col-sm-10 col-sm-offset-1  text-center">
+                        <div class="four_zero_four_bg">
+                            <h1 class="text-center">404</h1>
+                        </div>
+                        <div class="contant_box_404">
+                            <h3 class="h2">Look like you're lost</h3>
+                            <p>The page you are looking for is not available!</p>
+                            <a href="/userhome" class="link_404">Go to Home</a>
+                            <h2><%= message %></h2>
+                            <h1><%= error.status %></h1>
+                            <pre><%= error.stack %></pre>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="clearfix"></div>
-    </div>
+    </section>
 
-    <div class="clearfix"></div>
-    <br />
-
-    <% ordrs.forEach(order=> { %>
-    <div class="order-details">
-        <div class="order-info">
-            <h3>Order Date: <%= order.orderDate %></h3>
-            <h3>Delivery Date: <%= order.expectedDeliveryDate %></h3>
-            <h3>Payment Method: <%= order.paymentMethod %></h3>
-        </div>
-
-        <!-- Display address information -->
-        <div class="address-info">
-            <h3>Address</h3>
-            <p><strong>Address:</strong> <%= order.address.address %></p>
-            <p><strong>Locality:</strong> <%= order.address.locality %></p>
-            <p><strong>City:</strong> <%= order.address.city %></p>
-            <p><strong>District:</strong> <%= order.address.district %></p>
-            <p><strong>State:</strong> <%= order.address.state %></p>
-            <p><strong>Pincode:</strong> <%= order.address.pincode %></p>
-        </div>
-
-        <!-- Display product details -->
-        <div class="product-info">
-            <h3>Products</h3>
-            <% order.products.forEach(product=> { %>
-            <div class="product-item">
-                <img src="/product_images/<%=product.productid.images[0]%>" alt="[Product Name]">
-                <p><strong>Product name:</strong> <%= product.productid.productName %></p>
-                <p><strong>Price:</strong> <%= product.productid.price %></p>
-                <p><strong>Quantity:</strong> <%= product.quantity %></p>
-                <!-- Add other product details here -->
-            </div>
-            <% }) %>
-        </div>
-    </div>
-    <% }) %>
-
-</div>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(".menu").click(function () {
-        $("#mySidenav").css('width', '70px');
-        $("#main").css('margin-left', '70px');
-        $(".logo").css('display', 'none');
-        $(".logo1").css('display', 'block');
-        $(".logo span").css('visibility', 'visible');
-        $(".logo span").css('margin-left', '-10px');
-        $(".icon-a").css('visibility', 'hidden');
-        $(".icon-a").css('height', '25px');
-        $(".icons").css('visibility', 'visible');
-        $(".icons").css('margin-left', '-8px');
-        $(".menu1").css('display', 'block');
-        $(".menu").css('display', 'none');
-    });
-
-    $(".menu1").click(function () {
-        $("#mySidenav").css('width', '300px');
-        $("#main").css('margin-left', '300px');
-        $(".logo").css('visibility', 'visible');
-        $(".logo").css('display', 'block');
-        $(".icon-a").css('visibility', 'visible');
-        $(".icons").css('visibility', 'visible');
-        $(".menu").css('display', 'block');
-        $(".menu1").css('display', 'none');
-    });
-</script>
-<script>
-    $(document).ready(function () {
-        $(".profile p").click(function () {
-            $(".profile-div").toggle();
-        });
-        $(".noti-icon").click(function () {
-            $(".notification-div").toggle();
-        });
-    });
-</script>
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        let table = new DataTable('#example');
-    });
-</script>
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -31,9 +31,9 @@ const orderSchema = new mongoose.Schema({
     totalAmount: Number,
     deliveryDate: Date,
     orderStatus: String,
-    couponDiscount: String,
+    couponDiscount: Number,
     couponCode: String,
-    discountAmount: String,
+    discountAmount: Number,
 
 })
 const order = mongoose.model("order", orderSchema);

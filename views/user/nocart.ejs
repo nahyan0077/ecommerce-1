@@ -31,11 +31,96 @@
         } 
             
     </style>
+        <style>
+            *::selection {
+                background-color: transparent;
+            }
+    
+            * {
+                cursor: default;
+                box-sizing: border-box;
+            }
+    
+    
+    
+    
+    
+            .contenir {
+                width: 740px;
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-color: black;
+                
+            }
+    
+    
+    
+    
+    
+            .search {
+                box-shadow: 0px 0px 20px 1px #ffffff;
+                border: 0;
+                border-radius: 30px 0 0 30px;
+                padding: 0 10px 0 10px;
+                color: black;
+                height: 40px;
+                width: 400px;
+                font-size: 25px;
+                font-weight: 1000;
+                background-color: rgb(234, 234, 234);
+            }
+    
+            .search::selection {
+                background-color: red;
+                color: white;
+            }
+    
+            .search:focus {
+                border: 0;
+                outline: 0;
+            }
+    
+            .search:hover {
+                cursor: text;
+            }
+    
+    
+    
+    
+    
+            .search-btn {
+                transition: 0.2s ease-in-out;
+                border: 0;
+                border-radius: 0 30px 30px 0;
+                padding: 0 10px 0 10px;
+                text-align: center;
+                color: rgb(255, 255, 255);
+                position: relative;
+                background-color: rgb(15, 19, 9);
+                height: 40px;
+                width: 70px;
+                font-size: 25px;
+                font-weight: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+    
+            .search-btn:hover {
+                transition: 0.2s ease-in-out;
+                font-size: 30px;
+                font-weight: 800;
+                cursor: pointer;
+            }
+        </style>
+    
 </head>
 <body>
 
     <header class="header-area header-sticky">
-        <div class="container" >
+        <div class="container" id="top">
             <div class="row">
                 <div class="col-12">
                     <nav class="main-nav">
@@ -46,34 +131,40 @@
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav" style="margin-right: -217px;">
-                            <li class="scroll-to-section"><a href="#top" class="active">Home</a></li>
-                            <li class="scroll-to-section"><a href="#men">Men's</a></li>
-                            <li class="scroll-to-section"><a href="#women">Women's</a></li>
-                            <li class="scroll-to-section"><a href="#kids">Kid's</a></li>
+                            <div class="contenir">
+                                <form class="d-flex" action="/search">
+                                    <input type="text" name="search" class="search" id="search-inp"
+                                        placeholder="Search...">
+                                    <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
+                                </form>
+                            </div>
+                            <li class="scroll-to-section"><a href="/" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="/#men">Men's</a></li>
+                            <li class="scroll-to-section"><a href="/#women">Women's</a></li>
+                            <li class="scroll-to-section"><a href="/#kids">Kid's</a></li>
                             <li class="submenu">
                                 <a href="javascript:;">Pages</a>
                                 <ul>
                                     <li><a href="about.html">About Us</a></li>
                                     <li><a href="products.html">Products</a></li>
-                                    <li><a href="single-product.html">Single Product</a></li>
                                     <li><a href="contact.html">Contact Us</a></li>
                                 </ul>
                             </li>
-                            
+
                             <li class="submenu">
-                                <a href="javascript:;"><i class="fa-solid fa-bars" style="color: #000000;"></i></a>
+                                <a href="javascript:;"><i class="fa-solid fa-user" style="color: #000000;cursor: pointer;"></i></a>
                                 <ul>
-                                    <li><a href="#">Features Page 1</a></li>
-                                    <li><a href="#">Features Page 2</a></li>
-                                    <li><a href="#">Features Page 3</a></li>
-                                    <li><a rel="nofollow" href="https://templatemo.com/page/4" target="_blank">Template Page 4</a></li>
+                                    <li><a href="/allproducts">All Products</a></li>
+                                    <li><a href="/usersignup">Sign Up</a></li>
+                                    <li><a href="/userlogin">Login</a></li>
                                 </ul>
                             </li>
-                            <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;"></i></a></li>
-                            <li><a href=""><i class="fa-solid fa-cart-shopping" style="color: #000000;"></i></a></li>
-                            <li><a href="/userlogin"><i class="fa-solid fa-user" style="color: #000000;"></i></a></li>
-                            
-                        </ul>        
+                            <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;cursor: pointer;"></i></a></li>
+                            <li><a href="/nocart"><i class="fa-solid fa-cart-shopping" style="color: #000000;cursor: pointer;"></i></a>
+                            </li>
+                            <li><a href=""></a></li>
+
+                        </ul>
                         <a class='menu-trigger'>
                             <span>Menu</span>
                         </a>
@@ -83,7 +174,6 @@
             </div>
         </div>
     </header>
-
 
 
 

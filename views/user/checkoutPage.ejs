@@ -134,67 +134,7 @@
 <body>
 
 
-    <header class="header-area header-sticky">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
-                        <a href="index.html" class="logo">
-                            <img src="/images/ds_blk.png" style="max-width: 120px;margin-left: -260px;">
-                        </a>
-                        <!-- ***** Logo End ***** -->
-                        <!-- ***** Menu Start ***** -->
-                        <ul class="nav" style="margin-right: -200px;">
-                            <div class="contenir">
-                                <form class="d-flex" action="/search">
-                                    <input type="text" name="search" class="search" id="search-inp"
-                                        placeholder="Search...">
-                                    <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
-                                </form>
-                            </div>
-                            <li class="scroll-to-section"><a href="/userhome" class="active">Home</a></li>
-                            <li class="scroll-to-section"><a href="/userhome#men">Men's</a></li>
-                            <li class="scroll-to-section"><a href="/userhome#women">Women's</a></li>
-                            <li class="scroll-to-section"><a href="/userhome#kids">Kid's</a></li>
-                            <li class="submenu">
-                                <a href="javascript:;">Pages</a>
-                                <ul>
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="products.html">Products</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="submenu">
-                                <a href="javascript:;"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
-                                <ul>
-                                    <li><a href="/allproducts">All Products</a></li>
-                                    <li><a href="/userprofile">My Profile</a></li>
-                                    <li><a href="/logout" onclick="confirmLogout()">Logout</a></li>
-                                </ul>
-                            </li>
-                            <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;"></i></a></li>
-                            <li><a href="/usercart"><i class="fa-solid fa-cart-shopping"
-                                        style="color: #000000;"></i></a></li>
-
-
-                            <% if (locals.check) { %>
-                                <div class="" style="color: #000000;text-transform: capitalize;margin-top: 7px;">Hello,
-                                    <%- check.username %>
-                                </div>
-                                <% } %>
-
-                        </ul>
-                        <a class='menu-trigger'>
-                            <span>Menu</span>
-                        </a>
-                        <!-- ***** Menu End ***** -->
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
+    <%- include('./layout/userHeaderNav') %>
 
 
 
@@ -208,9 +148,16 @@
 
                 <div class="col-lg-9">
                     <div class="card-header">
+                        <a  class="btn btn-primary float-end" onclick="openModal()">Add Address</a>
                         <h4 class="card-title ">Delivery Address</h4>
                     </div>
-                    <div class="card border shadow-0">
+
+
+                    <% if (addrs[0]!=null) { %>
+                     
+                    
+
+                    <div class="card border shadow-0" id="addressCard0">
                         <div class="m-4">
 
                             <!-- Container to display existing addresses -->
@@ -267,9 +214,9 @@
                                                 <p><%-addrs[i].mobile-%></p>
                                                 <p><%-addrs[i].pincode-%></p>
                                                 <br>
-                                                <button type="button" class="btn btn-success btn-sm d-none"
+                                                <a type="button" class="btn btn-success btn-sm d-none"
                                                     id=<%="deliverHereBtn" +i%> onclick="selectAddress('<%-addrs[i]._id-%>')">Deliver
-                                                    Here</button>
+                                                    Here</a>
                                             </li>
                                         </ul>
                                         <hr style="color: #9a9a9a;">
@@ -290,12 +237,12 @@
 
                     </div>
 
-
+                    <% } %>
 
                     <br>
 
                     <!-- Payment Options -->
-                    <div class="card-header">
+                    <div class="card-header" id="paymentt">
                         <h4 class="card-title ">Payment Options</h4>
                     </div>
 
@@ -404,6 +351,115 @@
     <!-- cart + summary -->
 
 
+        <!-- address-modal -->
+        <div class="modal" id="addressModal">
+            <div class="modal-content" style="height: 800px; overflow:scroll;">
+                <!-- Inside the <div class="modal-content"> -->
+                <div class="modal-body"
+                    style="max-width: 500px; margin: 0 auto; width: 530px; margin-top: 100px;">
+                    <button type="button" class="close" aria-label="Close" onclick="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h2 class="text-center mb-4">Add New Address</h2>
+                    <form class="needs-validation" action="/postaddaddress" method="post" novalidate>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="name">Name:</label>
+                                <input type="text" class="form-control" id="name" name="name" oninput="validateName(); updateAddAddressBtnState()" required>
+                                <p style="color: red;" id="name-error" class="error-message"></p>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="phone">Phone No:</label>
+                                <input type="tel" class="form-control" id="phone" name="mobile" pattern="[0-9]{10}" oninput="validatePhone(); updateAddAddressBtnState()" required>
+                                <p style="color: red;" id="phone-error" class="error-message"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address:</label>
+                            <textarea class="form-control" id="address" name="address" rows="3" oninput="validateField('address', 'address-error', 'Address is required'); updateAddAddressBtnState()" required></textarea>
+                            <p style="color: red;" id="address-error" class="error-message"></p>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="city">City:</label>
+                                <input type="text" class="form-control" id="city" name="city" oninput="validateField('city', 'city-error', 'City is required'); updateAddAddressBtnState()" required>
+                                <p style="color: red;" id="city-error" class="error-message"></p>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="pincode">Pincode:</label>
+                                <input type="text" class="form-control" id="pincode" name="pincode" pattern="[0-9]{6}" oninput="validatePincode(); updateAddAddressBtnState()" required>
+                                <p style="color: red;" id="pincode-error" class="error-message"></p>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="district">District:</label>
+                                <input type="text" class="form-control" id="district" name="district" oninput="validateField('district', 'district-error', 'District is required'); updateAddAddressBtnState()" required>
+                                <p style="color: red;" id="district-error" class="error-message"></p>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="state">State:</label>
+                                <input type="text" class="form-control" id="state" name="state" oninput="validateField('state', 'state-error', 'State is required'); updateAddAddressBtnState()" required>
+                                <p style="color: red;" id="state-error" class="error-message"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="locality">Locality:</label>
+                            <input type="text" class="form-control" id="locality" name="locality" oninput="validateField('locality', 'locality-error', 'Locality is required'); updateAddAddressBtnState()" required>
+                            <p style="color: red;" id="locality-error" class="error-message"></p>
+                        </div>
+                        <div class="form-group">
+                            <label>Address Type:</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="addressType" id="homeType" value="Home" checked oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
+                                <label style="margin-top: -17px;" class="form-check-label" for="homeType">Home</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="addressType" id="workType" value="Work" oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
+                                <label style="margin-top: -17px;" class="form-check-label" for="workType">Work</label>
+                            </div>
+                            <p style="color: red;" id="addressType-error" class="error-message"></p>
+                        </div>
+        
+                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Add Address</button>
+        
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- payment confirm modal -->
+
+        <!-- Modal for Payment Success -->
+        <div class="modal fade" id="paymentSuccessModal" tabindex="-1" role="dialog" aria-labelledby="paymentSuccessModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="paymentSuccessModalLabel">Payment Successful</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Modal body content -->
+                        <p>Your payment was successful!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <!-- Buttons to navigate -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="goToHomePage()">Go to Home Page</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="goToMyOrders()">Go to My Orders</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
     <!-- ***** Footer Start ***** -->
     <footer>
         <div class="container">
@@ -463,34 +519,119 @@
             </div>
         </div>
     </footer>
-</body>
 
-<!-- <script>
-  function incrementCounter(button) {
-      var input = button.parentNode.querySelector('input[type=number]');
-      if (parseInt(input.value) < 5) {
-          input.stepUp();
-          button.parentNode.querySelector('button[onclick="decrementCounter(this)"]').removeAttribute('disabled');
-      } else {
-          showError("Cannot add more than 5 products");
-      }
-  }
 
-  function decrementCounter(button) {
-      var input = button.parentNode.querySelector('input[type=number]');
-      if (parseInt(input.value) > 1) {
-          input.stepDown();
-      } else {
-          button.setAttribute('disabled', 'disabled');
-          showError("Cannot go below 1 product");
-      }
-  }
 
-  function showError(message) {
-      // Display the error message (You can customize this part based on your UI)
-      alert(message);
-  }
-</script> -->
+<script>
+    function openModal() {
+        document.getElementById('addressModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('addressModal').style.display = 'none';
+    }
+</script>
+
+
+<script>
+
+    function validateForm() {
+            const nameIsValid = validateName();
+            const phoneIsValid = validatePhone();
+            const addressIsValid = validateField('address', 'address-error', 'Address is required');
+            const cityIsValid = validateField('city', 'city-error', 'City is required');
+            const pincodeIsValid = validatePincode();
+            const districtIsValid = validateField('district', 'district-error', 'District is required');
+            const stateIsValid = validateField('state', 'state-error', 'State is required');
+            const localityIsValid = validateField('locality', 'locality-error', 'Locality is required');
+            const addressTypeIsValid = validateRadio('addressType', 'addressType-error', 'Please select an Address Type');
+    
+            // Enable/disable submit button based on all validations
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = !(nameIsValid && phoneIsValid && addressIsValid && cityIsValid &&
+                pincodeIsValid && districtIsValid && stateIsValid && localityIsValid && addressTypeIsValid);
+    
+            return !submitBtn.disabled; // Return true if the form is valid and can be submitted
+        }
+    
+        function validateName() {
+            const nameInput = document.getElementById('name');
+            const nameError = document.getElementById('name-error');
+    
+            const namePattern = /^[a-zA-Z\s]{1,}$/;
+    
+            if (!namePattern.test(nameInput.value.trim())) {
+                nameError.textContent = 'Invalid name. Only letters and spaces allowed.';
+                return false;
+            } else {
+                nameError.textContent = '';
+                return true;
+            }
+        }
+    
+        function validatePhone() {
+            const phoneInput = document.getElementById('phone');
+            const phoneError = document.getElementById('phone-error');
+    
+            const phonePattern = /^[0-9]{10}$/;
+    
+            if (!phonePattern.test(phoneInput.value.trim())) {
+                phoneError.textContent = 'Invalid phone number. Must be 10 digits.';
+                return false;
+            } else {
+                phoneError.textContent = '';
+                return true;
+            }
+        }
+    
+        function validatePincode() {
+            const pincodeInput = document.getElementById('pincode');
+            const pincodeError = document.getElementById('pincode-error');
+    
+            const pincodePattern = /^[0-9]{6}$/;
+    
+            if (!pincodePattern.test(pincodeInput.value.trim())) {
+                pincodeError.textContent = 'Invalid pincode. Must be 6 digits.';
+                return false;
+            } else {
+                pincodeError.textContent = '';
+                return true;
+            }
+        }
+    
+        function validateField(fieldName, errorId, errorMessage) {
+            const fieldInput = document.getElementById(fieldName);
+            const errorElement = document.getElementById(errorId);
+    
+            if (fieldInput.value.trim() === '' || fieldInput.value.trim().split(/\s+/).length > 4) {
+                errorElement.textContent = errorMessage;
+                return false;
+            } else {
+                errorElement.textContent = '';
+                return true;
+            }
+        }
+    
+        function validateRadio(fieldName, errorId, errorMessage) {
+            const radioInputs = document.getElementsByName(fieldName);
+            const errorElement = document.getElementById(errorId);
+    
+            for (const radio of radioInputs) {
+                if (radio.checked) {
+                    errorElement.textContent = '';
+                    return true;
+                }
+            }
+    
+            errorElement.textContent = errorMessage;
+            return false;
+        }
+    
+        function updateAddAddressBtnState() {
+            validateForm(); // Update the button state on each input change
+        }
+    </script>
+
 
 
 <script>
@@ -558,7 +699,7 @@
             // Log or use the selected payment option value
             console.log("Selected Payment Option: " + selectedPaymentOption.value);
             confirmOrder(selectedPaymentOption.value);
-
+            $('#paymentSuccessModal').modal('show');
             // Continue with other logic for Confirm Order
             // Example: Submit the form or perform other actions
         } else {
@@ -567,6 +708,20 @@
         }
     }
 </script>
+
+<!-- Add these scripts to your existing script section -->
+<script>
+    function goToHomePage() {
+        // Redirect to the home page
+        window.location.href = '/';  // Replace '/' with your home page URL
+    }
+
+    function goToMyOrders() {
+        // Redirect to the My Orders page
+        window.location.href = '/myorders';  // Replace '/myorders' with your My Orders page URL
+    }
+</script>
+
 
 
 
@@ -655,5 +810,5 @@
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
                     integrity="sha384-A1DlJ1RQyZR6WjqJOQoKsU97A1HAj/poo/n8mzKbkgsQPZsJ8B9z9xgv76fqcQ1"
                     crossorigin="anonymous"></script>
-
+</body>
 </html>

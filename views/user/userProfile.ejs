@@ -335,65 +335,7 @@
 <body>
 
 
-    <header class="header-area header-sticky" style="height: 100px;">
-        <div class="container" style="margin-top: -15px;">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
-                        <a href="index.html" class="logo">
-                            <img src="/images/ds_blk.png" style="max-width: 120px;margin-left: -260px;">
-                        </a>
-                        <!-- ***** Logo End ***** -->
-                        <!-- ***** Menu Start ***** -->
-                        <ul class="nav" style="margin-right: -200px;">
-                            <div class="contenir">
-                                <form class="d-flex" action="/search">
-                                    <input type="text" name="search" class="search" id="search-inp"
-                                        placeholder="Search...">
-                                    <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
-                                </form>
-                            </div>
-                            <li class="scroll-to-section"><a href="/userhome" class="active">Home</a></li>
-                            <li class="scroll-to-section"><a href="/userhome/#men">Men's</a></li>
-                            <li class="scroll-to-section"><a href="/userhome/#women">Women's</a></li>
-                            <li class="scroll-to-section"><a href="/userhome/#kids">Kid's</a></li>
-                            <li class="submenu">
-                                <a href="javascript:;">Pages</a>
-                                <ul>
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="products.html">Products</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="submenu">
-                                <a href="javascript:;"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
-                                <ul>
-                                    <li><a href="/allproducts">All Products</a></li>
-                                    <li><a href="/logout" onclick="confirmLogout()">Logout</a></li>
-                                </ul>
-                            </li>
-                            <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;"></i></a></li>
-                            <li><a href=""><i class="fa-solid fa-cart-shopping" style="color: #000000;"></i></a></li>
-
-
-                            <% if (locals.check) { %>
-                                <div class="" style="color: #000000;text-transform: capitalize;margin-top: 7px;">Hello,
-                                    <%- check.username %>
-                                </div>
-                                <% } %>
-
-                        </ul>
-                        <a class='menu-trigger'>
-                            <span>Menu</span>
-                        </a>
-                        <!-- ***** Menu End ***** -->
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
+    <%- include('./layout/userHeaderNav') %>
 
 
 
@@ -419,7 +361,7 @@
                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#address1" role="tab">
                             Manage Addresses
                         </a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
+                        <!-- <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
                             Email notifications
                         </a>
                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
@@ -433,7 +375,7 @@
                         </a>
                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
                             Delete account
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -511,7 +453,7 @@
 
 
 
-                        <div class="card">
+                        <div class="card" hidden>
                             <div class="card-header">
                                 <div class="card-actions float-right">
                                     <div class="dropdown show">

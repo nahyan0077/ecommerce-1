@@ -43,11 +43,11 @@ module.exports = {
                 req.session.grandTotal = grandTotal
 
 
-                res.render('user/cart',{carts,grandTotal,totalDiscount,total,check:req.session.name,kart})
+                res.render('user/cart',{carts,grandTotal,totalDiscount,total,check:req.session.name,kart,check: req.session.name})
 
             }else{
 
-                res.render('user/emptyCart')
+                res.render('user/emptyCart',{check: req.session.name})
             }
 
 

@@ -22,10 +22,10 @@ module.exports = {
             if(user){
                 await address.create(req.body)
                 const msg = "New address added succesfully"
-                res.render('user/userProfile',{msg,usrData,adrs})
+                res.render('user/userProfile',{msg,usrData,adrs,check:req.session.name})
             }else{
                 const msg = "Error occured while adding address"
-                res.render('user/userProfile',{msg,usrData,adrs})
+                res.render('user/userProfile',{msg,usrData,adrs,check:req.session.name})
             }
         } catch (error) {
             console.log(error);
@@ -49,10 +49,10 @@ module.exports = {
                 await address.updateOne({_id:_Id},{$set:{name:newAdrs.name,mobile:newAdrs.mobile,address:newAdrs.address,pincode:newAdrs.pincode,locality:newAdrs.locality,city:newAdrs.city,district:newAdrs.district,state:newAdrs.state}})
 
                 const msg = "Address updates successfully"
-                res.render("user/userProfile",{msg,usrData,adrs})
+                res.render("user/userProfile",{msg,usrData,adrs,check:req.session.name})
             }else{
                 const msg = "Select an existing address"
-                res.render("user/userProfile",{msg,usrData,adrs})
+                res.render("user/userProfile",{msg,usrData,adrs,check:req.session.name})
             }
 
         } catch (error) {

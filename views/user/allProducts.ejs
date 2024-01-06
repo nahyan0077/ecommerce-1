@@ -46,7 +46,7 @@
       justify-content: center;
       align-items: center;
       border-color: black;
-      margin-left: -170px;
+      margin-left: -175px;
     }
 
 
@@ -128,79 +128,7 @@
 <body>
 
 
-  <header class="header-area header-sticky">
-    <div class="container" id="top">
-      <div class="row">
-        <div class="col-12">
-          <nav class="main-nav">
-            <!-- ***** Logo Start ***** -->
-            <a href="index.html" class="logo">
-              <img src="/images/ds_blk.png" style="max-width: 120px;margin-left: -260px;">
-            </a>
-            <!-- ***** Logo End ***** -->
-            <!-- ***** Menu Start ***** -->
-            <ul class="nav" style="margin-right: -217px;">
-              <div class="contenir">
-                <form class="d-flex" action="/search">
-                  <input type="text" name="search" class="search" id="search-inp" placeholder="Search...">
-                  <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
-                </form>
-              </div>
-              <li class="scroll-to-section"><a href="/userhome" class="active">Home</a></li>
-              <li class="scroll-to-section"><a href="/userhome/#men">Men's</a></li>
-              <li class="scroll-to-section"><a href="/userhome/#women">Women's</a></li>
-              <li class="scroll-to-section"><a href="/userhome/#kids">Kid's</a></li>
-              <li class="submenu">
-                <a href="javascript:;">Pages</a>
-                <ul>
-                  <li><a href="about.html">About Us</a></li>
-                  <li><a href="products.html">Products</a></li>
-                  <li><a href="contact.html">Contact Us</a></li>
-                </ul>
-              </li>
-
-              <li class="submenu">
-                <a href="javascript:;"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
-                <% if (locals.check) { %>
-
-                  <ul>
-
-                    <li><a href="/userprofile">My Profile</a></li>
-                    <li><a href="/logout" onclick="confirmLogout()">Log Out</a></li>
-                  </ul>
-
-                  <% } else { %>
-
-                    <ul>
-
-                      <li><a href="/userlogin">Login</a></li>
-                      <li><a href="/usersignup">Sign Up</a></li>
-                    </ul>
-
-                    <% } %>
-              </li>
-              <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;"></i></a></li>
-
-              <li><a href="/usercart"><i class="fa-solid fa-cart-shopping" style="color: #000000;"></i></a></li>
-
-              <li><a href=""></a></li>
-
-              <% if (locals.check) { %>
-                <div class="" style="color: #000000;text-transform: capitalize;margin-top: 7px;">Hello,
-                  <%- check.username %>
-                </div>
-                <% } %>
-
-            </ul>
-            <a class='menu-trigger'>
-              <span>Menu</span>
-            </a>
-            <!-- ***** Menu End ***** -->
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
+  <%- include('./layout/userHeaderNav') %>
 
 
 
@@ -404,22 +332,20 @@
                 <option value="3">Randomly</option>
               </select>
               <div class="btn-group shadow-0 border">
-                <a href="#" class="btn btn-light" title="List view">
+                <button class="btn btn-light" title="List view" onclick="toggleView('listView')">
                   <i class="fa fa-bars fa-lg"></i>
-                </a>
-                <a href="#" class="btn btn-light active" title="Grid view">
+                </button>
+                <button class="btn btn-light active" title="Grid view" onclick="toggleView('gridView')">
                   <i class="fa fa-th fa-lg"></i>
-                </a>
+                </button>
               </div>
+              
             </div>
           </header>
 
-          <% allPro.forEach(data=> { %>
-
-
-
-            <div class="row justify-content-center mb-3">
-              <div class="col-md-12">
+          <div class="row" id="listViewSection" style="display: none;">
+            <% allPro.forEach(data => { %>
+              <div class="col-md-12 mb-3">
                 <div class="card shadow-0 border rounded-3">
                   <div class="card-body">
                     <div class="row g-0">
@@ -448,7 +374,6 @@
                           </div>
                           <span class="text-muted"></span>
                         </div>
-
                         <p class="text mb-4 mb-md-0">
                           <%-data.description-%>
                         </p>
@@ -460,24 +385,56 @@
                         </div>
                         <h6 class="text-success">Free shipping</h6>
                         <div class="mt-4">
-                          <a href="/singleproduct/<%-data._id-%>"><button class="btn btn-primary shadow-0"
-                              type="button">View</button></a>
-                          <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover"><i
-                              class="fas fa-heart fa-lg px-1"></i></a>
+                          <% if (locals.check) { %>
+                            <a href="/singleproduct/<%-data._id-%>" class="btn btn-outline-primary shadow-0" type="button">View</a>
+                          <% } else { %>
+                            <a href="/singleproductnouser/<%-data._id-%>" class="btn btn-outline-primary shadow-0" type="button">View</a>
+                          <% } %>
+                          <a href="#!" class="btn btn-light border px-2 pt-2 icon-hover">
+                            <i class="fas fa-heart fa-lg px-1"></i>
+                          </a>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-
-
             <% }) %>
+          </div>
+          
 
+            <div class="row" id="gridViewSection">
+              <% allPro.forEach(data => { %>
+                <div class="col-lg-4 col-md-6 col-sm-6 my-2">
+                  <div class="card shadow-2-strong">
+                    <img src="/product_images/<%= data.images[0] %>" class="card-img-top" />
+                    <div class="card-body">
+                      <h6 style="font-size: 18px;"><%-data.productName-%></h6><br>
+                      <div class="d-flex flex-row">
+                        <h6 class="mb-1 me-1">₹ <%-data.DiscountAmount-%></h6>
+                        <span class="text-danger"><s>₹ <%-data.price-%></s></span>
+                      </div>
 
+                      <p class="card-text">Category:  <span style="margin-left: 10px"> <%-data.category-%></span></p>
 
-              <hr />
+                      <div class="d-flex justify-content-end" style="margin-top: 5px;">
+                        <% if (locals.check) { %> 
+                        <a href="/singleproduct/<%-data._id-%>" class="btn btn-outline-primary shadow-0 me-1" >View</a>
+                        <% } else { %>
+                          <a href="/singleproductnouser/<%-data._id-%>" class="btn btn-outline-primary shadow-0 me-1" >View</a>
+                        
+                        <% } %>
+  
+  
+                        <a href="#!" class="btn btn-light border  icon-hover px-2 pt-2" ><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+            
 
               <!-- Pagination -->
               <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3"
@@ -627,6 +584,20 @@
     }
 
   </script>
+
+
+<script>
+  function toggleView(view) {
+    if (view === 'listView') {
+      document.getElementById('gridViewSection').style.display = 'none';
+      document.getElementById('listViewSection').style.display = 'block';
+    } else {
+      document.getElementById('gridViewSection').style.display = 'block';
+      document.getElementById('listViewSection').style.display = 'none';
+    }
+  }
+</script>
+
 
 
 

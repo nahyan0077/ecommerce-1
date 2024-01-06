@@ -12,8 +12,13 @@ module.exports = {
         checkOutPage : async (req,res) => {
             try {
                 const addrs = await address.find({userId:req.session.name._id})
-    
-                res.render('user/checkoutPage',{grandTotal:req.session.grandTotal,totalDiscount:req.session.totalDiscount,total:req.session.total,addrs})
+                const carts = await cart.findOne({userId:req.session.name._id})
+                if(carts){
+                    res.render('user/checkoutPage',{grandTotal:req.session.grandTotal,totalDiscount:req.session.totalDiscount,total:req.session.total,addrs,check: req.session.name})
+                }else{
+                    res.redirect('/userhome')
+                }
+                
             } catch (error) {
                 console.log(error);
             }
@@ -143,9 +148,8 @@ module.exports = {
 
                     }
                     await cart.findByIdAndDelete(carts._id)
-                    res.json({msg:"Order places successfully"})
-
-                }else if(req.session.adrsId!=null){
+                    
+                }else if(req.session.adrsId==null){
 
                     res.json({msg:"please select the address"})
 
@@ -161,9 +165,53 @@ module.exports = {
         },
 
 
-        myOrders : (req,res) => {
+        myOrders : async (req,res) => {
             try {
-                res.render('user/myOrders')
+                const usr = await user.findOne({email:req.session.user})
+
+
+                const orders = await order.find({userid:usr._id}).populate("products.productid").sort({ orderDate: -1 })
+                console.log("bbbbb",orders);
+
+                res.render('user/myOrders',{orders,check: req.session.name})
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+
+
+        myOrderDetails : async (req,res) => {
+            try {
+                const orderId = req.params.orderid
+                const usrOdr = await order.findOne({_id:orderId}).populate("products.productid")
+                console.log(usrOdr);
+
+                res.render('user/myOrderDetails',{usrOdr,check: req.session.name})
+            } catch (error) {
+                console.log(error);
+            }
+        },
+
+
+        cancelOrder : async (req,res) => {
+            try {
+                const orderId = req.params.orderid
+                console.log("oo",orderId);
+                const ordr = await order.findOne({_id:orderId})
+                ordr.orderStatus = "Cancelled"
+                await ordr.save();
+
+
+                ordr.products.forEach(async data => {
+                    const prdkt = await product.findOne({_id:data.productid})
+                    if(prdkt){
+                        prdkt.stockQuantity = prdkt.stockQuantity + data.quantity 
+                        await prdkt.save()
+                    } 
+                });
+                res.json({msg:"The Order cancelled successfully"})
+
             } catch (error) {
                 console.log(error);
             }

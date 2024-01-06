@@ -2,113 +2,173 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>u-home</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>u-home</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-    <script src="https://kit.fontawesome.com/65b842e152.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+  <script src="https://kit.fontawesome.com/65b842e152.js" crossorigin="anonymous"></script>
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
-        rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+    rel="stylesheet">
 
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+  <!-- Additional CSS Files -->
+  <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 
-    <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
+  <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
 
-    <link rel="stylesheet" href="/css/templatemo-hexashop.css">
+  <link rel="stylesheet" href="/css/templatemo-hexashop.css">
 
-    <link rel="stylesheet" href="/css/owl-carousel.css">
+  <link rel="stylesheet" href="/css/owl-carousel.css">
 
-    <link rel="stylesheet" href="/css/lightbox.css">
+  <link rel="stylesheet" href="/css/lightbox.css">
 
-    <style>
-        *::selection {
-            background-color: transparent;
-        }
-
-        * {
-            cursor: default;
-            box-sizing: border-box;
-        }
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css"
+    integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
 
+  <style>
+    body {
+      margin-top: 20px;
+      background-color: #f1f3f7;
+    }
+
+    .avatar-lg {
+      height: 5rem;
+      width: 5rem;
+    }
+
+    .font-size-18 {
+      font-size: 18px !important;
+    }
+
+    .text-truncate {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    a {
+      text-decoration: none !important;
+    }
+
+    .w-xl {
+      min-width: 160px;
+    }
+
+    .card {
+      margin-bottom: 24px;
+      -webkit-box-shadow: 0 2px 3px #e4e8f0;
+      box-shadow: 0 2px 3px #e4e8f0;
+    }
+
+    .card {
+      position: relative;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      min-width: 0;
+      word-wrap: break-word;
+      background-color: #fff;
+      background-clip: border-box;
+      border: 1px solid #eff0f2;
+      border-radius: 1rem;
+    }
+  </style>
+
+
+  <style>
+    *::selection {
+      background-color: transparent;
+    }
+
+    * {
+      cursor: default;
+      box-sizing: border-box;
+    }
 
 
 
-        .contenir {
-            width: 740px;
-            height: 50px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-color: black;
-            margin-left: -175px;
-        }
+
+
+    .contenir {
+      width: 740px;
+      height: 50px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-color: black;
+      margin-left: -175px;
+    }
 
 
 
 
 
-        .search {
-            box-shadow: 0px 0px 20px 1px #ffffff;
-            border: 0;
-            border-radius: 30px 0 0 30px;
-            padding: 0 10px 0 10px;
-            color: black;
-            height: 40px;
-            width: 400px;
-            font-size: 25px;
-            font-weight: 1000;
-            background-color: rgb(234, 234, 234);
-        }
+    .search {
+      box-shadow: 0px 0px 20px 1px #ffffff;
+      border: 0;
+      border-radius: 30px 0 0 30px;
+      padding: 0 10px 0 10px;
+      color: black;
+      height: 40px;
+      width: 400px;
+      font-size: 25px;
+      font-weight: 1000;
+      background-color: rgb(234, 234, 234);
+    }
 
-        .search::selection {
-            background-color: red;
-            color: white;
-        }
+    .search::selection {
+      background-color: red;
+      color: white;
+    }
 
-        .search:focus {
-            border: 0;
-            outline: 0;
-        }
+    .search:focus {
+      border: 0;
+      outline: 0;
+    }
 
-        .search:hover {
-            cursor: text;
-        }
-
-
+    .search:hover {
+      cursor: text;
+    }
 
 
 
-        .search-btn {
-            transition: 0.2s ease-in-out;
-            border: 0;
-            border-radius: 0 30px 30px 0;
-            padding: 0 10px 0 10px;
-            text-align: center;
-            color: rgb(255, 255, 255);
-            position: relative;
-            background-color: rgb(15, 19, 9);
-            height: 40px;
-            width: 70px;
-            font-size: 25px;
-            font-weight: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
 
-        .search-btn:hover {
-            transition: 0.2s ease-in-out;
-            font-size: 30px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-    </style>
+
+    .search-btn {
+      transition: 0.2s ease-in-out;
+      border: 0;
+      border-radius: 0 30px 30px 0;
+      padding: 0 10px 0 10px;
+      text-align: center;
+      color: rgb(255, 255, 255);
+      position: relative;
+      background-color: rgb(15, 19, 9);
+      height: 40px;
+      width: 70px;
+      font-size: 25px;
+      font-weight: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .search-btn:hover {
+      transition: 0.2s ease-in-out;
+      font-size: 30px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+  </style>
 
 
 
@@ -118,367 +178,268 @@
 <body>
 
 
-    <header class="header-area header-sticky">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
-                        <a href="index.html" class="logo">
-                            <img src="/images/ds_blk.png" style="max-width: 120px;margin-left: -260px;">
-                        </a>
-                        <!-- ***** Logo End ***** -->
-                        <!-- ***** Menu Start ***** -->
-                        <ul class="nav" style="margin-right: -215px;">
-                            <div class="contenir">
-                                <form class="d-flex" action="/search">
-                                    <input type="text" name="search" class="search" id="search-inp"
-                                        placeholder="Search...">
-                                    <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
-                                </form>
-                            </div>
-                            <li class="scroll-to-section"><a href="#carouselExample" class="active">Home</a></li>
-                            <li class="scroll-to-section"><a href="#men">Men's</a></li>
-                            <li class="scroll-to-section"><a href="#women">Women's</a></li>
-                            <li class="scroll-to-section"><a href="#kids">Kid's</a></li>
-                            <li class="submenu">
-                                <a href="javascript:;">Pages</a>
-                                <ul>
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="products.html">Products</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
-                                </ul>
-                            </li>
-
-                            <li class="submenu">
-                                <a href="javascript:;"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
-                                <ul>
-                                    <li><a href="/allproducts">All Products</a></li>
-                                    <li><a href="/userprofile">My Profile</a></li>
-                                    <li><a href="/logout" onclick="confirmLogout()">Logout</a></li>
-                                </ul>
-                            </li>
-                            <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;"></i></a></li>
-                            <li><a href="/usercart"><i class="fa-solid fa-cart-shopping" style="color: #000000;"></i></a></li>
+  <%- include('./layout/userHeaderNav') %>
 
 
-                            <% if (locals.check) { %>
-                                <div class="" style="color: #000000;text-transform: capitalize;margin-top: 7px;">Hello,
-                                    <%-check.username-%>
-                                </div>
-                                <% } %>
-
-                        </ul>
-                        <a class='menu-trigger'>
-                            <span>Menu</span>
-                        </a>
-                        <!-- ***** Menu End ***** -->
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
+<% if (orders) { %>
+ 
 
 
-
-
-    <div class="container-fluid">
-
-        <div class="container" style="margin-left: 321px;margin-top: 90px;">
-    
-    
-    
-          <!-- Title -->
-          <div class="d-flex justify-content-between align-items-center py-3">
-            <h2 class="h5 mb-0"><a href="#" class="text-muted"></a># <%= ordrs._id %>
-            </h2>
+  <div class="container" style="margin-top: 100px;">
+    <div class="row">
+      <div class="col-xl-12">
+        <% orders.forEach(order => { %>
+          <div class="container h5 border p-2" style="background-color: rgb(152, 152, 152); margin-bottom: 0px; border: 1px solid; border-radius: 10px;">
+            <p style="display: inline-block;">Order: # <%= order._id %></p>
+            <p style="display: inline-block; margin-left: 590px;">Ordered Date: <%-order.orderDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' ,
+              dateStyle: 'short' , timeStyle: 'short' })-%></p>
           </div>
-    
-          <!-- Main content -->
-          <div class="row">
-            <div class="col-lg-8">
-              <!-- Details -->
-              <div class="card mb-4">
-                <div class="card-body">
-                  <div class="mb-3 d-flex justify-content-between">
+          <div class="card border shadow-none">
+            <div class="card-body">
+              <% order.products.forEach(data => { %>
+                <div class="d-flex align-items-start border-bottom pb-3">
+                  <div class="me-4">
+                    <img src="/product_images/<%=data.productid.images[0]%>" alt="" class="avatar-lg rounded">
+                  </div>
+                  <div class="flex-grow-1 align-self-center overflow-hidden">
                     <div>
-                      <span style="font-weight: bolder;" class="me-3"><%- ordrs.orderDate.toLocaleString('en-IN', {
-                          timeZone: 'Asia/Kolkata' , dateStyle: 'short' , timeStyle: 'short' }) %></span>
-    
-                      <span class="me-3"></span>
-    
-                    </div>
-                    <div class="d-flex">
-    
-                      <div class="dropdown">
-                        <button class="btn btn-link p-0 text-muted" type="button" data-bs-toggle="dropdown">
-                          <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                          <li><a class="dropdown-item" href="#"><i class="bi bi-pencil"></i> Edit</a></li>
-                          <li><a class="dropdown-item" href="#"><i class="bi bi-printer"></i> Print</a></li>
-                        </ul>
-                      </div>
+                      <h5 class="text-truncate font-size-18"><a href="#" class="text-dark"><%= data.productid.productName%></a></h5>
+                      <p class="text-muted mb-0">
+                        <i class="bx bxs-star text-warning"></i>
+                        <i class="bx bxs-star text-warning"></i>
+                        <i class="bx bxs-star text-warning"></i>
+                        <i class="bx bxs-star text-warning"></i>
+                        <i class="bx bxs-star-half text-warning"></i>
+                      </p>
+                      <p class="mb-0 mt-1">Category : <span class="fw-medium"><%= data.productid.category%></span></p>
                     </div>
                   </div>
-                  <table class="table table-borderless">
-                    <tbody>
-    
-                      <% ordrs.products.forEach(prdkt=> { %>
-    
-    
-    
-                        <tr style="background-color: white;">
-                          <td>
-                            <div class="d-flex mb-2">
-                              <div class="flex-shrink-0">
-                                <img src="/product_images/<%=prdkt.productid.images[0]%>" style="width: 100px;" alt=""
-                                  width="35" class="img-fluid">
-                              </div>
-                              <div class="flex-lg-grow-1 ms-3" style="margin-top: 20px;">
-                                <h6 class="" style="font-weight: 600;">
-                                  <%= prdkt.productid.productName %>
-                                </h6>
-    
-                                <span class="small">Category: <%= prdkt.productid.category %></span>
-                              </div>
-                            </div>
-                          </td>
-                          <td>Qty: <%= prdkt.quantity %>
-                          </td>
-                          <td class="text-end">₹ <%= prdkt.productid.price %>
-                          </td>
-                        </tr>
-    
-    
-                        <% }) %>
-    
-    
-                    </tbody>
-                    <tfoot>
-    
-                      <tr>
-                        <td colspan="2">Shipping</td>
-                        <td style="font-style: italic;" class="text-end">Free</td>
-                      </tr>
-                      <tr style="background-color: white;">
-                        <td colspan="2">Discount Amount</td>
-                        <td class="text-danger text-end">- ₹ <%= ordrs.discountAmount %>
-                        </td>
-                      </tr>
-                      <tr style="background-color: rgb(208, 207, 207);" class="fw-bold">
-                        <td colspan="2">TOTAL</td>
-                        <td class="text-end">₹ <%= ordrs.totalAmount %>
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
+                  <div class="flex-shrink-0 ms-2">
+                    <ul class="list-inline mb-0 font-size-16">
+                      <li class="list-inline-item" style="margin-left: -500px;margin-top: 20px;">
+                        <a href="#" class="text-muted px-1">
+                          <span style="color: #000000;">Qty: <%= data.quantity%></span>
+                        </a>
+                      </li>
+                      <li class="list-inline-item" style="margin-top: 20px;margin-left: 100px;">
+                        <a href="#" class="text-muted px-1">
+                          <% if (order.orderStatus === 'Order Processed') { %>
+                            <span class="badge rounded-pill bg-warning" style="font-weight: 400;"><%= order.orderStatus %></span>
+                        <% } else if (order.orderStatus === 'Order Confirmed') { %>
+                            <span class="badge rounded-pill bg-primary" style="font-weight: 400;"><%= order.orderStatus %></span>
+                        <% } else if (order.orderStatus === 'Order Shipped') { %>
+                            <span class="badge rounded-pill bg-info" style="font-weight: 400;"><%= order.orderStatus %></span>
+                        <% } else if (order.orderStatus === 'Order Delivered') { %>
+                            <span class="badge rounded-pill bg-success" style="font-weight: 400;"><%= order.orderStatus %></span>
+                        <% } else if (order.orderStatus === 'Order Rejected'){ %>
+                            <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
+                        <% } else if (order.orderStatus === "Cancelled"){ %>
+                            <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
+                        <% } %>
+                        </a>
+                      </li>
+
+                    </ul>
+                  </div>
                 </div>
-              </div>
-              <!-- Payment -->
-              <div class="card mb-4">
-                <div class="card-body">
-                  <div class="row">
-    
-                    <div class="col-lg-6">
-                      <h3 class="h6" style="font-weight: bolder;">Order Information</h3>
-    
-                      <h6>Order Status: <span class="badge rounded-pill bg-info" style="font-weight: 400;">
-                          <%= ordrs.orderStatus %>
-                        </span></h6>
-                      <h6>Ordered Date & Time: <span style="font-weight: 400;"><%- ordrs.orderDate.toLocaleString('en-IN', {
-                            timeZone: 'Asia/Kolkata' , dateStyle: 'short' , timeStyle: 'short' }) %></span></h6>
-                      <h6>Expected Delivery Date & Time: <span style="font-weight: 400;"><%-
-                            ordrs.expectedDeliveryDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' ,
-                            dateStyle: 'short' , timeStyle: 'short' }) %></span></h6>
-                    </div>
-    
-                    <div class="col-lg-6">
-                      <h3 class="h6">Billing address</h3>
-                      <address>
-                        <strong>DropShip</strong><br>
-                        1355 Market St, Suite 900<br>
-                        Kerala, CA 94103<br>
-                        <span title="Phone">P:</span> (123) 456-7890
-                      </address>
+              <% }) %>
+
+
+              
+              <div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="text-sm-end mt-2 mt-sm-0">
+                      <a href="/myorderdetails/<%= order._id %>" class="btn btn-outline-success">
+                         View details </a>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="col-lg-4">
-    
-              <div class="card mb-4">
-                <!-- Shipping information -->
-                <div class="card-body">
-    
-                  <h4>Address</h4>
-    
-    
-                  <address>
-                    <strong>
-                      <%= ordrs.address.name%>
-                    </strong><br>
-    
-                    <%= ordrs.address.address%>
-                      <%= ordrs.address.locality%><br>
-                        <%= ordrs.address.city%>
-                          <span%= ordrs.address.district%><br><br>
-                            <span title="Phone">PIN:</span>
-                            
-                  </address>
-    
-    
-    
+          </div>
+          <!-- end card -->
+        <% }) %>
+        <% } else { %>
+          <section class="h-100 h-custom" style="background-color: #eee;margin-top: 100px;"> 
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col">
+                  <div class="card">
+                    <div class="card-body p-4 d-flex justify-content-center align-items-center">
+          
+                     <div class="d-flex flex-column align-items-center">
+                        <img src="/images/nocart.webp" style="width: 260px;" alt=""><br><br>
+                        <h5 >You don't have any Orders yet!</h5>
+                        <p >Grab something right now.</p>
+                        <br>
+                        <a href="/allproducts"><button style="border-radius: 0px;width: 200px;" type="button" class="btn btn-success">Shop now</button></a>
+                     </div>
+                     
+          
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
+          </section>
+
+
+        <% } %>
+
+        <div class="row my-4">
+          <div class="col-sm-6">
+            <a href="/allproducts" class="btn btn-link text-muted">
+              <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping </a>
+          </div> <!-- end col -->
+        </div> <!-- end row-->
+      </div>
+    </div>
+    <!-- end row -->
+  </div>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- ***** Footer Start ***** -->
+  <footer>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-3">
+          <div class="first-item">
+            <div class="logo">
+              <img src="/images/ds_wht.png" alt="hexashop ecommerce templatemo" style="max-width: 120px;">
+            </div>
+            <ul>
+              <li><a href="#">16501 Collins Ave, Sunny Isles Beach, FL 33160, India</a></li>
+              <li><a href="#">dropship@company.com</a></li>
+              <li><a href="#">010-020-0340</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <h4>Shopping &amp; Categories</h4>
+          <ul>
+            <li><a href="#">Men’s Shopping</a></li>
+            <li><a href="#">Women’s Shopping</a></li>
+            <li><a href="#">Kid's Shopping</a></li>
+            <li><a href="#">Sports Shopping</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Homepage</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-3">
+          <h4>Help &amp; Information</h4>
+          <ul>
+            <li><a href="#">Help</a></li>
+            <li><a href="#">FAQ's</a></li>
+            <li><a href="#">Shipping</a></li>
+            <li><a href="#">Tracking ID</a></li>
+          </ul>
+        </div>
+        <div class="col-lg-12">
+          <div class="under-footer">
+            <p>Copyright © 2023 DropShip Co., Ltd. All Rights Reserved.
+
+              <br>
+            <ul>
+              <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+              <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+              <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+              <li><a href="#"><i class="fa fa-behance"></i></a></li>
+            </ul>
           </div>
         </div>
       </div>
+    </div>
+  </footer>
+
+
+
+
+  <!-- jQuery -->
+  <script src="/js/jquery-2.1.0.min.js"></script>
+
+  <!-- Bootstrap -->
+  <script src="/js/popper.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+
+  <!-- Plugins -->
+  <script src="/js/owl-carousel.js"></script>
+  <script src="/js/accordions.js"></script>
+  <script src="/js/datepicker.js"></script>
+  <script src="/js/scrollreveal.min.js"></script>
+  <script src="/js/waypoints.min.js"></script>
+  <script src="/js/jquery.counterup.min.js"></script>
+  <script src="/js/imgfix.min.js"></script>
+  <script src="/js/slick.js"></script>
+  <script src="/js/lightbox.js"></script>
+  <script src="/js/isotope.js"></script>
+
+  <!-- Global Init -->
+  <script src="/js/custom.js"></script>
+
+  <script>
+
+    $(function () {
+      var selectedClass = "";
+      $("p").click(function () {
+        selectedClass = $(this).attr("data-rel");
+        $("#portfolio").fadeTo(50, 0.1);
+        $("#portfolio div").not("." + selectedClass).fadeOut();
+        setTimeout(function () {
+          $("." + selectedClass).fadeIn();
+          $("#portfolio").fadeTo(50, 1);
+        }, 500);
+
+      });
+    });
+
+
+    function confirmLogout() {
+      var confirmLogout = confirm('Are you sure you want to logout?');
+
+      if (confirmLogout) {
+        window.location.href = '/user/logout';
+      }
+    }
+
+  </script>
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-       <!-- ***** Footer Start ***** -->
-       <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="first-item">
-                        <div class="logo">
-                            <img src="/images/ds_wht.png" alt="hexashop ecommerce templatemo" style="max-width: 120px;">
-                        </div>
-                        <ul>
-                            <li><a href="#">16501 Collins Ave, Sunny Isles Beach, FL 33160, India</a></li>
-                            <li><a href="#">dropship@company.com</a></li>
-                            <li><a href="#">010-020-0340</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <h4>Shopping &amp; Categories</h4>
-                    <ul>
-                        <li><a href="#">Men’s Shopping</a></li>
-                        <li><a href="#">Women’s Shopping</a></li>
-                        <li><a href="#">Kid's Shopping</a></li>
-                        <li><a href="#">Sports Shopping</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3">
-                    <h4>Useful Links</h4>
-                    <ul>
-                        <li><a href="#">Homepage</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3">
-                    <h4>Help &amp; Information</h4>
-                    <ul>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">FAQ's</a></li>
-                        <li><a href="#">Shipping</a></li>
-                        <li><a href="#">Tracking ID</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-12">
-                    <div class="under-footer">
-                        <p>Copyright © 2023 DropShip Co., Ltd. All Rights Reserved.
-
-                            <br>
-                        <ul>
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-
-
-
-    <!-- jQuery -->
-    <script src="/js/jquery-2.1.0.min.js"></script>
-
-    <!-- Bootstrap -->
-    <script src="/js/popper.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-
-    <!-- Plugins -->
-    <script src="/js/owl-carousel.js"></script>
-    <script src="/js/accordions.js"></script>
-    <script src="/js/datepicker.js"></script>
-    <script src="/js/scrollreveal.min.js"></script>
-    <script src="/js/waypoints.min.js"></script>
-    <script src="/js/jquery.counterup.min.js"></script>
-    <script src="/js/imgfix.min.js"></script>
-    <script src="/js/slick.js"></script>
-    <script src="/js/lightbox.js"></script>
-    <script src="/js/isotope.js"></script>
-
-    <!-- Global Init -->
-    <script src="/js/custom.js"></script>
-
-    <script>
-
-        $(function () {
-            var selectedClass = "";
-            $("p").click(function () {
-                selectedClass = $(this).attr("data-rel");
-                $("#portfolio").fadeTo(50, 0.1);
-                $("#portfolio div").not("." + selectedClass).fadeOut();
-                setTimeout(function () {
-                    $("." + selectedClass).fadeIn();
-                    $("#portfolio").fadeTo(50, 1);
-                }, 500);
-
-            });
-        });
-
-
-        function confirmLogout() {
-            var confirmLogout = confirm('Are you sure you want to logout?');
-
-            if (confirmLogout) {
-                window.location.href = '/user/logout';
-            }
-        }
-
-    </script>
-
-
-
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-        integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-        crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-        crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+    crossorigin="anonymous"></script>
 
 
 </body>

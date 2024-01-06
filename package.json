@@ -23,6 +23,7 @@
     "nodemailer": "^6.9.7",
     "otp-generator": "^4.0.1",
     "sweetalert2": "^11.10.2",
+    "toastr": "^2.1.4",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

@@ -9,6 +9,7 @@ const productController = require('../controllers/productsController');
 const orderController = require('../controllers/orderController');
 
 
+//------------------------admin login controls-----------------------
 
 //admin login page render
 router.get('/adminlogin',middleware.adminExist,adminController.adminLogin)
@@ -17,11 +18,19 @@ router.get('/adminlogin',middleware.adminExist,adminController.adminLogin)
 router.post('/adminloginpost',adminController.adminLoginPost)
 
 
+
+
 //-------------Dasshboard-----------------------
 
 
 //admin dashboard page render
 router.get('/admindash',middleware.verifyAdmin,adminController.adminDash)
+
+
+
+
+
+
 
 
 //-------------Customer-----------------------
@@ -32,6 +41,12 @@ router.get('/admincustomers',middleware.verifyAdmin,adminController.adminCustome
 
 //admin block and unblock customers
 router.get('/blockuser/:id',middleware.verifyAdmin,adminController.block_Unbock_User)
+
+
+
+
+
+
 
 
 //-------------Category-----------------------
@@ -58,15 +73,20 @@ router.post('/updatecategory',adminController.postEditCategory)
 
 
 
+
+
+
+
+
 //-------------Brands-----------------------
 
 
 
 //admin brand page render
-router.get('/adminbrand',adminController.getBrands)
+router.get('/adminbrand',middleware.verifyAdmin,adminController.getBrands)
 
 //admin addBrand page render
-router.get('/addbrandpage',adminController.getAddBrands)
+router.get('/addbrandpage',middleware.verifyAdmin,adminController.getAddBrands)
 
 //admin adding brands
 router.post('/addbrand',adminController.addBrands)
@@ -88,6 +108,8 @@ router.post('/updatebrand',adminController.postEditBrand)
 
 
 
+
+
 //-------------Products-----------------------
 
 const uploadFields = [
@@ -99,10 +121,10 @@ const uploadFields = [
 
 
 //admin products page render
-router.get('/adminproducts',productController.adminProducts)
+router.get('/adminproducts',middleware.verifyAdmin,productController.adminProducts)
 
 //admin add products page render
-router.get('/addproductspage',productController.adminAddProducts)
+router.get('/addproductspage',middleware.verifyAdmin,productController.adminAddProducts)
 
 //admin post products details
 router.post('/addproducts',multerUpload.fields(uploadFields),productController.postAddProducts) 
@@ -121,16 +143,23 @@ router.post('/updateproducts/:id',multerUpload.any(),productController.postEditP
 
 
 
+
+
+
+
+
 //-----------------orders----------------
 
 //get admin orders
-router.get('/adminorders',adminController.adminOrders)
+router.get('/adminorders',middleware.verifyAdmin,adminController.adminOrders)
 
 //list orders
 router.get('/orderlist1/:ids/:idk',adminController.orderList)
 
 //update order status by admin
 router.get('/updateorderstatus/:orderid/:status',adminController.orderStatus)
+
+
 
 
 
@@ -144,10 +173,10 @@ const uploadBanner = [
 ]
 
 //admin banner page render
-router.get('/adminbanner',adminController.getBanner)
+router.get('/adminbanner',middleware.verifyAdmin,adminController.getBanner)
 
 //add banner page render
-router.get('/addbannerpage',adminController.getAddBanner)
+router.get('/addbannerpage',middleware.verifyAdmin,adminController.getAddBanner)
 
 //add banner post 
 router.post('/addbanner',multerUpload.fields(uploadBanner),adminController.postBanner)

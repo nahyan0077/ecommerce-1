@@ -97,7 +97,7 @@
     </style>
     <style>
         body {
-            background: #ccc;
+            background: #eaeaea;
         }
 
         .example {
@@ -105,6 +105,90 @@
             display: inline-block;
         }
     </style>
+        <style>
+            *::selection {
+                background-color: transparent;
+            }
+    
+            * {
+                cursor: default;
+                box-sizing: border-box;
+            }
+    
+    
+    
+    
+    
+            .contenir {
+                width: 740px;
+                height: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-color: black;
+                margin-left: -175px;
+            }
+    
+    
+    
+    
+    
+            .search {
+                box-shadow: 0px 0px 20px 1px #ffffff;
+                border: 0;
+                border-radius: 30px 0 0 30px;
+                padding: 0 10px 0 10px;
+                color: black;
+                height: 40px;
+                width: 400px;
+                font-size: 25px;
+                font-weight: 1000;
+                background-color: rgb(234, 234, 234);
+            }
+    
+            .search::selection {
+                background-color: red;
+                color: white;
+            }
+    
+            .search:focus {
+                border: 0;
+                outline: 0;
+            }
+    
+            .search:hover {
+                cursor: text;
+            }
+    
+    
+    
+    
+    
+            .search-btn {
+                transition: 0.2s ease-in-out;
+                border: 0;
+                border-radius: 0 30px 30px 0;
+                padding: 0 10px 0 10px;
+                text-align: center;
+                color: rgb(255, 255, 255);
+                position: relative;
+                background-color: rgb(15, 19, 9);
+                height: 40px;
+                width: 70px;
+                font-size: 25px;
+                font-weight: 1000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+    
+            .search-btn:hover {
+                transition: 0.2s ease-in-out;
+                font-size: 30px;
+                font-weight: 800;
+                cursor: pointer;
+            }
+        </style>
 
 </head>
 
@@ -121,11 +205,18 @@
                         </a>
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
-                        <ul class="nav" style="margin-right: -200px;">
-                            <li class="scroll-to-section"><a href="/userhome" class="active">Home</a></li>
-                            <li class="scroll-to-section"><a href="/userhome/#men">Men's</a></li>
-                            <li class="scroll-to-section"><a href="/userhome/#women">Women's</a></li>
-                            <li class="scroll-to-section"><a href="/userhome/#kids">Kid's</a></li>
+                        <ul class="nav" style="margin-right: -217px;">
+                            <div class="contenir">
+                                <form class="d-flex" action="/search">
+                                    <input type="text" name="search" class="search" id="search-inp"
+                                        placeholder="Search...">
+                                    <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
+                                </form>
+                            </div>
+                            <li class="scroll-to-section"><a href="/" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="/#men">Men's</a></li>
+                            <li class="scroll-to-section"><a href="/#women">Women's</a></li>
+                            <li class="scroll-to-section"><a href="/#kids">Kid's</a></li>
                             <li class="submenu">
                                 <a href="javascript:;">Pages</a>
                                 <ul>
@@ -136,34 +227,32 @@
                             </li>
 
                             <li class="submenu">
-                                <a href="javascript:;"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
+                                <a href="javascript:;"><i class="fa-solid fa-user" style="color: #000000;cursor: pointer;"></i></a>
+                            
+                                <% if (!check) { %>
 
-                                <% if (locals.check) { %>
-                                 
                                 <ul>
-                                    
-                                    <li><a href="#">My Profile</a></li>
                                     <li><a href="/allproducts">All Products</a></li>
-                                    <li><a href="/logout" onclick="confirmLogout()">Log Out</a></li>
+                                    <li><a href="/usersignup">Sign Up</a></li>
+                                    <li><a href="/userlogin">Login</a></li>
                                 </ul>
 
                                 <% } else { %>
-                                 
                                     <ul>
-                                    
                                         <li><a href="/allproducts">All Products</a></li>
-                                        <li><a href="/usersignup">Sign Up</a></li>
-                                        <li><a href="/userlogin">Login</a></li>
+                                        <li><a href="/myorders">My Orders</a></li>
+                                        <li><a href="/userprofile">My Profile</a></li>
+                                        <li><a href="/logout" onclick="confirmLogout()">Logout</a></li>
                                     </ul>
 
                                 <% } %>
 
                             </li>
-                            <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;"></i></a></li>
-                            <li><a href="/nocart"><i class="fa-solid fa-cart-shopping" style="color: #000000;"></i></a></li>
-                            
-                            <% if (locals.check) { %>
-                                <div class="" style="color: #000000;text-transform: capitalize;margin-top: 7px;">Hello,
+                            <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;cursor: pointer;"></i></a></li>
+                            <li><a href="/nocart"><i class="fa-solid fa-cart-shopping" style="color: #000000;cursor: pointer;"></i></a>
+                            </li>
+                            <% if (check) { %>
+                                <div class="" style="color: #000000;text-transform: capitalize;margin-top: 7px;cursor: pointer;">Hello,
                                     <%- check.username %>
                                 </div>
                                 <% } %>
@@ -178,6 +267,7 @@
             </div>
         </div>
     </header>
+
 
     <div class="container mt-5">
         <div class="row">
@@ -248,13 +338,13 @@
 
                                 <% if (crtPdkt==null) { %>
 
-                                    <button class="btn btn-primary" type="button" onclick="addToCart('<%-data._id-%>')"><i class="fas fa-shopping-cart" ></i> Add
+                                    <button class="btn btn-success" type="button" onclick="addToCart('<%-data._id-%>')"><i class="fas fa-shopping-cart" ></i> Add
                                         to
                                         Cart</button>
 
                                 <% } else { %>
                                          
-                                    <button id="goToCartBtn" class="btn btn-primary" type="button" ><i class="fas fa-shopping-cart" ></i> Go
+                                    <button id="goToCartBtn" class="btn btn-success" type="button" ><i class="fas fa-shopping-cart" ></i> Go
                                         to
                                         Cart</button>
 
@@ -263,9 +353,8 @@
 
 
 
-                                <button class="btn btn-success" type="button"><i class="fas fa-shopping-bag"></i> Buy
-                                    Now</button>
-                                <button class="btn btn-secondary" type="button"><i class="fas fa-heart"></i> Add to
+
+                                <button class="btn btn-primary" type="button"><i class="fas fa-heart"></i> Add to
                                     Wishlist</button>
                             </div>
             </div>

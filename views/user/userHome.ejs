@@ -1,203 +1,143 @@
-    <!DOCTYPE html>
-    <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>u-home</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>u-home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
-        <script src="https://kit.fontawesome.com/65b842e152.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/65b842e152.js" crossorigin="anonymous"></script>
 
-        <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
-            rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap"
+        rel="stylesheet">
 
-        <!-- Additional CSS Files -->
-        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
 
-        <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
+    <link rel="stylesheet" type="text/css" href="/css/font-awesome.css">
 
-        <link rel="stylesheet" href="/css/templatemo-hexashop.css">
+    <link rel="stylesheet" href="/css/templatemo-hexashop.css">
 
-        <link rel="stylesheet" href="/css/owl-carousel.css">
+    <link rel="stylesheet" href="/css/owl-carousel.css">
 
-        <link rel="stylesheet" href="/css/lightbox.css">
+    <link rel="stylesheet" href="/css/lightbox.css">
 
-        <style>
-            *::selection {
-                background-color: transparent;
-            }
+    <style>
+        *::selection {
+            background-color: transparent;
+        }
 
-            * {
-                cursor: default;
-                box-sizing: border-box;
-            }
-
-
-
-
-
-            .contenir {
-                width: 740px;
-                height: 50px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                border-color: black;
-                margin-left: -175px;
-            }
+        * {
+            cursor: default;
+            box-sizing: border-box;
+        }
 
 
 
 
 
-            .search {
-                box-shadow: 0px 0px 20px 1px #ffffff;
-                border: 0;
-                border-radius: 30px 0 0 30px;
-                padding: 0 10px 0 10px;
-                color: black;
-                height: 40px;
-                width: 400px;
-                font-size: 25px;
-                font-weight: 1000;
-                background-color: rgb(234, 234, 234);
-            }
-
-            .search::selection {
-                background-color: red;
-                color: white;
-            }
-
-            .search:focus {
-                border: 0;
-                outline: 0;
-            }
-
-            .search:hover {
-                cursor: text;
-            }
+        .contenir {
+            width: 740px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-color: black;
+            margin-left: -175px;
+        }
 
 
 
 
 
-            .search-btn {
-                transition: 0.2s ease-in-out;
-                border: 0;
-                border-radius: 0 30px 30px 0;
-                padding: 0 10px 0 10px;
-                text-align: center;
-                color: rgb(255, 255, 255);
-                position: relative;
-                background-color: rgb(15, 19, 9);
-                height: 40px;
-                width: 70px;
-                font-size: 25px;
-                font-weight: 1000;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+        .search {
+            box-shadow: 0px 0px 20px 1px #ffffff;
+            border: 0;
+            border-radius: 30px 0 0 30px;
+            padding: 0 10px 0 10px;
+            color: black;
+            height: 40px;
+            width: 400px;
+            font-size: 25px;
+            font-weight: 1000;
+            background-color: rgb(234, 234, 234);
+        }
 
-            .search-btn:hover {
-                transition: 0.2s ease-in-out;
-                font-size: 30px;
-                font-weight: 800;
-                cursor: pointer;
-            }
-        </style>
+        .search::selection {
+            background-color: red;
+            color: white;
+        }
 
+        .search:focus {
+            border: 0;
+            outline: 0;
+        }
 
-
-
-    </head>
-
-    <body>
+        .search:hover {
+            cursor: text;
+        }
 
 
-        <header class="header-area header-sticky">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <nav class="main-nav">
-                            <!-- ***** Logo Start ***** -->
-                            <a href="index.html" class="logo">
-                                <img src="/images/ds_blk.png" style="max-width: 120px;margin-left: -260px;">
-                            </a>
-                            <!-- ***** Logo End ***** -->
-                            <!-- ***** Menu Start ***** -->
-                            <ul class="nav" style="margin-right: -215px;">
-                                <div class="contenir">
-                                    <form class="d-flex" action="/search">
-                                        <input type="text" name="search" class="search" id="search-inp"
-                                            placeholder="Search...">
-                                        <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
-                                    </form>
-                                </div>
-                                <li class="scroll-to-section"><a href="#carouselExample" class="active">Home</a></li>
-                                <li class="scroll-to-section"><a href="#men">Men's</a></li>
-                                <li class="scroll-to-section"><a href="#women">Women's</a></li>
-                                <li class="scroll-to-section"><a href="#kids">Kid's</a></li>
-                                <li class="submenu">
-                                    <a href="javascript:;">Pages</a>
-                                    <ul>
-                                        <li><a href="about.html">About Us</a></li>
-                                        <li><a href="products.html">Products</a></li>
-                                        <li><a href="contact.html">Contact Us</a></li>
-                                    </ul>
-                                </li>
-
-                                <li class="submenu">
-                                    <a href="javascript:;"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
-                                    <ul>
-                                        <li><a href="/allproducts">All Products</a></li>
-                                        <li><a href="/myorders">My Orders</a></li>
-                                        <li><a href="/userprofile">My Profile</a></li>
-                                        <li><a href="/logout" onclick="confirmLogout()">Logout</a></li>
-                                    </ul>
-                                </li>
-                                <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;"></i></a></li>
-                                <li><a href="/usercart"><i class="fa-solid fa-cart-shopping" style="color: #000000;"></i></a></li>
 
 
-                                <% if (locals.check) { %>
-                                    <div class="" style="color: #000000;text-transform: capitalize;margin-top: 7px;">Hello,
-                                        <%- check.username %>
-                                    </div>
-                                    <% } %>
 
-                            </ul>
-                            <a class='menu-trigger'>
-                                <span>Menu</span>
-                            </a>
-                            <!-- ***** Menu End ***** -->
-                        </nav>
-                    </div>
-                </div>
-            </div>
-        </header>
+        .search-btn {
+            transition: 0.2s ease-in-out;
+            border: 0;
+            border-radius: 0 30px 30px 0;
+            padding: 0 10px 0 10px;
+            text-align: center;
+            color: rgb(255, 255, 255);
+            position: relative;
+            background-color: rgb(15, 19, 9);
+            height: 40px;
+            width: 70px;
+            font-size: 25px;
+            font-weight: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-btn:hover {
+            transition: 0.2s ease-in-out;
+            font-size: 30px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+    </style>
+
+
+
+
+</head>
+
+<body>
+
+
+    <%- include('./layout/userHeaderNav') %>
 
 
 
     <!-- upper carousal  -->
     <div id="carouselExample" class="carousel slide">
         <div class="carousel-inner" style="max-height: 700px;">
-   
+
             <div class="carousel-item active">
                 <img src="/product_images/<%=banners[0].bannerImage%>" class="d-block w-100" alt="...">
             </div>
 
-            <% sbanners.forEach(sbnr => { %>
-             
-           
-            <div class="carousel-item">
-                <img src="/product_images/<%=sbnr.bannerImage%>" class="d-block w-100" alt="...">
-            </div>
+            <% sbanners.forEach(sbnr=> { %>
 
-            <% }) %>
+
+                <div class="carousel-item">
+                    <img src="/product_images/<%=sbnr.bannerImage%>" class="d-block w-100" alt="...">
+                </div>
+
+                <% }) %>
 
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
@@ -227,8 +167,8 @@
         <div class="container">
             <div class="row images" style="grid-gap: 44px;">
 
-                <% bstdl.forEach(data => { %>
-                 
+                <% bstdl.forEach(data=> { %>
+
 
 
                     <div class="col-2">
@@ -240,10 +180,11 @@
                             </div>
 
                             <button type="button" class="btn btn-danger"
-                            style="position: absolute; border-radius: 0px; font-size: x-small;">
-                            <% const discountPercentage = Math.round(((data.price - data.DiscountAmount) / data.price) * 100); %>
-                            <%= discountPercentage %>% OFF
-                        </button>
+                                style="position: absolute; border-radius: 0px; font-size: x-small;">
+                                <% const discountPercentage=Math.round(((data.price - data.DiscountAmount) / data.price)
+                                    * 100); %>
+                                    <%= discountPercentage %>% OFF
+                            </button>
 
 
                             <img src="/product_images/<%=data.images[0]%>" alt="">
@@ -256,9 +197,9 @@
                             <del style="font-size: small;">₹ <%-data.price-%></del>
                         </span>
                     </div>
-    
+
                     <% }) %>
-                
+
             </div>
         </div>
     </section>
@@ -284,16 +225,18 @@
                         <div class="owl-men-item owl-carousel">
 
 
-                            <% mensData.forEach(data => { %>
-                             
+                            <% mensData.forEach(data=> { %>
+
 
                                 <div class="item">
                                     <div class="thumb">
                                         <div class="hover-content">
                                             <ul>
-                                                <li><a href="/singleproduct/<%-data._id-%>"><i class="fa fa-eye"></i></a></li>
+                                                <li><a href="/singleproduct/<%-data._id-%>"><i
+                                                            class="fa fa-eye"></i></a></li>
                                                 <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                                <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a>
+                                                <li><a href="single-product.html"><i
+                                                            class="fa fa-shopping-cart"></i></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -301,9 +244,9 @@
                                     </div>
                                     <div class="down-content">
                                         <h4><%-data.productName-%></h4>
-                                        <span>₹   <%-data.DiscountAmount-%></span>
+                                        <span>₹ <%-data.DiscountAmount-%></span>
                                         <span class="me-1">
-                                            <del style="font-size: small;">₹   <%-data.price-%></del>
+                                            <del style="font-size: small;">₹ <%-data.price-%></del>
                                         </span>
                                         <ul class="stars">
                                             <li><i class="fa fa-star"></i></li>
@@ -314,12 +257,12 @@
                                         </ul>
                                     </div>
                                 </div>
-    
+
                                 <% }) %>
 
 
 
-                           
+
                         </div>
                     </div>
                 </div>
@@ -349,15 +292,17 @@
 
 
 
-                            <% womensData.forEach(data => { %>
+                            <% womensData.forEach(data=> { %>
 
                                 <div class="item">
                                     <div class="thumb">
                                         <div class="hover-content">
                                             <ul>
-                                                <li><a href="/singleproduct/<%-data._id-%>"><i class="fa fa-eye"></i></a></li>
+                                                <li><a href="/singleproduct/<%-data._id-%>"><i
+                                                            class="fa fa-eye"></i></a></li>
                                                 <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                                <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a>
+                                                <li><a href="single-product.html"><i
+                                                            class="fa fa-shopping-cart"></i></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -365,9 +310,9 @@
                                     </div>
                                     <div class="down-content">
                                         <h4><%-data.productName-%></h4>
-                                        <span>₹   <%-data.DiscountAmount-%></span>
+                                        <span>₹ <%-data.DiscountAmount-%></span>
                                         <span class="me-1">
-                                            <del style="font-size: small;">₹   <%-data.price-%></del>
+                                            <del style="font-size: small;">₹ <%-data.price-%></del>
                                         </span>
                                         <ul class="stars">
                                             <li><i class="fa fa-star"></i></li>
@@ -378,15 +323,15 @@
                                         </ul>
                                     </div>
                                 </div>
-    
-                                
-                                 
+
+
+
                                 <% }) %>
 
 
 
 
-                            
+
                         </div>
                     </div>
                 </div>
@@ -415,16 +360,18 @@
 
 
 
-                            <% kidsData.forEach(data => { %>
+                            <% kidsData.forEach(data=> { %>
 
 
                                 <div class="item">
                                     <div class="thumb">
                                         <div class="hover-content">
                                             <ul>
-                                                <li><a href="/singleproduct/<%-data._id-%>"><i class="fa fa-eye"></i></a></li>
+                                                <li><a href="/singleproduct/<%-data._id-%>"><i
+                                                            class="fa fa-eye"></i></a></li>
                                                 <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                                <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a>
+                                                <li><a href="single-product.html"><i
+                                                            class="fa fa-shopping-cart"></i></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -432,9 +379,9 @@
                                     </div>
                                     <div class="down-content">
                                         <h4><%-data.productName-%></h4>
-                                        <span>₹   <%-data.DiscountAmount-%></span>
+                                        <span>₹ <%-data.DiscountAmount-%></span>
                                         <span class="me-1">
-                                            <del style="font-size: small;">₹   <%-data.price-%></del>
+                                            <del style="font-size: small;">₹ <%-data.price-%></del>
                                         </span>
                                         <ul class="stars">
                                             <li><i class="fa fa-star"></i></li>
@@ -445,13 +392,13 @@
                                         </ul>
                                     </div>
                                 </div>
-    
+
                                 <% }) %>
 
 
 
 
-                            
+
                         </div>
                     </div>
                 </div>

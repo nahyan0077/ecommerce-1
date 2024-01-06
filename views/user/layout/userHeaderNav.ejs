@@ -1,0 +1,74 @@
+<header class="header-area header-sticky">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <nav class="main-nav">
+                    <!-- ***** Logo Start ***** -->
+                    <a href="index.html" class="logo">
+                        <img src="/images/ds_blk.png" style="max-width: 120px;margin-left: -260px;">
+                    </a>
+                    <!-- ***** Logo End ***** -->
+                    <!-- ***** Menu Start ***** -->
+                    <ul class="nav" style="margin-right: -215px;">
+                        <div class="contenir">
+                            <form class="d-flex" action="/search">
+                                <input type="text" name="search" class="search" id="search-inp"
+                                    placeholder="Search...">
+                                <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
+                            </form>
+                        </div>
+                        <li class="scroll-to-section"><a href="/userhome" class="active">Home</a></li>
+                        <li class="scroll-to-section"><a href="/userhome#men">Men's</a></li>
+                        <li class="scroll-to-section"><a href="/userhome#women">Women's</a></li>
+                        <li class="scroll-to-section"><a href="/userhome#kids">Kid's</a></li>
+                        <li class="submenu">
+                            <a href="javascript:;">Pages</a>
+                            <ul>
+                                <li><a href="about.html">About Us</a></li>
+                                <li><a href="products.html">Products</a></li>
+                                <li><a href="contact.html">Contact Us</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="submenu">
+                            <a href="javascript:;"><i class="fa-solid fa-user" style="color: #000000;cursor: pointer;"></i></a>
+                            <% if (check) { %>
+
+                            <ul>
+                                <li><a href="/allproducts">All Products</a></li>
+                                <li><a href="/myorders">My Orders</a></li>
+                                <li><a href="/userprofile">My Profile</a></li>
+                                <li><a href="/logout" onclick="confirmLogout()">Logout</a></li>
+                            </ul>
+                            <% } else { %>
+                             
+                                <ul>
+                                    <li><a href="/allproducts">All Products</a></li>
+                                    <li><a href="/usersignup">Sign Up</a></li>
+                                    <li><a href="/userlogin">Login</a></li>
+                                </ul>
+
+                            <% } %>
+
+                        </li>
+                        <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;cursor: pointer;"></i></a></li>
+                        <li><a href="/usercart"><i class="fa-solid fa-cart-shopping"
+                                    style="color: #000000;cursor: pointer;"></i></a></li>
+
+
+                        <% if (check) { %>
+                            <div class="" style="color: #000000;text-transform: capitalize;margin-top: 7px;cursor: pointer;">Hello,
+                                <%- check.username %>
+                            </div>
+                            <% } %>
+
+                    </ul>
+                    <a class='menu-trigger'>
+                        <span>Menu</span>
+                    </a>
+                    <!-- ***** Menu End ***** -->
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>

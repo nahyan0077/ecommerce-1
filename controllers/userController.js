@@ -123,17 +123,34 @@ module.exports = {
     },
 
 
+    //when no user exist 
+    singleProductNoUser : async (req,res) => {
+        try {
+            let id = req.params.id
 
+            let prdkt = await product.find({ _id:id})
+            const crtPdkt = null
+
+            res.render('user/singleProduct', { data: prdkt[0],crtPdkt})
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    //user exists
     singleProduct: async (req, res) => {
         try {
             let id = req.params.id
+
             let prdkt = await product.find({ _id: id })
 
             const crtPdkt = await cart.findOne({userId:req.session.name._id,'products.productid':id})
 
             console.log("prst",crtPdkt);
 
-            res.render('user/singleProduct', { data: prdkt[0] , check: req.session.name,crtPdkt})
+            res.render('user/singleProduct', { data: prdkt[0] ,check:req.session.name,crtPdkt})
         } catch (error) {
             console.log(error);
         }
