@@ -30,6 +30,9 @@
     integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 
   <style>
     body {
@@ -191,7 +194,7 @@
         <% orders.forEach(order => { %>
           <div class="container h5 border p-2" style="background-color: rgb(152, 152, 152); margin-bottom: 0px; border: 1px solid; border-radius: 10px;">
             <p style="display: inline-block;">Order: # <%= order._id %></p>
-            <p style="display: inline-block; margin-left: 590px;">Ordered Date: <%-order.orderDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' ,
+            <p style="display: inline-block; margin-left: 570px;">Ordered Date: <%-order.orderDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' ,
               dateStyle: 'short' , timeStyle: 'short' })-%></p>
           </div>
           <div class="card border shadow-none">
@@ -222,21 +225,28 @@
                         </a>
                       </li>
                       <li class="list-inline-item" style="margin-top: 20px;margin-left: 100px;">
-                        <a href="#" class="text-muted px-1">
-                          <% if (order.orderStatus === 'Order Processed') { %>
-                            <span class="badge rounded-pill bg-warning" style="font-weight: 400;"><%= order.orderStatus %></span>
-                        <% } else if (order.orderStatus === 'Order Confirmed') { %>
-                            <span class="badge rounded-pill bg-primary" style="font-weight: 400;"><%= order.orderStatus %></span>
-                        <% } else if (order.orderStatus === 'Order Shipped') { %>
-                            <span class="badge rounded-pill bg-info" style="font-weight: 400;"><%= order.orderStatus %></span>
-                        <% } else if (order.orderStatus === 'Order Delivered') { %>
-                            <span class="badge rounded-pill bg-success" style="font-weight: 400;"><%= order.orderStatus %></span>
-                        <% } else if (order.orderStatus === 'Order Rejected'){ %>
-                            <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
-                        <% } else if (order.orderStatus === "Cancelled"){ %>
-                            <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
-                        <% } %>
-                        </a>
+                        <% if (data.status!="Cancelled") { %>
+                         
+                        
+                                <a  class="text-muted px-1">
+                                <% if (order.orderStatus === 'Order Processed') { %>
+                                    <span class="badge rounded-pill bg-warning" style="font-weight: 400;"><%= order.orderStatus %></span>
+                                <% } else if (order.orderStatus === 'Order Confirmed') { %>
+                                    <span class="badge rounded-pill bg-primary" style="font-weight: 400;"><%= order.orderStatus %></span>
+                                <% } else if (order.orderStatus === 'Order Shipped') { %>
+                                    <span class="badge rounded-pill bg-info" style="font-weight: 400;"><%= order.orderStatus %></span>
+                                <% } else if (order.orderStatus === 'Order Delivered') { %>
+                                    <span class="badge rounded-pill bg-success" style="font-weight: 400;"><%= order.orderStatus %></span>
+                                <% } else if (order.orderStatus === 'Order Rejected'){ %>
+                                    <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
+                                <% } else if (order.orderStatus === "Cancelled"){ %>
+                                    <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
+                                <% } %>
+                                </a>
+                          <% } else { %>
+
+                             <a  class="text-muted px-1"><span class="badge rounded-pill bg-danger" style="font-weight: 400;margin-left: 20px;"><%= data.status %></span></a>
+                          <% } %>
                       </li>
 
                     </ul>
@@ -417,15 +427,27 @@
     });
 
 
-    function confirmLogout() {
-      var confirmLogout = confirm('Are you sure you want to logout?');
-
-      if (confirmLogout) {
-        window.location.href = '/user/logout';
-      }
-    }
-
   </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure you want to logout?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/logout';
+            }
+        });
+    }
+</script>
+
 
 
 

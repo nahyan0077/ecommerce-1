@@ -3,6 +3,8 @@ const otp = require("../models/otpModels");
 const { sendEmail } = require('../auth/nodemailer')
 const { generateOTP } = require('../util/generateOtp')
 const user = require('../models/userModels')
+const wallet = require('../models/walletModel')
+const walletHistory = require('../models/walletHistoryModel')
 
 
 
@@ -67,7 +69,13 @@ module.exports = {
         const otp_ = await otp.findOne({ email: req.session.otpuser.email })
         console.log(otp_)
         if (otp_?.otp == userotp && otp_ != null) {
-            user.create(req.session.otpuser).then((data) => {
+
+            user.create(req.session.otpuser).then(async(data) => {
+                const usr = await user.findOne({email:req.session.otpuser.email})
+                await wallet.create({
+                    userid:usr._id,
+                    wallet:0
+                })
                 res.render('user/userLogin', { msg: "SignUp Successfully..!" });
             })
         } else {
@@ -81,7 +89,6 @@ module.exports = {
         sendEmail(req.session.otpuser.email)
         res.render('otp', { status: "OTP resend successfully" })
     },
-
 
 
 

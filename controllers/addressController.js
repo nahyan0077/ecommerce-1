@@ -1,6 +1,7 @@
 
 const address = require('../models/addressModel');
 const user = require('../models/userModels');
+const coupon = require('../models/couponModel')
 
 
 module.exports = {
@@ -14,6 +15,7 @@ module.exports = {
 
             const id = usrData._id
             const adrs = await address.find({userId:id})
+            const cupn = await coupon.find().sort({_id:-1})
 
             //impp
             req.body.userId = usr._id
@@ -22,10 +24,10 @@ module.exports = {
             if(user){
                 await address.create(req.body)
                 const msg = "New address added succesfully"
-                res.render('user/userProfile',{msg,usrData,adrs,check:req.session.name})
+                res.render('user/userProfile',{msg,usrData,adrs,check:req.session.name,cartCount:req.session.cartCount,cupn})
             }else{
                 const msg = "Error occured while adding address"
-                res.render('user/userProfile',{msg,usrData,adrs,check:req.session.name})
+                res.render('user/userProfile',{msg,usrData,adrs,check:req.session.name,cartCount:req.session.cartCount,cupn})
             }
         } catch (error) {
             console.log(error);
@@ -49,10 +51,10 @@ module.exports = {
                 await address.updateOne({_id:_Id},{$set:{name:newAdrs.name,mobile:newAdrs.mobile,address:newAdrs.address,pincode:newAdrs.pincode,locality:newAdrs.locality,city:newAdrs.city,district:newAdrs.district,state:newAdrs.state}})
 
                 const msg = "Address updates successfully"
-                res.render("user/userProfile",{msg,usrData,adrs,check:req.session.name})
+                res.render("user/userProfile",{msg,usrData,adrs,check:req.session.name,cartCount:req.session.cartCount})
             }else{
                 const msg = "Select an existing address"
-                res.render("user/userProfile",{msg,usrData,adrs,check:req.session.name})
+                res.render("user/userProfile",{msg,usrData,adrs,check:req.session.name,cartCount:req.session.cartCount})
             }
 
         } catch (error) {

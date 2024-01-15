@@ -31,6 +31,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+    <link rel="stylesheet" href="/css/coupon.css">
+
     <style>
         #create-button:disabled {
             background-color: #696868;
@@ -332,7 +334,7 @@
 
 </head>
 
-<body>
+<body style="font-family: Poppins, sans-serif;">
 
 
     <%- include('./layout/userHeaderNav') %>
@@ -361,10 +363,10 @@
                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#address1" role="tab">
                             Manage Addresses
                         </a>
-                        <!-- <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
-                            Email notifications
+                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#coupons" role="tab">
+                            Available Coupons
                         </a>
-                        <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
+                        <!--<a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
                             Web notifications
                         </a>
                         <a class="list-group-item list-group-item-action" data-toggle="list" href="#" role="tab">
@@ -453,7 +455,7 @@
 
 
 
-                        <div class="card" hidden>
+                        <div class="card" >
                             <div class="card-header">
                                 <div class="card-actions float-right">
                                     <div class="dropdown show">
@@ -574,6 +576,35 @@
                         </div>
                     </div>
 
+
+                    <div class="tab-pane fade show active" id="coupons" role="tabpanel">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="container">
+    
+                                <% cupn.forEach(data => { %>
+                                     
+                                    <div class="coupon-card1" >
+                                        <!-- <img src="https://i.postimg.cc/KvTqpZq9/uber.png" class="logo"> -->
+                                        <h4><%= data.description%></h4>
+                                        <di class="coupon-row">
+                                            <span class="cpnCode"><%= data.couponCode%></span>
+                                            <span class="cpnBtn">Copy Code</span>
+                                        </di>
+                                        <p style="color: white;">Valid Till: <%= new Date(data.validTo).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></p>
+                                        <div class="circle1"></div>
+                                        <div class="circle2"></div>
+                                    </div>
+                                    <br>
+    
+                                <% }) %>                            
+    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <!-- address part -->
                     <div class="tab-pane fade" id="address1" role="tabpanel">
                         <!-- <div class="header">
@@ -603,7 +634,7 @@
                                     <p>Phone: <%-data.mobile-%></p>
                                     <p>Pin: <%-data.pincode-%></p>
                                     
-                                    <a href="#editaddress"><button class="btn-sm" onclick="openEditModal('<%-data.name-%>', '<%= data.address %>', '<%= data.locality %>', '<%= data.city %>', '<%= data.district %>', '<%= data.state %>', '<%-data.mobile-%>', '<%-data.pincode-%>', '<%-data._id-%>','<%-data.addressType-%>'),openEditModalss()" ><i class="fas fa-edit"></i> Edit</button></a>
+                                    <a ><button class="btn-sm" onclick="openEditModal('<%-data.name-%>', '<%= data.address %>', '<%= data.locality %>', '<%= data.city %>', '<%= data.district %>', '<%= data.state %>', '<%-data.mobile-%>', '<%-data.pincode-%>', '<%-data._id-%>','<%-data.addressType-%>'),openEditModalss()" ><i class="fas fa-edit"></i> Edit</button></a>
                                     
                                     <p hidden>id: <%-data.userId-%></p>
                                     
@@ -617,164 +648,168 @@
 
                             <% }) %>
 
-
-                            
-
                         </div>
-
-                <div id="editAddressModal" class="modal" style="display: none;overflow: scroll;">
-                    <div class="modal-content">
-
-                        <div class="container" id="editaddress" style="background-color: white; box-shadow: 0px 0px 10px 0px rgba(111, 110, 110, 0.5); max-width: 700px;padding-top: 400px;">
-                            <span class="close" onclick="closeEditModal()">&times;</span>
-                            <h2 class="text-center mb-4">Edit Address</h2>
-                            <form class="needs-validation" action="/posteditaddress" method="post" style="padding-bottom: 35px" novalidate>
-                                <div class="form-group">
-                                    <label for="editName">Name:</label>
-                                    <input type="text" class="form-control" id="editName" name="name" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editAddress">Address:</label>
-                                    <textarea class="form-control" id="editAddress" name="address" rows="3" required></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editLocality">Locality:</label>
-                                    <input type="text" class="form-control" id="editLocality" name="locality" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editCity">City:</label>
-                                    <input type="text" class="form-control" id="editCity" name="city" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editDistrict">District:</label>
-                                    <input type="text" class="form-control" id="editDistrict" name="district" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editState">State:</label>
-                                    <input type="text" class="form-control" id="editState" name="state" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editMobile">Mobile:</label>
-                                    <input type="tel" class="form-control" id="editMobile" name="mobile" pattern="[0-9]{10}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="editPincode">Pincode:</label>
-                                    <input type="text" class="form-control" id="editPincode" name="pincode" pattern="[0-9]{6}" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Address Type:</label>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="editAddressType" id="editHomeType" value="Home" checked required>
-                                        <label style="margin-top: -17px;" class="form-check-label" for="editHomeType">Home</label>
-                                    </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="editAddressType" id="editWorkType" value="Work" required>
-                                        <label style="margin-top: -17px;" class="form-check-label" for="editWorkType">Work</label>
-                                    </div>
-                                    <p id="editAddressType-error" class="error-message"></p>
-                                </div>
-
-
-                                <input id="id" type="text" name="id" hidden>
-
-                                <button type="submit" class="btn btn-primary" id="editSubmitBtn">Save Changes</button>
-                            </form>
-                        </div>
-
-                    </div>
                 </div>
 
 
-                        <div class="modal" id="addressModal">
-                            <div class="modal-content" style="height: 800px; overflow:scroll;">
-                                <!-- Inside the <div class="modal-content"> -->
-                                <div class="modal-body"
-                                    style="max-width: 500px; margin: 0 auto; width: 530px; margin-top: 100px;">
-                                    <button type="button" class="close" aria-label="Close" onclick="closeModal()">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    <h2 class="text-center mb-4">Add New Address</h2>
-                                    <form class="needs-validation" action="/postaddaddress" method="post" novalidate>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="name">Name:</label>
-                                                <input type="text" class="form-control" id="name" name="name" oninput="validateName(); updateAddAddressBtnState()" required>
-                                                <p style="color: red;" id="name-error" class="error-message"></p>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="phone">Phone No:</label>
-                                                <input type="tel" class="form-control" id="phone" name="mobile" pattern="[0-9]{10}" oninput="validatePhone(); updateAddAddressBtnState()" required>
-                                                <p style="color: red;" id="phone-error" class="error-message"></p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="address">Address:</label>
-                                            <textarea class="form-control" id="address" name="address" rows="3" oninput="validateField('address', 'address-error', 'Address is required'); updateAddAddressBtnState()" required></textarea>
-                                            <p style="color: red;" id="address-error" class="error-message"></p>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="city">City:</label>
-                                                <input type="text" class="form-control" id="city" name="city" oninput="validateField('city', 'city-error', 'City is required'); updateAddAddressBtnState()" required>
-                                                <p style="color: red;" id="city-error" class="error-message"></p>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="pincode">Pincode:</label>
-                                                <input type="text" class="form-control" id="pincode" name="pincode" pattern="[0-9]{6}" oninput="validatePincode(); updateAddAddressBtnState()" required>
-                                                <p style="color: red;" id="pincode-error" class="error-message"></p>
-                                            </div>
-                                        </div>
-                                        <div class="form-row">
-                                            <div class="form-group col-md-6">
-                                                <label for="district">District:</label>
-                                                <input type="text" class="form-control" id="district" name="district" oninput="validateField('district', 'district-error', 'District is required'); updateAddAddressBtnState()" required>
-                                                <p style="color: red;" id="district-error" class="error-message"></p>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label for="state">State:</label>
-                                                <input type="text" class="form-control" id="state" name="state" oninput="validateField('state', 'state-error', 'State is required'); updateAddAddressBtnState()" required>
-                                                <p style="color: red;" id="state-error" class="error-message"></p>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="locality">Locality:</label>
-                                            <input type="text" class="form-control" id="locality" name="locality" oninput="validateField('locality', 'locality-error', 'Locality is required'); updateAddAddressBtnState()" required>
-                                            <p style="color: red;" id="locality-error" class="error-message"></p>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Address Type:</label>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="addressType" id="homeType" value="Home" checked oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
-                                                <label style="margin-top: -17px;" class="form-check-label" for="homeType">Home</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="addressType" id="workType" value="Work" oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
-                                                <label style="margin-top: -17px;" class="form-check-label" for="workType">Work</label>
-                                            </div>
-                                            <p style="color: red;" id="addressType-error" class="error-message"></p>
-                                        </div>
-                        
-                                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Add Address</button>
-                        
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
 
 
 
 
 
 
-                </div>
+
             </div>
         </div>
     </div>
-    <script type="text/javascript"></script>
+
+    <!-- <script type="text/javascript"></script> -->
 
 
 
 
+<!-- edit address modal -->
+
+    <div id="editAddressModal" class="modal" style="display: none;overflow: scroll;">
+        <div class="modal-content">
+
+            <div class="container" id="editaddress" style="background-color: white; box-shadow: 0px 0px 10px 0px rgba(111, 110, 110, 0.5); max-width: 700px;padding-top: 400px;">
+                <span class="close" onclick="closeEditModal()">&times;</span>
+                <h2 class="text-center mb-4">Edit Address</h2>
+                <form class="needs-validation" action="/posteditaddress" method="post" style="padding-bottom: 35px" novalidate>
+                    <div class="form-group">
+                        <label for="editName">Name:</label>
+                        <input type="text" class="form-control" id="editName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editAddress">Address:</label>
+                        <textarea class="form-control" id="editAddress" name="address" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editLocality">Locality:</label>
+                        <input type="text" class="form-control" id="editLocality" name="locality" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editCity">City:</label>
+                        <input type="text" class="form-control" id="editCity" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDistrict">District:</label>
+                        <input type="text" class="form-control" id="editDistrict" name="district" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editState">State:</label>
+                        <input type="text" class="form-control" id="editState" name="state" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editMobile">Mobile:</label>
+                        <input type="tel" class="form-control" id="editMobile" name="mobile" pattern="[0-9]{10}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editPincode">Pincode:</label>
+                        <input type="text" class="form-control" id="editPincode" name="pincode" pattern="[0-9]{6}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address Type:</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="editAddressType" id="editHomeType" value="Home" checked required>
+                            <label style="margin-top: -17px;" class="form-check-label" for="editHomeType">Home</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="editAddressType" id="editWorkType" value="Work" required>
+                            <label style="margin-top: -17px;" class="form-check-label" for="editWorkType">Work</label>
+                        </div>
+                        <p id="editAddressType-error" class="error-message"></p>
+                    </div>
+
+
+                    <input id="id" type="text" name="id" hidden>
+
+                    <button type="submit" class="btn btn-primary" id="editSubmitBtn">Save Changes</button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- add address modal -->
+
+    <div class="modal" id="addressModal">
+        <div class="modal-content" style="height: 800px; overflow:scroll;">
+            <!-- Inside the <div class="modal-content"> -->
+            <div class="modal-body"
+                style="max-width: 500px; margin: 0 auto; width: 530px; margin-top: 100px;">
+                <button type="button" class="close" aria-label="Close" onclick="closeModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="text-center mb-4">Add New Address</h2>
+                <form class="needs-validation" action="/postaddaddress" method="post" novalidate>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control" id="name" name="name" oninput="validateName(); updateAddAddressBtnState()" required>
+                            <p style="color: red;" id="name-error" class="error-message"></p>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="phone">Phone No:</label>
+                            <input type="tel" class="form-control" id="phone" name="mobile" pattern="[0-9]{10}" oninput="validatePhone(); updateAddAddressBtnState()" required>
+                            <p style="color: red;" id="phone-error" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <textarea class="form-control" id="address" name="address" rows="3" oninput="validateField('address', 'address-error', 'Address is required'); updateAddAddressBtnState()" required></textarea>
+                        <p style="color: red;" id="address-error" class="error-message"></p>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="city">City:</label>
+                            <input type="text" class="form-control" id="city" name="city" oninput="validateField('city', 'city-error', 'City is required'); updateAddAddressBtnState()" required>
+                            <p style="color: red;" id="city-error" class="error-message"></p>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="pincode">Pincode:</label>
+                            <input type="text" class="form-control" id="pincode" name="pincode" pattern="[0-9]{6}" oninput="validatePincode(); updateAddAddressBtnState()" required>
+                            <p style="color: red;" id="pincode-error" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="district">District:</label>
+                            <input type="text" class="form-control" id="district" name="district" oninput="validateField('district', 'district-error', 'District is required'); updateAddAddressBtnState()" required>
+                            <p style="color: red;" id="district-error" class="error-message"></p>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="state">State:</label>
+                            <input type="text" class="form-control" id="state" name="state" oninput="validateField('state', 'state-error', 'State is required'); updateAddAddressBtnState()" required>
+                            <p style="color: red;" id="state-error" class="error-message"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="locality">Locality:</label>
+                        <input type="text" class="form-control" id="locality" name="locality" oninput="validateField('locality', 'locality-error', 'Locality is required'); updateAddAddressBtnState()" required>
+                        <p style="color: red;" id="locality-error" class="error-message"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Address Type:</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="addressType" id="homeType" value="Home" checked oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
+                            <label style="margin-top: -17px;" class="form-check-label" for="homeType">Home</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="addressType" id="workType" value="Work" oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
+                            <label style="margin-top: -17px;" class="form-check-label" for="workType">Work</label>
+                        </div>
+                        <p style="color: red;" id="addressType-error" class="error-message"></p>
+                    </div>
+    
+                    <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Add Address</button>
+    
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -850,6 +885,23 @@
         </div>
     </footer>
 
+
+    <!-- coupon copy js -->
+
+    <script>
+        var cpnBtns = document.querySelectorAll(".cpnBtn");
+        var cpnCodes = document.querySelectorAll(".cpnCode");
+    
+        cpnBtns.forEach(function (btn, index) {
+            btn.onclick = function () {
+                navigator.clipboard.writeText(cpnCodes[index].innerHTML);
+                btn.innerHTML = "COPIED";
+                setTimeout(function () {
+                    btn.innerHTML = "COPY CODE";
+                }, 3000);
+            };
+        });
+    </script>
 
 
     <script>
@@ -1175,15 +1227,26 @@ function validateForm() {
         });
 
 
-        function confirmLogout() {
-            var confirmLogout = confirm('Are you sure you want to logout?');
-
-            if (confirmLogout) {
-                window.location.href = '/user/logout';
-            }
-        }
-
     </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure you want to logout?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/logout';
+            }
+        });
+    }
+</script>
+
 
 
 

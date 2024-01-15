@@ -78,8 +78,6 @@ var productSchema = new mongoose.Schema(
     Tags : {
         type : String
     }
-    
-
     },
 
     {

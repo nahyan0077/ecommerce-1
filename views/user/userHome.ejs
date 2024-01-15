@@ -25,6 +25,9 @@
 
     <link rel="stylesheet" href="/css/lightbox.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <style>
         *::selection {
             background-color: transparent;
@@ -515,14 +518,25 @@
         });
 
 
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script>
         function confirmLogout() {
-            var confirmLogout = confirm('Are you sure you want to logout?');
-
-            if (confirmLogout) {
-                window.location.href = '/user/logout';
-            }
+            Swal.fire({
+                title: 'Are you sure you want to logout?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, logout!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '/logout';
+                }
+            });
         }
-
     </script>
 
 

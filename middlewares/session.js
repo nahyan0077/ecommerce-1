@@ -1,4 +1,5 @@
 const user = require('../models/userModels')
+const cart = require('../models/cartModels')
 
 module.exports = {
 
@@ -14,6 +15,19 @@ module.exports = {
                 req.session.user = false
                 res.redirect('/')
             }
+
+            //update the cart count navbar
+            const carts = await cart.findOne({ userId: req.session.name._id })
+
+            if (carts != null) {
+                var cartCount = 0
+                carts.products.forEach(data => {
+                    cartCount++
+                })
+                req.session.cartCount = cartCount
+            } else {
+                req.session.cartCount = '0'
+            }
             next()
         }else{
             res.redirect('/')
@@ -23,6 +37,7 @@ module.exports = {
     //before login
     userExist : (req,res,next)=>{
         if(req.session.user){
+            res.locals.cartCount = req.session.cartCount
             res.redirect('/userhome')
         }else{
             next()

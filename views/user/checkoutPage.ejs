@@ -24,6 +24,11 @@
 
     <script src="/js/customerAjax.js"></script>
 
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 
     <!-- Additional styles -->
     <style>
@@ -279,6 +284,12 @@
                                 <label class="form-check-label" for="walletPayment" style="font-weight: bold;">
                                     Wallet Payment
                                 </label>
+                                <br>
+                                <% if (walBalnc) { %>
+                                    <p id="walletBalance"  class="text-bg-dark" style="margin-left: 10px;">Balance: <span style="margin-left: 10px;color: green;">₹ <%= walBalnc.wallet %></span> </p>
+                                <% } %>
+                                
+
                             </div>
 
                             <!-- Confirm Order button -->
@@ -301,18 +312,31 @@
                 <div class="col-lg-3">
                     <div class="card mb-3 border shadow-0">
                         <div class="card-body">
-                            <form>
+                            <form id="couponForm" method="post">
                                 <div class="form-group">
                                     <label class="form-label">Have coupon?</label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control border" name=""
-                                            placeholder="Coupon code" />
-                                        <button class="btn btn-light border">Apply</button>
+                                        <input type="text" class="form-control border" name="couponCode" id="couponCode" placeholder="Coupon code" required oninput="this.value = this.value.toUpperCase()"/>
+                                        <button type="button" class="btn btn-light border" onclick="applyCoupon()">Apply</button>
                                     </div>
+                                    <a href="/userprofile#coupons" style="color: blue;font-size: 14px;cursor: pointer;"><%= cupnCount%>  coupons available</a><br>
+                                    
+                                    <% if (cpnMsg) { %>
+                                        <% if (cpnMsg!=false) { %>
+                                            <small style="color: rgb(30, 179, 30);">Coupon applied successfully</small>
+                                        <% } else { %>
+                                            <small style="color: red;">Invalid Coupon Code or Coupon Expired</small>
+                                        <% } %>
+                                    <% } %>
+                                    
                                 </div>
                             </form>
                         </div>
                     </div>
+                    
+
+
+
                     <div class="card shadow-0 border">
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
@@ -325,6 +349,17 @@
                                 <p class="mb-2 text-success">-₹ <%= totalDiscount %>
                                 </p>
                             </div>
+
+                            <% if (cupnDisc) { %>
+
+                                <div class="d-flex justify-content-between">
+                                    <p class="mb-2">Coupon Discount:</p>
+                                    <p class="mb-2 text-success">-₹ <%= cupnDisc %>
+                                    </p>
+                                </div>
+
+                            <% } %>
+
                             <div class="d-flex justify-content-between">
                                 <p class="mb-2">Delivery charges:</p>
                                 <span style="font-size: small;color: green;">Free</span><del
@@ -430,30 +465,7 @@
 
 
 
-        <!-- payment confirm modal -->
 
-        <!-- Modal for Payment Success -->
-        <div class="modal fade" id="paymentSuccessModal" tabindex="-1" role="dialog" aria-labelledby="paymentSuccessModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="paymentSuccessModalLabel">Payment Successful</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Modal body content -->
-                        <p>Your payment was successful!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <!-- Buttons to navigate -->
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="goToHomePage()">Go to Home Page</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="goToMyOrders()">Go to My Orders</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
 
 
@@ -519,6 +531,31 @@
             </div>
         </div>
     </footer>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script>
+        $(document).ready(function () {
+            // Initially hide the <p> element
+            $('#walletBalance').hide();
+    
+            // Add an event listener to the radio buttons
+            $('input[name="paymentOption"]').change(function () {
+                // Check if the selected option is 'walletPayment'
+                if ($(this).val() === 'walletPayment') {
+                    // If 'walletPayment' is selected, show the <p> element
+                    $('#walletBalance').show();
+                } else {
+                    // If any other option is selected, hide the <p> element
+                    $('#walletBalance').hide();
+                }
+            });
+        });
+    </script>
+
+
 
 
 
@@ -709,22 +746,6 @@
     }
 </script>
 
-<!-- Add these scripts to your existing script section -->
-<script>
-    function goToHomePage() {
-        // Redirect to the home page
-        window.location.href = '/';  // Replace '/' with your home page URL
-    }
-
-    function goToMyOrders() {
-        // Redirect to the My Orders page
-        window.location.href = '/myorders';  // Replace '/myorders' with your My Orders page URL
-    }
-</script>
-
-
-
-
 
 
 
@@ -787,6 +808,25 @@
                     });
 
                 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure you want to logout?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/logout';
+            }
+        });
+    }
+</script>
+
 
 
 

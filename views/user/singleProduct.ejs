@@ -37,6 +37,10 @@
 
     <link rel="stylesheet" href="/css/jquery.jqZoom.css" type="text/css" />
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+
     <style>
         /* Add your custom styles here */
         body {
@@ -242,7 +246,7 @@
                                         <li><a href="/allproducts">All Products</a></li>
                                         <li><a href="/myorders">My Orders</a></li>
                                         <li><a href="/userprofile">My Profile</a></li>
-                                        <li><a href="/logout" onclick="confirmLogout()">Logout</a></li>
+                                        <li><a  onclick="confirmLogout()">Logout</a></li>
                                     </ul>
 
                                 <% } %>
@@ -344,7 +348,7 @@
 
                                 <% } else { %>
                                          
-                                    <button id="goToCartBtn" class="btn btn-success" type="button" ><i class="fas fa-shopping-cart" ></i> Go
+                                    <button id="goToCartBtn" class="btn btn-warning" type="button" ><i class="fas fa-shopping-cart" ></i> Go
                                         to
                                         Cart</button>
 
@@ -354,7 +358,7 @@
 
 
 
-                                <button class="btn btn-primary" type="button"><i class="fas fa-heart"></i> Add to
+                                <button class="btn btn-primary" type="button" onclick="addToWishlist('<%-data._id-%>')"><i class="fas fa-heart"></i> Add to
                                     Wishlist</button>
                             </div>
             </div>
@@ -468,18 +472,27 @@
 
         })
 
-
-        function confirmLogout() {
-            var confirmLogout = confirm('Are you sure you want to logout?');
-
-            if (confirmLogout) {
-                window.location.href = '/user/logout';
-            }
-        }
     </script>
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure you want to logout?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/logout';
+            }
+        });
+    }
+</script>
 
 
 

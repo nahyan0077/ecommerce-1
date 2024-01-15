@@ -9,7 +9,7 @@ const banner = require('../models/bannerModels')
 module.exports = {
     adminProducts : async (req,res) =>{
         try {
-            let prdctData = await products.find()
+            let prdctData = await products.find().populate('category')
             res.render('admin/adminProducts',{prdctData,successModal: req.session.modal1})
         } catch (error) {
             console.log(error);

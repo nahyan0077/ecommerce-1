@@ -86,7 +86,7 @@
 
                     <td>
                       <a href="/editproducts/<%-data._id-%>"><i class="fa-solid fa-pen-to-square fa-lg mx-1 text-success"></i></a>
-                      <a href=""><i class="fa-solid fa-trash fa-lg mx-1 text-danger" onclick="deleteProduct('<%-data._id-%>')"></i></a>
+                      <a ><i class="fa-solid fa-trash fa-lg mx-1 text-danger" onclick="deleteProduct('<%-data._id-%>')"></i></a>
                     </td>
                   </tr>
 
@@ -124,6 +124,9 @@
             </script>
         <% } %>
 
+        
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>

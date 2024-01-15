@@ -7,6 +7,9 @@ const userHelper= require('../controllers/userHelper')
 const addressController = require('../controllers/addressController')
 const cartController = require('../controllers/cartController')
 const orderController = require('../controllers/orderController')
+const couponController = require('../controllers/couponController');
+const order = require('../models/orderModels');
+const wishlistController = require('../controllers/wishlistController')
 
 
 
@@ -169,6 +172,54 @@ router.get('/myorderdetails/:orderid',middleware.verifyUser,orderController.myOr
 
 //cancel order
 router.get('/cancelorder/:orderid',orderController.cancelOrder)
+
+//cancel a single product form an order
+router.get('/cancelsingleproduct/:prodktid/:orderid/:index',orderController.cancelSingleProduct)
+
+//return single product 
+router.post('/returnrequest',orderController.returnProduct)
+
+//payment success page for user side
+router.get('/paymentsuccesspage',middleware.verifyUser,orderController.paymentSuccessPage)
+
+//verify payment
+router.post('/verifypayment',middleware.verifyUser,orderController.verifyPayment)
+
+
+
+//--------------------------coupons-------------------------
+
+//get available coupons
+router.get('/usercoupons',middleware.verifyUser,couponController.userCoupons)
+
+//apply the coupon
+router.post('/applycoupon',couponController.applyCoupon)
+
+
+
+
+
+//--------------apply filter--------------------
+
+router.post('/applyfilter',userController.allproducts)
+
+
+
+
+//---------------------wishlist-----------
+router.get('/wishlist',middleware.verifyUser,wishlistController.getWishlist)
+
+//add to wishlist 
+router.get('/addtowishlist/:prdktId',wishlistController.addToWishlist)
+
+//remove from wishlist 
+router.get('/removefromwishlist/:prdktid/:wishId',wishlistController.removeFromWishlist)
+
+
+
+
+//usr wallet
+router.get('/userwallet',middleware.verifyUser,userController.getWallet)
 
 
 

@@ -12,7 +12,7 @@
     
     <style>
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
             background-color: #f4f4f4;
             display: flex;
             /* align-items: center; */
@@ -84,7 +84,7 @@
 
     <!-- category name -->
 
-            <h2 class=" mb-4">Add Category</h2>
+            <h2 class=" mb-4">Edit Category</h2>
             <p style="color: red; text-align: center;" id="err1" ><%-locals.err?"This category already exist":""-%></p>
             <p style="color: rgb(27, 161, 9); text-align: center;" id="err1" ><%-locals.added?"The category has been added":""-%></p>
             <form id="categoryForm" action="/updatecategory" method="post">

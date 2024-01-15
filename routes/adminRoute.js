@@ -7,6 +7,7 @@ const multerUpload = require('../middlewares/multer');
 const upload = require('../middlewares/multer');
 const productController = require('../controllers/productsController');
 const orderController = require('../controllers/orderController');
+const couponController = require('../controllers/couponController')
 
 
 //------------------------admin login controls-----------------------
@@ -102,6 +103,12 @@ router.get('/editbrand/:id',adminController.editBrand)
 //admin update brands
 router.post('/updatebrand',adminController.postEditBrand)
 
+//return request response from admin
+router.post('/submitreturnresponse',orderController.submitReturnResponse)
+
+
+
+
 
 
 
@@ -180,6 +187,26 @@ router.get('/addbannerpage',middleware.verifyAdmin,adminController.getAddBanner)
 
 //add banner post 
 router.post('/addbanner',multerUpload.fields(uploadBanner),adminController.postBanner)
+
+
+
+
+//-------------------admin coupon------------------
+
+//render coupon page 
+router.get('/admincoupon',middleware.verifyAdmin,couponController.getCoupon)
+
+//add coupon admin
+router.post('/addcoupon',middleware.verifyAdmin,couponController.addCoupon)
+
+//delete coupon 
+router.delete('/deletecoupon/:cupnId',couponController.deleteCoupon)
+
+//get edit coupon 
+router.get('/editcoupon/:id',couponController.getEditCoupon)
+
+//post edit coupon
+router.post('/posteditcoupon/:id',couponController.postEditCoupon)
 
 
 

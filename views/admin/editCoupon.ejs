@@ -1,0 +1,257 @@
+<%- include('./partials/adminnav') %>
+
+
+
+    <div id="main">
+
+        <div class="head">
+            <div class="col-div-6">
+                <p class="nav"> Products</p>
+
+            </div>
+
+            <div class="col-div-6">
+                <i class="fa fa-search search-icon"></i>
+
+
+                <i class="fa fa-bell noti-icon"></i>
+                <div class="notification-div">
+                    <p class="noti-head">Notification <span>2</span></p>
+                    <hr class="hr" />
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                </div>
+                <div class="profile">
+
+                    <p><i class="fa-solid fa-user fa-xl" style="color: #7c4ff9;padding-right: 5px;margin-left: -15px;"></i>  ADMIN <i class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
+                    <div class="profile-div">
+                        <p><i class="fa fa-user"></i> Profile</p>
+                        <p><i class="fa fa-cogs"></i> Settings</p>
+                        <p><i class="fa fa-power-off"></i> <a href="/adminlogout" style="text-decoration: none;">Log Out</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="modal-header bg-white text-dark">
+                  <h1 class="modal-title fs-3" id="exampleModalLabel">Edit Coupon</h1>
+                  
+                </div>
+                <div class="">
+                  <form class="p-5" method="post" action="/posteditcoupon/<%-cupn._id-%>" id="couponform">
+                    <div class="mb-3">
+                      <label for="coupon-type" class="col-form-label">Coupon Code:</label>
+                      <input type="text" class="form-control" name="couponCode" id="coupon-type" placeholder="Enter Coupon Code" value="<%= cupn.couponCode%>" required oninput="this.value = this.value.toUpperCase()">
+                      <small class="text-danger" id="couponTypeError"></small>
+                    </div>
+                    <div class="mb-3">
+                      <label for="coupon-description" class="col-form-label">Description:</label>
+                      <input type="text" class="form-control" name="description" id="coupon-description" placeholder="Input description" value="<%= cupn.description%>" required>
+                      <small class="text-danger" id="couponDescriptionError"></small>
+                    </div>
+                    <div class="mb-3">
+                      <label for="min-purchase" class="col-form-label">Min Purchase Amount:</label>
+                      <input type="number" class="form-control" name="minPurchaseAmount" id="min-purchase" placeholder="Enter Min Purchase Amount" value="<%= cupn.minPurchaseAmount%>" required>
+                      <small class="text-danger" id="minPurchaseAmountError"></small>
+                    </div>
+                    <div class="mb-3">
+                      <label for="discount-amount" class="col-form-label">Discount Amount:</label>
+                      <input type="number" class="form-control" name="discountAmount" id="discount-amount" placeholder="Enter Discount Amount" value="<%= cupn.discountAmount%>" required>
+                      <small class="text-danger" id="discountAmountError"></small>
+                    </div>
+                    <div class="mb-3">
+                      <label for="start-date" class="col-form-label">Valid From:</label>
+                      <input type="date" class="form-control" name="validFrom" id="start-date" value="<%= cupn.validFrom.toISOString().split('T')[0] %>" required>
+                      <small class="text-danger" id="startDateError"></small>
+                    </div>
+                    <div class="mb-3">
+                      <label for="expiry-date" class="col-form-label">Valid To:</label>
+                      <input type="date" class="form-control" name="validTo" id="expiry-date" value="<%= cupn.validTo.toISOString().split('T')[0] %>" required>
+                      <small class="text-danger" id="expiryDateError"></small>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"  id="submitBtn" disabled>Save Changes</button>
+                      </div>
+                  </form>
+                </div>
+
+
+
+
+
+  
+
+          
+
+
+    <script>
+        document.getElementById('couponform').addEventListener('input', function () {
+          validateForm();
+        });
+      
+        function validateForm() {
+          // Reset error messages
+          clearErrors();
+      
+          // Get form fields
+          const startDate = document.getElementById('start-date').value;
+          const expiryDate = document.getElementById('expiry-date').value;
+          const discountAmount = parseFloat(document.getElementById('discount-amount').value);
+          const minPurchaseAmount = parseFloat(document.getElementById('min-purchase').value);
+          const couponType = document.getElementById('coupon-type').value.trim();
+          const description = document.getElementById('coupon-description').value.trim();
+      
+          // Check for empty or spaces-only fields
+          if (isFieldEmptyOrSpaces(startDate)) {
+            showError('startDateError', 'Start date cannot be empty or contain only spaces.');
+          }
+      
+          if (isFieldEmptyOrSpaces(expiryDate)) {
+            showError('expiryDateError', 'Expiry date cannot be empty or contain only spaces.');
+          }
+      
+          if (isFieldEmptyOrSpaces(couponType)) {
+            showError('couponTypeError', 'Coupon type cannot be empty or contain only spaces.');
+          }
+      
+          if (isFieldEmptyOrSpaces(description)) {
+            showError('couponDescriptionError', 'Description cannot be empty or contain only spaces.');
+          }
+      
+          // Check if coupon type starts with space
+          if (couponType[0] === ' ') {
+            showError('couponTypeError', 'Coupon type cannot start with a space.');
+          }
+      
+          // Validate date range
+          if (new Date(startDate) >= new Date(expiryDate)) {
+            showError('startDateError', 'Start date must be smaller than the expiry date.');
+          }
+      
+          // Validate discount and minPurchaseAmount
+          if (isNaN(discountAmount) || discountAmount < 0) {
+            showError('discountAmountError', 'Discount must be a non-negative number.');
+          }
+      
+          if (isNaN(minPurchaseAmount) || minPurchaseAmount < 0) {
+            showError('minPurchaseAmountError', 'Min Purchase Amount must be a non-negative number.');
+          }
+      
+          if (discountAmount >= minPurchaseAmount) {
+            showError('discountAmountError', 'Discount must be less than Min Purchase Amount.');
+          }
+      
+          // Check for leading and trailing spaces
+          checkForLeadingAndTrailingSpaces('start-date', 'startDateError');
+          checkForLeadingAndTrailingSpaces('expiry-date', 'expiryDateError');
+      
+          // Disable or enable the submit button based on errors
+          const submitBtn = document.getElementById('submitBtn');
+          const hasErrors = document.querySelectorAll('.text-danger:not(:empty)').length > 0;
+          submitBtn.disabled = hasErrors;
+        }
+      
+        function isFieldEmptyOrSpaces(value) {
+          return value.trim() === '';
+        }
+      
+        function checkForLeadingAndTrailingSpaces(fieldName, errorId) {
+          const field = document.getElementById(fieldName);
+          if (field.value.trim() !== field.value) {
+            showError(errorId, 'Leading or trailing spaces are not allowed.');
+          }
+        }
+      
+        function showError(errorId, message) {
+          document.getElementById(errorId).innerText = message;
+        }
+      
+        function clearErrors() {
+          const errorElements = document.querySelectorAll('.text-danger');
+          errorElements.forEach((error) => {
+            error.innerText = '';
+          });
+        }
+      </script>
+
+
+  
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+        $(".menu").click(function () {
+            $("#mySidenav").css('width', '70px');
+            $("#main").css('margin-left', '70px');
+            $(".logo").css('display', 'none');
+            $(".logo1").css('display', 'block');
+            $(".logo span").css('visibility', 'visible');
+            $(".logo span").css('margin-left', '-10px');
+            $(".icon-a").css('visibility', 'hidden');
+            $(".icon-a").css('height', '25px');
+            $(".icons").css('visibility', 'visible');
+            $(".icons").css('margin-left', '-8px');
+            $(".menu1").css('display', 'block');
+            $(".menu").css('display', 'none');
+        });
+
+        $(".menu1").click(function () {
+            $("#mySidenav").css('width', '300px');
+            $("#main").css('margin-left', '300px');
+            $(".logo").css('visibility', 'visible');
+            $(".logo").css('display', 'block');
+            $(".icon-a").css('visibility', 'visible');
+            $(".icons").css('visibility', 'visible');
+            $(".menu").css('display', 'block');
+            $(".menu1").css('display', 'none');
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".profile p").click(function () {
+                $(".profile-div").toggle();
+
+            });
+            $(".noti-icon").click(function () {
+                $(".notification-div").toggle();
+            });
+
+
+
+
+        });
+    </script>
+
+
+
+
+</body>
+
+
+</html>
+

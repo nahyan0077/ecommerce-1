@@ -25,6 +25,9 @@
 
     <link rel="stylesheet" href="/css/lightbox.css">
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
     <style>
         *::selection {
             background-color: transparent;
@@ -228,9 +231,16 @@
                 <div class="col-2">
                     <div class="thumb">
                         <div class="icon">
-                            <a href="/singleproduct/<%-data._id-%>">
-                                <h6>View</h6>
-                            </a>
+                            <% if (check) { %>
+                                <a href="/singleproduct/<%-data._id-%>">
+                                    <h6>View</h6>
+                                </a>
+                            <% } else { %>
+                                <a href="/singleproductnouser/<%-data._id-%>">
+                                    <h6>View</h6>
+                                </a>
+                            <% } %>
+                            
                         </div>
 
                             <button type="button" class="btn btn-danger"

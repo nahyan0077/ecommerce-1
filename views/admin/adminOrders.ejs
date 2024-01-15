@@ -63,6 +63,7 @@
                     <th class="text-center" scope="col">Total Price</th>
                     <th class="text-center" scope="col">Order Status</th>
                     <th class="text-center" scope="col">Update Status</th>
+                    <th class="text-center" scope="col">Return Requests</th>
                     <th class="text-center" scope="col">View</th>
                   </tr>
                 </thead>
@@ -79,7 +80,7 @@
                     <td class="text-center"><%-data.paymentMethod-%></td>
                     <td class="text-center">₹  <%-data.totalAmount-%></td>
                     
-
+ 
                     <td class="text-center">
                         <% if (data.orderStatus === 'Order Processed') { %>
                             <span class="badge rounded-pill bg-warning" style="font-weight: 400;"><%= data.orderStatus %></span>
@@ -131,6 +132,21 @@
                          
                       </td>
 
+
+                      <td class="text-center">
+                        <% const hasReturnRequested = retns.some(returnData => returnData.orderId.toString() === data._id.toString() && returnData.status === "Requested"); %>
+                        
+                        <% if (hasReturnRequested) { %>
+                            <span class="badge rounded-pill bg-warning text-dark" style="font-weight: 400;">Requested</span>
+                        <% } else { %>
+                            <span class="text-success" style="font-weight: 400;">Nill</span>
+                        <% } %>
+                    </td>
+                    
+                    
+                    
+
+
                     <td>
 
                         <a href="/orderlist1/<%-data._id-%>/<%-data._id-%>" class="btn btn-success">view</a>                                                                                 
@@ -146,6 +162,8 @@
             </div>
           </div>
 
+          <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
