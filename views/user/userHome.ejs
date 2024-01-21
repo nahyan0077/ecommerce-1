@@ -28,6 +28,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
+    <script src="/js/customerAjax.js"></script>
+
     <style>
         *::selection {
             background-color: transparent;
@@ -113,6 +115,48 @@
         }
     </style>
 
+<style>
+    .shopnow {
+--b: 3px;   /* border thickness */
+--s: .15em; /* size of the corner */
+--c: #BD5532;
+
+padding: calc(.05em + var(--s)) calc(.3em + var(--s));
+color: var(--c);
+--_p: var(--s);
+background:
+conic-gradient(from 90deg at var(--b) var(--b),#0000 90deg,var(--c) 0)
+var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
+transition: .3s linear, color 0s, background-color 0s;
+outline: var(--b) solid #0000;
+outline-offset: .2em;
+}
+.shopnow:hover,
+.shopnow:focus-visible{
+--_p: 0px;
+outline-color: var(--c);
+outline-offset: .05em;
+}
+.shopnow:active {
+background: var(--c);
+color: #fff;
+}
+
+
+.shopnow {
+font-family: system-ui, sans-serif;
+font-weight: bold;
+font-size: 4rem;
+cursor: pointer;
+border: none;
+margin: .1em;
+}
+</style>
+
+
+
+</head>
+
 
 
 
@@ -126,10 +170,14 @@
 
 
     <!-- upper carousal  -->
-    <div id="carouselExample" class="carousel slide">
+    <div id="carouselExample" class="carousel slide" style="margin-top: 85px;">
         <div class="carousel-inner" style="max-height: 700px;">
 
             <div class="carousel-item active">
+                <div class="carousel-text" style="position: absolute;margin-top: 300px; margin-left:200px ;">
+                    <h1>Upto 40% offer</h1>
+                    <a href="/allproducts"><button class="shopnow" style="--c: #373B44;--b: 2px;--s:12px;font-size: 40px;">SHOP NOW</button></a>
+                </div>
                 <img src="/product_images/<%=banners[0].bannerImage%>" class="d-block w-100" alt="...">
             </div>
 
@@ -194,7 +242,7 @@
                         </div>
                         <br>
                         <h6><%-data.productName-%></h6>
-                        <p><%-data.category-%> SHOES</p>
+                        <p><%-data.category_id.catagoryName-%> SHOES</p>
                         <p class="text-danger fw-bold">₹ <%-data.DiscountAmount-%></p>
                         <span class="me-1">
                             <del style="font-size: small;">₹ <%-data.price-%></del>
@@ -228,8 +276,8 @@
                         <div class="owl-men-item owl-carousel">
 
 
-                            <% mensData.forEach(data=> { %>
-
+                            <% prdktsData.forEach(data=> { %>
+                                <% if (data.category_id.categoryName=="MENS") { %>
 
                                 <div class="item">
                                     <div class="thumb">
@@ -237,17 +285,16 @@
                                             <ul>
                                                 <li><a href="/singleproduct/<%-data._id-%>"><i
                                                             class="fa fa-eye"></i></a></li>
-                                                <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                                <li><a href="single-product.html"><i
-                                                            class="fa fa-shopping-cart"></i></a>
-                                                </li>
+                                                <li><a onclick="addToWishlist('<%-data._id-%>')"><i class="fa fa-heart"></i></a></li>
+                                                <li><a href=""><i class="fa fa-star" ></i></a></li>
+
                                             </ul>
                                         </div>
                                         <img src="/product_images/<%=data.images[0]%>" alt="">
                                     </div>
                                     <div class="down-content">
                                         <h4><%-data.productName-%></h4>
-                                        <span>₹ <%-data.DiscountAmount-%></span>
+                                        <span style="color: #000000;font-weight: 600;">₹ <%-data.DiscountAmount-%></span>
                                         <span class="me-1">
                                             <del style="font-size: small;">₹ <%-data.price-%></del>
                                         </span>
@@ -258,8 +305,10 @@
                                             <li><i class="fa fa-star"></i></li>
                                             <li><i class="fa fa-star"></i></li>
                                         </ul>
+                                        
                                     </div>
                                 </div>
+                                <% } %>
 
                                 <% }) %>
 
@@ -295,7 +344,8 @@
 
 
 
-                            <% womensData.forEach(data=> { %>
+                            <% prdktsData.forEach(data=> { %>
+                                <% if (data.category_id.categoryName=="WOMENS") { %>
 
                                 <div class="item">
                                     <div class="thumb">
@@ -303,9 +353,9 @@
                                             <ul>
                                                 <li><a href="/singleproduct/<%-data._id-%>"><i
                                                             class="fa fa-eye"></i></a></li>
-                                                <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                                <li><a href="single-product.html"><i
-                                                            class="fa fa-shopping-cart"></i></a>
+                                                <li><a onclick="addToWishlist('<%-data._id-%>')"><i class="fa fa-heart"></i></a></li>
+                                                <li><a href=""><i
+                                                            class="fa fa-star"></i></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -313,7 +363,7 @@
                                     </div>
                                     <div class="down-content">
                                         <h4><%-data.productName-%></h4>
-                                        <span>₹ <%-data.DiscountAmount-%></span>
+                                        <span style="color: #000000;font-weight: 600;">₹ <%-data.DiscountAmount-%></span>
                                         <span class="me-1">
                                             <del style="font-size: small;">₹ <%-data.price-%></del>
                                         </span>
@@ -327,7 +377,7 @@
                                     </div>
                                 </div>
 
-
+                                <% } %>
 
                                 <% }) %>
 
@@ -363,18 +413,17 @@
 
 
 
-                            <% kidsData.forEach(data=> { %>
+                            <% prdktsData.forEach(data=> { %>
 
-
+                                <% if (data.category_id.categoryName=="KIDS") { %>
                                 <div class="item">
                                     <div class="thumb">
                                         <div class="hover-content">
                                             <ul>
                                                 <li><a href="/singleproduct/<%-data._id-%>"><i
                                                             class="fa fa-eye"></i></a></li>
-                                                <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                                <li><a href="single-product.html"><i
-                                                            class="fa fa-shopping-cart"></i></a>
+                                                <li><a  onclick="addToWishlist('<%-data._id-%>')"><i class="fa fa-heart"></i></a></li>
+                                                <li><a href=""><i class="fa fa-star"></i></a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -382,7 +431,7 @@
                                     </div>
                                     <div class="down-content">
                                         <h4><%-data.productName-%></h4>
-                                        <span>₹ <%-data.DiscountAmount-%></span>
+                                        <span style="color: #000000;font-weight: 600;">₹ <%-data.DiscountAmount-%></span>
                                         <span class="me-1">
                                             <del style="font-size: small;">₹ <%-data.price-%></del>
                                         </span>
@@ -395,6 +444,7 @@
                                         </ul>
                                     </div>
                                 </div>
+                                <% } %>
 
                                 <% }) %>
 
@@ -477,6 +527,9 @@
     </footer>
 
 
+
+    <!-- for ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
     <!-- jQuery -->

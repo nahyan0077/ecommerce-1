@@ -52,7 +52,7 @@
  
             
             <div class="row my-5">
-              <table id="example" class="table bg-light table-striped text-center">
+              <table id="example" class="table bg-light table-striped text-center" > 
                 <thead class="thead-dark text-center">
                   <tr>
                     <th class="text-center" scope="col">Number</th>
@@ -74,9 +74,9 @@
                     <th class="text-center" scope="row"><%-index+1-%></th>
                     <td><img src="/product_images/<%=data.images[0]%>" alt="" style="width: 80px;height: 80px;"></td>
                     <td class="text-center"><%-data.productName-%></td>
-                    <td class="text-center">₹  <%-data.price-%></td>
-                    <td class="text-center"><%-data.category-%></td>
-                    <td class="text-center"><%-data.brandName-%></td>
+                    <td class="text-center">₹  <%-data.DiscountAmount-%></td>
+                    <td class="text-center"><%-data.category_id.categoryName-%></td>
+                    <td class="text-center"><%-data.brand_id.brandName-%></td>
                     <td class="text-center"><%-data.stockQuantity-%></td>
                     <%if(data.displayStatus=="Show"){%>
                         <td class="text-center"><a ><button style="background-color: red; border-radius: 30px; border:none; width:90px; color: white;"  onclick="show_hide('<%-data._id-%>')">Hide</button></a></td>
@@ -129,35 +129,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
 
-        $(".menu").click(function () {
-            $("#mySidenav").css('width', '70px');
-            $("#main").css('margin-left', '70px');
-            $(".logo").css('display', 'none');
-            $(".logo1").css('display', 'block');
-            $(".logo span").css('visibility', 'visible');
-            $(".logo span").css('margin-left', '-10px');
-            $(".icon-a").css('visibility', 'hidden');
-            $(".icon-a").css('height', '25px');
-            $(".icons").css('visibility', 'visible');
-            $(".icons").css('margin-left', '-8px');
-            $(".menu1").css('display', 'block');
-            $(".menu").css('display', 'none');
-        });
-
-        $(".menu1").click(function () {
-            $("#mySidenav").css('width', '300px');
-            $("#main").css('margin-left', '300px');
-            $(".logo").css('visibility', 'visible');
-            $(".logo").css('display', 'block');
-            $(".icon-a").css('visibility', 'visible');
-            $(".icons").css('visibility', 'visible');
-            $(".menu").css('display', 'block');
-            $(".menu1").css('display', 'none');
-        });
-
-    </script>
     <script>
         $(document).ready(function () {
             $(".profile p").click(function () {
@@ -167,12 +139,9 @@
             $(".noti-icon").click(function () {
                 $(".notification-div").toggle();
             });
-
-
-
-
         });
     </script>
+
 
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

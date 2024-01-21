@@ -6,7 +6,12 @@ const walletSchema = new Schema({
   wallet: {
     type: Number,
   },
-  invited: Array,
+  invited: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  ],
 });
 
 const wallet = mongoose.model("wallet", walletSchema);

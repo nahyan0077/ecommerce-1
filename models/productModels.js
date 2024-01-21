@@ -19,19 +19,11 @@ var productSchema = new mongoose.Schema(
         required: true,
     },
 
-    brandName: {
-        type: String,
+    brand_id: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'brands',
         required: true,
     },
-
-    // size: {
-    //     type: Number,
-    //     required: true 
-    // },
-
-    // tags: {
-    //     type: Array,
-    // },
 
     images: {
         type: Array,
@@ -43,9 +35,9 @@ var productSchema = new mongoose.Schema(
         required: true,
     },
 
-    category: {
-        type: String,
-        required: true,
+    category_id: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'category',
     },
 
     DiscountAmount: {
@@ -77,9 +69,15 @@ var productSchema = new mongoose.Schema(
     
     Tags : {
         type : String
+    },
+    inCategoryOffer : {
+        type: Boolean,
+        default: false
+    },
+    beforeOffer : {
+        type: Number
     }
     },
-
     {
         timestamps: true,
     }

@@ -65,6 +65,7 @@
                       <input type="text" class="form-control" name="couponCode" id="coupon-type" placeholder="Enter Coupon Code" value="<%= cupn.couponCode%>" required oninput="this.value = this.value.toUpperCase()">
                       <small class="text-danger" id="couponTypeError"></small>
                     </div>
+                    <input type="text" class="form-control" name="oldCouponCode" id="coupon-type" placeholder="Enter Coupon Code" value="<%= cupn.couponCode%>" required oninput="this.value = this.value.toUpperCase()" hidden>
                     <div class="mb-3">
                       <label for="coupon-description" class="col-form-label">Description:</label>
                       <input type="text" class="form-control" name="description" id="coupon-description" placeholder="Input description" value="<%= cupn.description%>" required>

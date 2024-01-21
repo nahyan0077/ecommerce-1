@@ -894,7 +894,16 @@ function addToWishlist(prddktId) {
         url: "/addtowishlist/" + `${prddktId}`,
         method: "get",
         success: function (res) {
-            if (res.prdktExist == false && res.userr == true) {
+            if(res.userr == false){
+                Toastify({
+                    text: 'No user Found Please Login',
+                    duration: 3000,
+                    gravity: 'top',
+                    position: 'center',
+                    backgroundColor: 'red',
+                    stopOnFocus: true,
+                }).showToast();
+            }else if (res.prdktExist == false && res.userr == true) {
                 // Show success notification using Toastify
                 Toastify({
                     text: 'Product added to wishlist',
@@ -913,7 +922,7 @@ function addToWishlist(prddktId) {
                     showConfirmButton: false,
                     timer: 3000
                 });
-            }
+            } 
         },
         error: function (err) {
             // Show error notification using SweetAlert
@@ -974,6 +983,129 @@ function removeFromWishlist(prdktid, wishId) {
         }
     });
 }
+
+
+
+//delete an offer in admin side
+function delete_offer(offerid) {
+    // Show SweetAlert confirmation dialog
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User clicked 'Yes', proceed with the deletion
+            $.ajax({
+                url: "/deleteoffer/" + `${offerid}`,
+                method: "delete",
+                success: function (response) {
+                    Swal.fire({
+                        text: response.msg,
+                        icon: 'success',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000);
+                },
+                error: function (err) {
+                    Swal.fire({
+                        text: 'Something went wrong',
+                        icon: 'error',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                    console.log(err);
+                }
+            });
+        }
+    });
+}
+
+
+
+function updatecount(id) {
+    $.ajax({
+      url:id,
+      method: 'get',
+      success: (res) => {
+        new Chart("reportsChart", {
+          type: "line",
+          data: {
+            labels: res.labelsByCount,
+            datasets: [{
+              label: "Sales by orders",
+              data: res.dataByCount,
+              borderColor: "blue",
+              fill: false
+            }]
+          },
+          options: {
+            legend: { display: true },
+            text: "Sales by Amount"
+          }
+        });
+  
+        var barColors = ["red", "green", "blue", "orange", "brown","blue",
+        "#00aba9",
+        "#2b5797",
+        "#e8c3b9",
+        "#1e7145",
+        "red", "green"];
+  
+        new Chart("barChart", {
+          type: "bar",
+          data: {
+            labels: res.labelsByAmount,
+            datasets: [{
+              backgroundColor: barColors,
+              data: res.dataByAmount
+            }]
+          },
+          options: {
+            legend: { display: false },
+            title: {
+              display: true,
+              text: "Sales by Amount"
+            }
+          }
+        });
+  
+        var barColors = [
+          "blue",
+          "#00aba9",
+          "#2b5797",
+          "#e8c3b9",
+          "#1e7145",
+          "red", "green", "blue", "orange", "brown","yellow"
+        ];
+  
+        new Chart("pieChart", {
+          type: "pie",
+          data: {
+            labels: res.labelsByCount,
+            datasets: [{
+              backgroundColor: barColors,
+              data: res.dataByCount
+            }]
+          },
+          options: {
+            title: {
+              display: true,
+              text: "sales by order"
+            }
+          }
+        });
+      }
+    });
+  }
+
 
 
 

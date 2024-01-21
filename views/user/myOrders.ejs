@@ -184,143 +184,159 @@
   <%- include('./layout/userHeaderNav') %>
 
 
-<% if (orders) { %>
- 
-
-
-  <div class="container" style="margin-top: 100px;">
-    <div class="row">
-      <div class="col-xl-12">
-        <% orders.forEach(order => { %>
-          <div class="container h5 border p-2" style="background-color: rgb(152, 152, 152); margin-bottom: 0px; border: 1px solid; border-radius: 10px;">
-            <p style="display: inline-block;">Order: # <%= order._id %></p>
-            <p style="display: inline-block; margin-left: 570px;">Ordered Date: <%-order.orderDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' ,
-              dateStyle: 'short' , timeStyle: 'short' })-%></p>
-          </div>
-          <div class="card border shadow-none">
-            <div class="card-body">
-              <% order.products.forEach(data => { %>
-                <div class="d-flex align-items-start border-bottom pb-3">
-                  <div class="me-4">
-                    <img src="/product_images/<%=data.productid.images[0]%>" alt="" class="avatar-lg rounded">
-                  </div>
-                  <div class="flex-grow-1 align-self-center overflow-hidden">
-                    <div>
-                      <h5 class="text-truncate font-size-18"><a href="#" class="text-dark"><%= data.productid.productName%></a></h5>
-                      <p class="text-muted mb-0">
-                        <i class="bx bxs-star text-warning"></i>
-                        <i class="bx bxs-star text-warning"></i>
-                        <i class="bx bxs-star text-warning"></i>
-                        <i class="bx bxs-star text-warning"></i>
-                        <i class="bx bxs-star-half text-warning"></i>
-                      </p>
-                      <p class="mb-0 mt-1">Category : <span class="fw-medium"><%= data.productid.category%></span></p>
+  <% if (orders.length>0) { %>
+    <div class="container" style="margin-top: 100px;">
+      <div class="row">
+        <div class="col-xl-12">
+          <% orders.forEach(order => { %>
+            <div class="container h5 border p-2" style="background-color: rgb(152, 152, 152); margin-bottom: 0px; border: 1px solid; border-radius: 10px;">
+              <p style="display: inline-block;">Order: # <%= order._id %></p>
+              <p style="display: inline-block; margin-left: 570px;">Ordered Date: <%-order.orderDate.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'short', timeStyle: 'short' })-%></p>
+            </div>
+            <div class="card border shadow-none">
+              <div class="card-body">
+                <% order.products.forEach(data => { %>
+                  <div class="d-flex align-items-start border-bottom pb-3">
+                    <div class="me-4">
+                      <img src="/product_images/<%=data?.productid?.images[0]%>" alt="" class="avatar-lg rounded">
                     </div>
-                  </div>
-                  <div class="flex-shrink-0 ms-2">
-                    <ul class="list-inline mb-0 font-size-16">
-                      <li class="list-inline-item" style="margin-left: -500px;margin-top: 20px;">
-                        <a href="#" class="text-muted px-1">
-                          <span style="color: #000000;">Qty: <%= data.quantity%></span>
-                        </a>
-                      </li>
-                      <li class="list-inline-item" style="margin-top: 20px;margin-left: 100px;">
-                        <% if (data.status!="Cancelled") { %>
-                         
-                        
-                                <a  class="text-muted px-1">
-                                <% if (order.orderStatus === 'Order Processed') { %>
-                                    <span class="badge rounded-pill bg-warning" style="font-weight: 400;"><%= order.orderStatus %></span>
-                                <% } else if (order.orderStatus === 'Order Confirmed') { %>
-                                    <span class="badge rounded-pill bg-primary" style="font-weight: 400;"><%= order.orderStatus %></span>
-                                <% } else if (order.orderStatus === 'Order Shipped') { %>
-                                    <span class="badge rounded-pill bg-info" style="font-weight: 400;"><%= order.orderStatus %></span>
-                                <% } else if (order.orderStatus === 'Order Delivered') { %>
-                                    <span class="badge rounded-pill bg-success" style="font-weight: 400;"><%= order.orderStatus %></span>
-                                <% } else if (order.orderStatus === 'Order Rejected'){ %>
-                                    <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
-                                <% } else if (order.orderStatus === "Cancelled"){ %>
-                                    <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
-                                <% } %>
-                                </a>
+                    <div class="flex-grow-1 align-self-center overflow-hidden">
+                      <div>
+                        <h5 class="text-truncate font-size-18"><a href="#" class="text-dark"><%= data?.productid?.productName%></a></h5>
+                        <p class="text-muted mb-0">
+                          <i class="bx bxs-star text-warning"></i>
+                          <i class="bx bxs-star text-warning"></i>
+                          <i class="bx bxs-star text-warning"></i>
+                          <i class="bx bxs-star text-warning"></i>
+                          <i class="bx bxs-star-half text-warning"></i>
+                        </p>
+                        <p class="text-muted" style="margin-left: 17px;"><%-data?.productid?.category_id?.categoryName-%></p>
+                      </div>
+                    </div>
+                    <div class="flex-shrink-0 ms-2">
+                      <ul class="list-inline mb-0 font-size-16">
+                        <li class="list-inline-item" style="margin-left: -500px;margin-top: 20px;">
+                          <a href="#" class="text-muted px-1">
+                            <span style="color: #000000;">Qty: <%= data.quantity%></span>
+                          </a>
+                        </li>
+                        <li class="list-inline-item" style="margin-top: 20px;margin-left: 100px;">
+                          <% if (data.status!="Cancelled") { %>
+                            <a class="text-muted px-1">
+                              <% if (order.orderStatus === 'Order Processed') { %>
+                                <span class="badge rounded-pill bg-warning" style="font-weight: 400;"><%= order.orderStatus %></span>
+                              <% } else if (order.orderStatus === 'Order Confirmed') { %>
+                                <span class="badge rounded-pill bg-primary" style="font-weight: 400;"><%= order.orderStatus %></span>
+                              <% } else if (order.orderStatus === 'Order Shipped') { %>
+                                <span class="badge rounded-pill bg-info" style="font-weight: 400;"><%= order.orderStatus %></span>
+                              <% } else if (order.orderStatus === 'Order Delivered') { %>
+                                <span class="badge rounded-pill bg-success" style="font-weight: 400;"><%= order.orderStatus %></span>
+                              <% } else if (order.orderStatus === 'Order Rejected'){ %>
+                                <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
+                              <% } else if (order.orderStatus === "Cancelled"){ %>
+                                <span class="badge rounded-pill bg-danger" style="font-weight: 400;"><%= order.orderStatus %></span>
+                              <% } %>
+                            </a>
                           <% } else { %>
-
-                             <a  class="text-muted px-1"><span class="badge rounded-pill bg-danger" style="font-weight: 400;margin-left: 20px;"><%= data.status %></span></a>
+                            <a class="text-muted px-1">
+                              <span class="badge rounded-pill bg-danger" style="font-weight: 400;margin-left: 20px;"><%= data.status %></span>
+                            </a>
                           <% } %>
-                      </li>
-
-                    </ul>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
-                </div>
-              <% }) %>
-
-
-              
-              <div>
-                <div class="row">
-                  <div class="col-sm-12">
-                    <div class="text-sm-end mt-2 mt-sm-0">
-                      <a href="/myorderdetails/<%= order._id %>" class="btn btn-outline-success">
-                         View details </a>
+                <% }) %>
+                <div>
+                  <div class="row">
+                    <div class="col-sm-12">
+                      <div class="text-sm-end mt-2 mt-sm-0">
+                        <a href="/myorderdetails/<%= order._id %>" class="btn btn-outline-success">
+                          View details
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!-- end card -->
-        <% }) %>
-        <% } else { %>
-          <section class="h-100 h-custom" style="background-color: #eee;margin-top: 100px;"> 
-            <div class="container py-5 h-100">
-              <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col">
-                  <div class="card">
-                    <div class="card-body p-4 d-flex justify-content-center align-items-center">
-          
-                     <div class="d-flex flex-column align-items-center">
-                        <img src="/images/nocart.webp" style="width: 260px;" alt=""><br><br>
-                        <h5 >You don't have any Orders yet!</h5>
-                        <p >Grab something right now.</p>
-                        <br>
-                        <a href="/allproducts"><button style="border-radius: 0px;width: 200px;" type="button" class="btn btn-success">Shop now</button></a>
-                     </div>
-                     
-          
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-
-        <% } %>
-
-        <div class="row my-4">
-          <div class="col-sm-6">
-            <a href="/allproducts" class="btn btn-link text-muted">
-              <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping </a>
-          </div> <!-- end col -->
-        </div> <!-- end row-->
+            <!-- end card -->
+          <% }) %>
+        </div>
       </div>
     </div>
-    <!-- end row -->
-  </div>
   
+    <!-- Pagination -->
+    <div class="container" style="display: flex;justify-content: center;">
+    <nav aria-label="...">
+      <ul class="pagination">
+        <% if (paginationData.hasPrevPage) { %>
+          <li class="page-item">
+            <a class="page-link" href="/myorders?page=<%= paginationData.prevPage %>" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+        <% } else { %>
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+          </li>
+        <% } %>
+  
+        <% for (let i = 1; i <= paginationData.totalPages; i++) { %>
+          <% if (i === paginationData.currentPage) { %>
+            <li class="page-item active" aria-current="page">
+              <span class="page-link"><%= i %></span>
+            </li>
+          <% } else { %>
+            <li class="page-item">
+              <a class="page-link" href="/myorders?page=<%= i %>"><%= i %></a>
+            </li>
+          <% } %>
+        <% } %>
+  
+        <% if (paginationData.hasNextPage) { %>
+          <li class="page-item">
+            <a class="page-link" href="/myorders?page=<%= paginationData.nextPage %>">Next</a>
+          </li>
+        <% } else { %>
+          <li class="page-item disabled">
+            <a class="page-link" href="#" aria-disabled="true">Next</a>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+  </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
+  <% } else { %>
+    <!-- Display if there are no orders -->
+    <section class="h-100 h-custom" style="background-color: #eee;margin-top: 100px;">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col">
+            <div class="card">
+              <div class="card-body p-4 d-flex justify-content-center align-items-center">
+                <div class="d-flex flex-column align-items-center">
+                  <img src="/images/nocart.webp" style="width: 260px;" alt=""><br><br>
+                  <h5>You don't have any Orders yet!</h5>
+                  <p>Grab something right now.</p>
+                  <br>
+                  <a href="/allproducts"><button style="border-radius: 0px;width: 200px;" type="button" class="btn btn-success">Shop now</button></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <% } %>
+  
+  <div class="container">
+    <div class="col-sm-6">
+      <a href="/allproducts" class="btn btn-link text-muted">
+        <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping
+      </a>
+    </div> <!-- end col -->
+  </div> <!-- end row -->
+  
 
 
 

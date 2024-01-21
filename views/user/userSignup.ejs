@@ -17,7 +17,24 @@
     }
     </style>
 
+    <style>
+      @import url('//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css');
 
+
+.success-msg{
+  
+
+  border-radius: 3px 3px 3px 3px;
+}
+.info-msg {
+  color: #059;
+  background-color: #BEF;
+}
+.success-msg {
+  color: #270;
+
+}
+    </style>
 
 </head>
 
@@ -32,8 +49,11 @@
             <br>
             <br>
             <h6 style="color: #4ff977">User SignUp</h6>
-            <br/>
+            <% if (refer!="") { %>
+              <div class="success-msg"><i class="fa fa-check"></i>Referal applied succesfully</div>
+            <% } %>
             
+            <br>
             <form class="register1-form" action="/signupotp" method="post"  onsubmit="validateForm()">
                 <input id="username" type="text" placeholder="username" name="username" oninput="validateUsername()" required/>
                 <p id="username-error" class="error-message" style="color: red; margin-bottom: 10px;font-size: small;"></p>
@@ -52,6 +72,9 @@
                 <%if(locals.userExist){%>
                     <div class="" style="color: #4ff977;">Existing User Please Login</div>
                 <%}%>
+
+                <input type="text" value="<%= refer%>" name="referredBy" hidden>
+
                 <button  id="create-button" type="submit" disabled>create</button>
                 
                 <p class="message">Already registered? <a href="/userlogin">Sign In</a></p>

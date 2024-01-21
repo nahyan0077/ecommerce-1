@@ -21,10 +21,18 @@ const userSchema = new mongoose.Schema({
     status:{
         type:String,
         default: "active"
-    }
-},{
+    },
+    referredBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default:null
+    },
+
+    },
+    {
     timestamps:true
-});
+    }
+);
 
 userSchema.pre('save',async function (next){
     const salt = await bcrypt.genSaltSync(10);

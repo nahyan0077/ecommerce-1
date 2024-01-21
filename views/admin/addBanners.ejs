@@ -11,11 +11,26 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
+          <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <style>
+        h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", sans-serif;
+}
+    </style>
+
 
 </head>
 
 
-<body style="font-family: Poppins, sans-serif;">
+<body style="font-family: 'Poppins', sans-serif;">
 
 
 
@@ -85,96 +100,80 @@
 
 
         <div class="container justify-content-center">
-            <form onsubmit="return validateForm()" id="productForm" action="/addbanner" method="post"
-                enctype="multipart/form-data">
+            <form onsubmit="return validateForm()" id="bannerForm" action="/addbanner" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="productName">Banner Name</label>
-                    <input type="text" id="productName" placeholder="Do not exceed 50 characters" name="bannerName"
-                        required maxlength="50" oninput="validateProductName()">
-                    <div class="error-message text-danger" id="productNameError"></div>
+                    <label for="bannerType">Banner Type</label>
+                    <select id="bannerType" name="bannerName" required>
+                        <option value="mainBanner">Main Banner</option>
+                        <option value="subBanner1">Sub Banner 1</option>
+                        <option value="subBanner2">Sub Banner 2</option>
+                    </select>
                 </div>
-
-               
-
-                <label for="brand">Upload Images</label><br><br>
+        
+                <label for="banner">Upload Images</label><br><br>
                 <div class="image-upload">
                     <div class="dropzone">
-                        <input type="file" id="productImage1" name="banner" onchange="displayImage(this)">
-                        <img id="previewImage1" class="preview-image" alt="Drag & drop or click to select image-1">
+                        <input type="file" id="bannerImage" name="banner" onchange="displayImage(this)">
+                        <img id="previewBanner" class="preview-image" alt="Drag & drop or click to select image">
                     </div>
-                   
                 </div>
-
-
+        
                 <div class="form-group d-grid gap-2">
                     <button class="btn btn-primary" type="submit" id="submitButton" disabled>Add Banners</button>
                 </div>
             </form>
         </div>
-
-    </div>
-
+        
         <script>
             function displayImage(input) {
-                const previewId = input.id.replace('productImage', 'previewImage');
-                const previewImage = document.getElementById(previewId);
-
+                const previewImage = document.getElementById('previewBanner');
                 const file = input.files[0];
-
+        
                 if (file) {
                     const reader = new FileReader();
-
                     reader.onload = function (e) {
                         previewImage.src = e.target.result;
                     };
-
                     reader.readAsDataURL(file);
                 } else {
                     // Clear the preview if no file is selected
                     previewImage.src = '';
                 }
+        
+                updateSubmitButton(); // Call the function to update the button status
             }
-        </script>
-
-        <script>
-            // document.getElementById('productForm').addEventListener('submit', function (event) {
-
-            //     if (validateForm()) {
-            //         // Submit the form
-            //         alert('Form submitted successfully!');
-            //     } else {
-            //         alert('Please fix the errors in the form before submitting.');
-            //     }
-            // });
-
-
-            function validateProductName() {
-                const productName = document.getElementById('productName').value;
-                const productNameError = document.getElementById('productNameError');
-                if (!productName || productName.length > 50) {
-                    productNameError.textContent = 'Product Name is required and should not exceed 20 characters.';
-                } else {
-                    productNameError.textContent = '';
-                }
-                updateSubmitButton()
-            }
-
-            
-
+        
             function updateSubmitButton() {
-                const isValid = validateForm();
+                const bannerType = document.getElementById('bannerType').value;
+                const bannerImage = document.getElementById('bannerImage').value;
+        
                 const submitButton = document.getElementById('submitButton');
-                submitButton.disabled = !isValid;
+                submitButton.disabled = !(bannerType && bannerImage);
             }
-
+        
             function validateForm() {
-                const isValidProductName = document.getElementById('productNameError').textContent.trim() === '';
-                
-
-                return isValidProductName;
+                const bannerType = document.getElementById('bannerType').value;
+        
+                if (!bannerType) {
+                    Toastify({
+                        text: "Please select a banner type.",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: 'left',
+                        backgroundColor: "red",
+                        stopOnFocus: true,
+                    }).showToast();
+                    return false;
+                }
+        
+                // Add additional validations as needed
+        
+                return true;
             }
         </script>
-
+        
+        
 
 
 <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
@@ -183,48 +182,16 @@
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>
 
-            $(".menu").click(function () {
-                $("#mySidenav").css('width', '70px');
-                $("#main").css('margin-left', '70px');
-                $(".logo").css('display', 'none');
-                $(".logo1").css('display', 'block');
-                $(".logo span").css('visibility', 'visible');
-                $(".logo span").css('margin-left', '-10px');
-                $(".icon-a").css('visibility', 'hidden');
-                $(".icon-a").css('height', '25px');
-                $(".icons").css('visibility', 'visible');
-                $(".icons").css('margin-left', '-8px');
-                $(".menu1").css('display', 'block');
-                $(".menu").css('display', 'none');
-            });
-
-            $(".menu1").click(function () {
-                $("#mySidenav").css('width', '300px');
-                $("#main").css('margin-left', '300px');
-                $(".logo").css('visibility', 'visible');
-                $(".logo").css('display', 'block');
-                $(".icon-a").css('visibility', 'visible');
-                $(".icons").css('visibility', 'visible');
-                $(".menu").css('display', 'block');
-                $(".menu1").css('display', 'none');
-            });
-
-        </script>
         <script>
             $(document).ready(function () {
                 $(".profile p").click(function () {
                     $(".profile-div").toggle();
-
+    
                 });
                 $(".noti-icon").click(function () {
                     $(".notification-div").toggle();
                 });
-
-
-
-
             });
         </script>
 

@@ -171,7 +171,7 @@
           <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
             <div class="accordion" id="accordionPanelsStayOpenExample">
 
-              <form id="filterForm" action="/applyfilter" method="post">
+              <form id="filterForm" action="/applyfilter" >
                 <!-- Category Section -->
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingCategory">
@@ -189,10 +189,10 @@
                                 <% catgCount.forEach((data) => { %>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox"
-                                        id="categoryCheckbox<%-data._id-%>" name="categories"
-                                        value="<%-data._id-%>" />
+                                        id="categoryCheckbox<%-data.category._id-%>" name="categories"
+                                        value="<%-data.category._id-%>" />
                                     <label class="form-check-label"
-                                        for="categoryCheckbox<%-data._id-%>"><%-data._id-%></label>
+                                        for="categoryCheckbox<%-data.category.categoryName-%>"><%-data.category.categoryName-%></label>
                                     <span class="badge badge-secondary float-end"><%-data.count-%></span>
                                 </div>
                                 <% }) %>
@@ -218,10 +218,10 @@
                                 <% count.forEach((data) => { %>
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox"
-                                        id="brandCheckbox<%-data._id-%>" name="brands"
-                                        value="<%-data._id-%>" />
+                                        id="brandCheckbox<%-data.brand._id-%>" name="brands"
+                                        value="<%-data.brand._id-%>" />
                                     <label class="form-check-label"
-                                        for="brandCheckbox<%-data._id-%>"><%-data._id-%></label>
+                                        for="brandCheckbox<%-data.brand.brandName-%>"><%-data.brand.brandName-%></label>
                                     <span class="badge badge-secondary float-end"><%-data.count-%></span>
                                 </div>
                                 <% }) %>
@@ -440,6 +440,15 @@
               <% allPro.forEach(data => { %>
                 <div class="col-lg-4 col-md-6 col-sm-6 my-2">
                   <div class="img-wrapper card shadow-2-strong">
+                    <% if (data.DiscountAmount!=data.price) { %>
+                      <button type="button" class="btn btn-danger"
+                        style="position: absolute; border-radius: 0px; font-size: x-small;">
+                        <% const discountPercentage=Math.round(((data.price - data.DiscountAmount) / data.price)
+                            * 100); %>
+                            <%= discountPercentage %>% OFF
+                    </button>
+                    <% } %>
+                    
                     <img src="/product_images/<%= data.images[0] %>" class="inner-img card-img-top" />
                     <div class="card-body">
                       <h6 style="font-size: 18px;"><%-data.productName-%></h6><br>
@@ -448,19 +457,29 @@
                         <span class="text-danger"><s>₹ <%-data.price-%></s></span>
                       </div>
 
-                      <p class="card-text">Category:  <span style="margin-left: 10px"> <%-data.category-%></span></p>
+                      <p class="card-text">Category:  <span style="margin-left: 10px"> <%-data.category_id.categoryName-%></span></p>
 
-                      <div class="d-flex justify-content-end" style="margin-top: 5px;">
-                        <% if (locals.check) { %> 
-                        <a href="/singleproduct/<%-data._id-%>" class="btn btn-outline-primary shadow-0 me-1" >View</a>
-                        <% } else { %>
-                          <a href="/singleproductnouser/<%-data._id-%>" class="btn btn-outline-primary shadow-0 me-1" >View</a>
+                      <div class="d-flex justify-content-between " style="margin-top: 5px;">
+
+                            <div class="d-flex align-items-center">
+                              <p></p>
+                              <a href="" class="badge badge-secondary"><%= data.brand_id.brandName %></a>
+                          </div>
+
                         
-                        <% } %>
-  
-  
-                        <a class="btn btn-light border  icon-hover px-2 pt-2" onclick="addToWishlist('<%-data._id-%>')"><i class="fas fa-heart fa-lg text-secondary px-1"></i></a>
-                      </div>
+                    
+                        <div class="d-flex justify-content-end">
+                            <% if (locals.check) { %> 
+                                <a href="/singleproduct/<%-data._id-%>" class="btn btn-outline-primary shadow-0 me-1">View</a>
+                            <% } else { %>
+                                <a href="/singleproductnouser/<%-data._id-%>" class="btn btn-outline-primary shadow-0 me-1">View</a>
+                            <% } %>
+                    
+                            <a class="btn btn-light border  icon-hover px-2 pt-2" onclick="addToWishlist('<%-data._id-%>')">
+                                <i class="fas fa-heart fa-lg text-secondary px-1"></i>
+                            </a>
+                        </div>
+                    </div>
                     </div>
 
                   </div>
@@ -470,26 +489,16 @@
             
 
               <!-- Pagination -->
-              <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3"
-                style="margin-bottom: 110px ">
+              <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3" style="margin-bottom: 110px ">
                 <ul class="pagination">
-                  <li class="page-item disabled">
-                    <a class="page-link" href="#" aria-label="Previous">
-                      <span aria-hidden="true">&laquo;</span>
-                    </a>
-                  </li>
-                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                  <li class="page-item"><a class="page-link" href="#">2</a></li>
-                  <li class="page-item"><a class="page-link" href="#">3</a></li>
-                  <li class="page-item"><a class="page-link" href="#">4</a></li>
-                  <li class="page-item"><a class="page-link" href="#">5</a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                      <span aria-hidden="true">&raquo;</span>
-                    </a>
-                  </li>
+                    <% for (let i = 1; i <= totalPages; i++) { %>
+                        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                            <a class="page-link" href="?page=<%= i %>&perPage=<%= perPage %>"><%= i %></a>
+                        </li>
+                    <% } %>
                 </ul>
-              </nav>
+            </nav>
+            
               <!-- Pagination -->
         </div>
       </div>
@@ -562,6 +571,60 @@
       </div>
     </div>
   </footer>
+
+
+
+  <script>
+    const productsPerPage = 6; // Adjust as needed
+const allProducts = [allPro]; // Replace with your array of all products
+
+const productContainer = document.getElementById('gridViewSection');
+const paginationContainer = document.getElementById('pagination');
+
+function displayProducts(pageNumber) {
+  const startIndex = (pageNumber - 1) * productsPerPage;
+  const endIndex = startIndex + productsPerPage;
+  const displayedProducts = allProducts.slice(startIndex, endIndex);
+
+  // Clear existing content
+  productContainer.innerHTML = '';
+
+  // Display products
+  displayedProducts.forEach(product => {
+    // ... your existing product HTML creation logic ...
+  });
+}
+
+function displayPagination(totalPages) {
+  // Clear existing content
+  paginationContainer.innerHTML = '';
+
+  // Create pagination links
+  for (let i = 1; i <= totalPages; i++) {
+    const pageLink = document.createElement('li');
+    pageLink.className = 'page-item';
+    const link = document.createElement('a');
+    link.className = 'page-link';
+    link.href = '#';
+    link.textContent = i;
+
+    link.addEventListener('click', () => {
+      displayProducts(i);
+    });
+
+    pageLink.appendChild(link);
+    paginationContainer.appendChild(pageLink);
+  }
+}
+
+// Calculate total number of pages
+const totalPages = Math.ceil(allProducts.length / productsPerPage);
+
+// Initial display
+displayProducts(1);
+displayPagination(totalPages);
+
+  </script>
 
   
 

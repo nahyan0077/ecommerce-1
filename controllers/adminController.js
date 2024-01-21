@@ -45,22 +45,6 @@ module.exports = {
 
 
 
-    //----------admin dash---------------------------
-
-
-    adminDash: (req, res) => {
-        try {
-            res.render('admin/adminDashboard')
-        } catch (error) {
-            console.log(error);
-        }
-    },
-
-
-
-
-
-
 
     //------------------admin category---------------------
 
@@ -126,8 +110,8 @@ module.exports = {
     editCategory: async (req, res) => {
         try {
             let edtCatId = req.params.id
-            let edtCat = await category.find({ _id: edtCatId })
-            res.render('admin/editCategory', { cat: edtCat[0] })
+            let edtCat = await category.findOne({ _id: edtCatId })
+            res.render('admin/editCategory', { cat: edtCat })
         } catch (error) {
             console.log(error);
         }
@@ -307,7 +291,13 @@ module.exports = {
     getBanner: async (req, res) => {
         try {
             const banners = await banner.find()
-            res.render('admin/adminBanner', { banners })
+
+            const successMessage = req.session.successMessage;
+            const errorMessage = req.session.errorMessage;
+            delete req.session.successMessage;
+            delete req.session.errorMessage;
+
+            res.render('admin/adminBanner', { banners, successMessage, errorMessage })
         } catch (error) {
             console.log(error);
         }
@@ -325,11 +315,26 @@ module.exports = {
         try {
             const imgFiles = req?.files
             const details = req.body
-            // let images=[imgFiles.image1[0].filename,imgFiles.image2[0].filename,imgFiles.image3[0].filename,imgFiles.image4[0].filename]
+            
+
             let bannerImage = imgFiles.banner[0].filename
             const bannerDtls = { ...details, bannerImage }
-            await banner.create(bannerDtls)
-            res.redirect('/adminbanner')
+
+            const bannerExist = await banner.findOne({bannerName:req.body.bannerName})
+
+            if(!bannerExist){
+
+                req.session.successMessage = 'New Banner Added successfully';
+                await banner.create(bannerDtls)
+                res.redirect('/adminbanner')
+            }else{
+                await banner.updateOne({bannerName:req.body.bannerName},{$set:{bannerImage:bannerImage}})
+                req.session.errorMessage = 'Existing Banner is replaced';
+                res.redirect('/adminbanner')
+            }
+
+            
+            
         } catch (error) {
             console.log(error);
         }
@@ -392,6 +397,7 @@ module.exports = {
             const retns = await returns.find()
 
             res.render('admin/adminOrders', { orders, retns })
+            
         } catch (error) {
             console.log(error);
         }

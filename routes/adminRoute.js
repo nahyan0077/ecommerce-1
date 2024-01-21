@@ -7,7 +7,9 @@ const multerUpload = require('../middlewares/multer');
 const upload = require('../middlewares/multer');
 const productController = require('../controllers/productsController');
 const orderController = require('../controllers/orderController');
-const couponController = require('../controllers/couponController')
+const couponController = require('../controllers/couponController');
+const offerController = require('../controllers/offerController');
+const admindashController = require('../controllers/dashboardController')
 
 
 //------------------------admin login controls-----------------------
@@ -21,11 +23,7 @@ router.post('/adminloginpost',adminController.adminLoginPost)
 
 
 
-//-------------Dasshboard-----------------------
 
-
-//admin dashboard page render
-router.get('/admindash',middleware.verifyAdmin,adminController.adminDash)
 
 
 
@@ -210,7 +208,43 @@ router.post('/posteditcoupon/:id',couponController.postEditCoupon)
 
 
 
+//----------------------admin offers----------------------------
 
+//render admin offers
+router.get('/adminoffers',middleware.verifyAdmin,offerController.getOffers)
+
+//post add offers
+router.post('/addoffer',offerController.addOffers)
+
+//render edit offer page
+router.get('/editoffers/:offerid',offerController.getEditOffer)
+
+//post edit offer details
+router.post('/editoffer',middleware.verifyAdmin,offerController.postEditOffers)
+
+//delete offer from admin side
+router.delete('/deleteoffer/:offerid',offerController.deleteOffers)
+
+
+
+
+//-------------Dasshboard-----------------------
+
+
+//admin dashboard page render
+router.get('/admindash',middleware.verifyAdmin,admindashController.adminDash)
+
+//get order datas by day month year
+router.get('/count-orders-by-day',admindashController.getCount)
+router.get('/count-orders-by-month',admindashController.getCount)
+router.get('/count-orders-by-year',admindashController.getCount)
+
+
+
+
+//----------------Sales report----------------------
+
+router.post('/salesreport',admindashController.downloadSalesReport)
 
 
 

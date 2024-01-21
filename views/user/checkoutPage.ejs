@@ -141,6 +141,22 @@
 
     <%- include('./layout/userHeaderNav') %>
 
+    <% if (successMessage || errorMessage) { %>
+        <div class="position-fixed top-0 start-50 translate-middle-x" style="z-index: 1000; width: 300px;">
+            <div class="alert alert-dismissible fade show <% if (successMessage) { %>alert-success<% } else { %>alert-danger<% } %>" role="alert">
+                <%= successMessage || errorMessage %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    
+        <script>
+            // Hide the message after 5 seconds
+            setTimeout(function() {
+                document.querySelector('.alert')?.remove();
+            }, 5000);
+        </script>
+    <% } %>
+
 
 
     <!-- cart + summary -->
@@ -387,16 +403,16 @@
 
 
         <!-- address-modal -->
-        <div class="modal" id="addressModal">
-            <div class="modal-content" style="height: 800px; overflow:scroll;">
+        <div class="modal" id="addressModal" style="max-height: 700px;margin-top: 10px;margin-left: 500px;">
+            <div class="modal-content" style="height: 800px; max-width: 700px;">
                 <!-- Inside the <div class="modal-content"> -->
                 <div class="modal-body"
-                    style="max-width: 500px; margin: 0 auto; width: 530px; margin-top: 100px;">
+                    style="max-width: 500px; margin: 0 auto; width: 530px; ">
                     <button type="button" class="close" aria-label="Close" onclick="closeModal()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="text-center mb-4">Add New Address</h2>
-                    <form class="needs-validation" action="/postaddaddress" method="post" novalidate>
+                    <form class="needs-validation" action="/postaddaddress-checkout" method="post" novalidate>
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label for="name">Name:</label>

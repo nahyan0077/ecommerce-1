@@ -201,13 +201,13 @@
 
                             <div class="d-flex align-items-start border-bottom pb-3">
                                 <div class="me-4">
-                                    <img src="/product_images/<%=data.productid.images[0]%>" alt=""
+                                    <img src="/product_images/<%=data?.productid?.images[0]%>" alt=""
                                         class="avatar-lg rounded">
                                 </div>
                                 <div class="flex-grow-1 align-self-center overflow-hidden">
                                     <div>
                                         <h5 class="text-truncate font-size-18"><a href="#" class="text-dark">
-                                                <%= data.productid.productName%>
+                                                <%= data?.productid?.productName%>
                                             </a></h5>
                                         <p class="text-muted mb-0">
                                             <i class="bx bxs-star text-warning"></i>
@@ -217,7 +217,7 @@
                                             <i class="bx bxs-star-half text-warning"></i>
                                         </p>
                                         <p class="mb-0 mt-1">Category : <span class="fw-medium">
-                                                <%= data.productid.category%>
+                                                <%= data?.productid?.category%>
                                             </span></p>
                                     </div>
                                 </div>
@@ -244,8 +244,8 @@
                                             <p class="text-muted mb-2">Price</p>
                                             <h6 class="mb-0 mt-2"><span class="text-muted me-2"><del
                                                         class="font-size-16 fw-normal" style="font-size: small;">₹ <%=
-                                                            data.productid.price%></del></span>₹ <%=
-                                                    data.productid.DiscountAmount%>
+                                                            data?.productid?.price%></del></span>₹ <%=
+                                                    data?.productid?.DiscountAmount%>
                                             </h6>
                                         </div>
                                     </div>
@@ -308,12 +308,18 @@
                                     </div>
                                 </div>
                                 <div class="text-start mt-4" >
-                                    <a href="/singleproduct/<%-data.productid._id-%>" 
+                                    <a href="/singleproduct/<%-data?.productid?._id-%>" 
                                         class="btn btn-outline-primary btn-sm">Buy Again</a>
                                 </div>
                             </div>
 
                             <div class="d-flex justify-content-end" style="margin-top: -20px;">
+
+                                <% if (data.status=="Delivered") { %>
+                                    <div class="col-sm-6 text-end">
+                                        <a type="button"  class="btn btn-dark btn-sm" onclick="generateAndDownloadInvoice('<%= usrOdr._id%>','<%= index %>')"><i class="fa-solid fa-file-invoice" style="color: #ffffff;margin-right: 5px;" ></i>Download Invoice</a>
+                                    </div>
+                                <% } %>
 
                                 <% const returnStatus = retns.find(returnData => returnData.productId.toString() === data.productid._id.toString()) %>
                                 <% if (!returnStatus || (returnStatus && returnStatus.status !== "Requested") && (returnStatus && returnStatus.status !== "Approved") && (returnStatus && returnStatus.status !== "Rejected")) { %>
@@ -321,6 +327,7 @@
                                         <a class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#returnModal_<%- data.productid._id %>" onclick="returnRequest()">Return</a>
                                     <% } %>
                                 <% } %>
+                                
 
                                 <% if (usrOdr.orderStatus!="Order Delivered" && usrOdr.orderStatus!="Order Rejected" && usrOdr.orderStatus!="Cancelled" && data.status!="Cancelled") { %>
                                     <a  class="btn btn-outline-danger btn-sm"
@@ -348,6 +355,8 @@
                                 <a href="/allproducts" class="btn btn-link text-muted">
                                     <i class="mdi mdi-arrow-left me-1"></i> Continue Shopping </a>
                             </div> <!-- end col -->
+                            
+                            
                             <div class="col-sm-6">
 
 
@@ -612,7 +621,7 @@
 
     <% usrOdr.products.forEach(data => { %>
         <!-- Return request Modal -->
-        <div class="modal fade" id="returnModal_<%- data.productid._id %>" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
+        <div class="modal fade" id="returnModal_<%- data?.productid?._id %>" tabindex="-1" aria-labelledby="returnModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -621,26 +630,27 @@
                     </div>
                     <div class="modal-body">
                         <!-- Return Form -->
-                        <form id="returnForm_<%- data.productid._id %>" action="/returnrequest" method="post">
+                        <form id="returnForm_<%- data?.productid?._id %>" action="/returnrequest" method="post">
                             <!-- Common Return Reasons -->
                             <div class="mb-3">
                                 <label for="returnReason" class="form-label">Select Return Reason</label>
-                                <select class="form-select" id="returnReason_<%- data.productid._id %>" name="returnReason" required>
+                                <select class="form-select" id="returnReason_<%- data?.productid?._id %>" name="returnReason" required>
                                     <option value="defective">Defective Product</option>
                                     <option value="doesnt-fit">The product doesn't fit</option>
                                     <option value="wrong-item">Received Wrong Item</option>
                                     <option value="changed-mind">Changed My Mind</option>
+                                    <option value="changed-mind">Other</option>
                                     <!-- Add more options as needed -->
                                 </select>
                             </div>
                             <!-- Hidden -->
                             <input type="hidden" name="userId" value="<%-usrOdr.userid-%>">
                             <input type="hidden" name="orderId" value="<%-usrOdr._id-%>">
-                            <input type="hidden" name="productId" value="<%-data.productid._id-%>">
+                            <input type="hidden" name="productId" value="<%-data?.productid?._id-%>">
                             <!-- Description -->
                             <div class="mb-3">
                                 <label for="returnDescription" class="form-label">Description</label>
-                                <textarea class="form-control" id="returnDescription_<%- data.productid._id %>" name="description" rows="3" required></textarea>
+                                <textarea class="form-control" id="returnDescription_<%- data?.productid?._id %>" name="description" rows="3" required></textarea>
                             </div>
                             <!-- Submit Button -->
                             <button type="submit" class="btn btn-primary">Submit Return</button>
@@ -715,6 +725,61 @@
             </div>
         </div>
     </footer>
+
+
+    <script>
+
+async function generateAndDownloadInvoice(orderId,index) {
+  let timerInterval;
+
+  // Display a SweetAlert2 modal
+  Swal.fire({
+    title: 'Download Started!',
+    html: 'I will close in <b></b> milliseconds.',
+    timer: 4000,
+    timerProgressBar: true,
+    didOpen: () => {
+      Swal.showLoading();
+      const b = Swal.getHtmlContainer().querySelector('b');
+      timerInterval = setInterval(() => {
+        b.textContent = Swal.getTimerLeft();
+      }, 100);
+    },
+    willClose: () => {
+      clearInterval(timerInterval);
+    }
+  }).then((result) => {
+    if (result.dismiss === Swal.DismissReason.timer) {
+      console.log('I was closed by the timer');
+    }
+  });
+
+  try {
+    // Send a POST request to the server to initiate the download
+    const response = await fetch(`/generateinvoice/${orderId}/${index}`, {
+      method: 'get',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      
+    });
+
+    if (response.ok) {
+      
+      window.location.href = `/downloadinvoice/${orderId}`;
+    }
+  } catch (error) {
+    console.error('Error in downloading the invoice:', error);
+  }
+
+
+}
+
+
+
+    </script>
+
+
 
     <script>
         function submitReturn(productId) {

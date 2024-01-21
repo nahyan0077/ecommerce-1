@@ -15,10 +15,11 @@ module.exports = {
             req.session.cartId = id._id
 
 
-            if (cartData != null) {
+            if (cartData != null && cartData.products.length!=0) {
 
                 //populating product details
-                const kart = await cart.findOne({ userId: id._id }).populate("products.productid");
+                const kart = await cart.findOne({ userId: id._id }).populate(
+                    {path: "products.productid", populate: { path: 'category_id', model: 'category' }});
 
                 const carts = kart.products
 
@@ -67,8 +68,11 @@ module.exports = {
             const usr = await user.findOne({ email: req.session.user })
             console.log("usr", usr);
             if (usr) {
-                const Cart = await cart.findOne({ userId: usr._id })
-                const prdkt = await product.findOne({ _id: req.params.id })
+
+                const [Cart, prdkt] = await Promise.all([
+                    cart.findOne({ userId: usr._id }),
+                    product.findOne({ _id: req.params.id })
+                ])
 
                 console.log("stock", prdkt.stockQuantity);
 

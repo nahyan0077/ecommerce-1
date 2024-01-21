@@ -9,9 +9,16 @@ const cart = require('../models/cartModels')
 module.exports = {
     getWishlist : async (req,res) => {
         try {
-            const wish = await wishlist.findOne({userid:req.session.name._id}).populate("products.productid")
-            const carts = await cart.findOne({ userId: req.session.name._id }).populate("products.productid");
-            console.log("wishhhhhh",wish);
+
+            const [wish, carts] = await Promise.all([
+                wishlist.findOne(
+                    {userid:req.session.name._id}).populate(
+                        {path: "products.productid",  populate: [
+                            {path: 'category_id', model: 'category'}, { path: 'brand_id', model: 'brands' } ]}),
+
+                cart.findOne({ userId: req.session.name._id }).populate("products.productid")
+            ])
+
 
             let prdktCheck = [];
             if(wish!=null){
@@ -23,10 +30,10 @@ module.exports = {
                 } else {
                     prdktCheck = Array(wish.products.length).fill(false);
                 }
-
+  
                 res.render('user/wishlist',{check: req.session.name,wish,prdktCheck,cartCount:req.session.cartCount})
             }else{
-                res.redirect('/userlogin')
+                res.render('user/wishlist',{check: req.session.name,wish,prdktCheck,cartCount:req.session.cartCount})
             }
         } catch (error) {
             console.log(error);
@@ -63,7 +70,7 @@ module.exports = {
                     res.json({prdktExist:false,userr:true})
                 }
             }else{
-                res.json({msg:"No user found"})
+                res.json({userr:false})
             }
         } catch (error) {
             console.log(error);

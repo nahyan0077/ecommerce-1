@@ -12,34 +12,45 @@ const cart = require('../models/cartModels')
 const coupon = require('../models/couponModel')
 const wallet = require('../models/walletModel')
 const walletHistory = require('../models/walletHistoryModel')
+const mongoose = require('mongoose');
 
 const JWT_SECRET = "jwt-secret-key"
 
 module.exports = {
 
     //get sign up page
-    renderSignup: (req, res) => {
+    renderSignup: async (req, res) => {
         try {
-            res.render('user/userSignup')
+            const referId = req.query.refer;
+    
+            let usr;
+            if (mongoose.Types.ObjectId.isValid(referId)) {
+                usr = await user.findOne({ _id: referId });
+            }
+    
+            if (usr) {
+                res.render('user/userSignup', { refer: referId });
+            } else {
+                res.render('user/userSignup', { refer: '' });
+            }
         } catch (error) {
             console.log(error);
         }
-
     },
 
     //get guest home page
     renderHome: async (req, res) => {
         try {
-            const [mensData, womensData, kidsData, bstdl] = await Promise.all([
-                await product.find({ category: "MENS", displayStatus: "Show" }),
-                await product.find({ category: "WOMENS", displayStatus: "Show" }),
-                await product.find({ category: "KIDS", displayStatus: "Show" }),
-                await product.find({ Tags: "bestdeal", displayStatus: "Show" })
+            const [prdktsData, bstdl, banners, sbanners] = await Promise.all([
+                product.find({  displayStatus: "Show" }).populate('category_id'),
+                product.find({ Tags: "bestdeal", displayStatus: "Show" }).populate('category_id'),
+                banner.find(),
+                banner.find({ bannerName: /^subBanner/ })
             ])
+          
 
-            const banners = await banner.find()
-            const sbanners = await banner.find({ bannerName: "s-banner-1" })
-            res.render('user/guestHome', { mensData, womensData, kidsData, banners, sbanners, bstdl, check: req.session.name })
+            res.render('user/guestHome', { prdktsData, banners, sbanners, bstdl, check: req.session.name })
+
         } catch (error) {
             console.log(error);
         }
@@ -51,29 +62,16 @@ module.exports = {
         try {
             const login = true
 
-            const [mensData, womensData, kidsData, bstdl] = await Promise.all([
-                await product.find({ category: "MENS", displayStatus: "Show" }),
-                await product.find({ category: "WOMENS", displayStatus: "Show" }),
-                await product.find({ category: "KIDS", displayStatus: "Show" }),
-                await product.find({ Tags: "bestdeal", displayStatus: "Show" })
+            const [prdktsData, bstdl, banners, sbanners] = await Promise.all([
+                product.find({  displayStatus: "Show" }).populate('category_id'),
+                product.find({ Tags: "bestdeal", displayStatus: "Show" }).populate('category_id'),
+                banner.find(),
+                banner.find({ bannerName: /^subBanner/ })
             ])
 
-            const banners = await banner.find()
-            const sbanners = await banner.find({ bannerName: "s-banner-1" })
 
-            // const carts = await cart.findOne({ userId: req.session.name._id })
-            // if (carts != null) {
-            //     var cartCount = 0
-            //     carts.products.forEach(data => {
-            //         cartCount++
-            //     })
-            //     req.session.cartCount = cartCount
-            // } else {
-            //     req.session.cartCount = '0'
-            // }
+            res.render('user/userHome', { check: req.session.name, login, prdktsData, banners, sbanners, bstdl, cartCount: req.session.cartCount })
 
-
-            res.render('user/userHome', { check: req.session.name, login, mensData, womensData, kidsData, banners, sbanners, bstdl, cartCount: req.session.cartCount })
         } catch (error) {
             console.log(error);
         }
@@ -148,7 +146,7 @@ module.exports = {
         try {
             let id = req.params.id
 
-            let prdkt = await product.find({ _id: id })
+            let prdkt = await product.find({ _id: id }).populate('category_id').populate('brand_id')
             const crtPdkt = null
 
             res.render('user/singleProduct', { data: prdkt[0], crtPdkt, check: req.session.name, cartCount: req.session.cartCount })
@@ -164,11 +162,10 @@ module.exports = {
         try {
             let id = req.params.id
 
-            let prdkt = await product.findOne({ _id: id })
-
-            const crtPdkt = await cart.findOne({ userId: req.session.name._id, 'products.productid': id })
-
-            console.log("prst", crtPdkt);
+            const [prdkt, crtPdkt] = await Promise.all([
+                product.findOne({ _id: id }).populate('category_id').populate('brand_id'),
+                cart.findOne({ userId: req.session.name._id, 'products.productid': id })
+            ])
 
             res.render('user/singleProduct', { data: prdkt, check: req.session.name, crtPdkt, cartCount: req.session.cartCount })
         } catch (error) {
@@ -187,12 +184,18 @@ module.exports = {
     // searching products
     searchProduct: async (req, res) => {
         try {
-            const searchTerm = req.query.search; // Extract search term from query parameters
+            const searchTerm = req.query.search; 
+
+            const [catgry, brnd] = await Promise.all([
+                category.findOne({ categoryName: { $regex: searchTerm, $options: "i" } }),
+                brand.findOne({ brandName: { $regex: searchTerm, $options: "i" } })
+            ])
+
             const searchOptions = {
                 $or: [
                     { productName: { $regex: searchTerm, $options: "i" } },
-                    { category: { $regex: searchTerm, $options: "i" } },
-                    { brandName: { $regex: searchTerm, $options: "i" } }
+                    { category_id: catgry },
+                    { brand_id: brnd }
                 ],
                 displayStatus: "Show"
             };
@@ -202,7 +205,7 @@ module.exports = {
             res.render('user/searchProducts', { check: req.session.user, searchResults, searchTerm, cartCount: req.session.cartCount });
         } catch (err) {
             console.error(err.message);
-            // Handle errors appropriately
+
             res.render('errorPage', { errorMessage: 'An error occurred while searching for products.' });
         }
     },
@@ -214,66 +217,75 @@ module.exports = {
     allproducts: async (req, res) => {
         try {
 
-            console.log("acc", req.body);
-            console.log("acasdac", req.body.categories);
-            console.log("acasdac", req.body.minPrice);
+            const { categories, brands, minPrice, maxPrice, page = 1, perPage = 9  } = req.query
 
-            const { categories, brands, minPrice, maxPrice } = req.body
+            const skip = (page - 1) * perPage;
 
             let allPro
-            if (categories == undefined && brands == undefined && maxPrice<50000) {
-                console.log("full");
-                
-                console.log("prcc");
+            if (categories == undefined && brands == undefined && maxPrice < 50000) {
+
                 allPro = await product.find({
                     price: { $gte: minPrice, $lte: maxPrice },
                     displayStatus: "Show"
-                });
-            } else if (categories == undefined && brands == undefined ) {
-                console.log("prcc");
-                allPro = await product.find({ displayStatus: "Show" })
+                }).skip(skip).limit(parseInt(perPage)).populate('category_id').populate('brand_id');
+
+            } else if (categories == undefined && brands == undefined) {
+
+                allPro = await product.find({ displayStatus: "Show" }).skip(skip).limit(parseInt(perPage)).populate('category_id').populate('brand_id');
+
             } else if (categories && brands) {
-                console.log("c");
+
                 allPro = await product.find({
-                    category: { $in: categories },
-                    brandName: { $in: brands },
+                    category_id: { $in: categories },
+                    brand_id: { $in: brands },
                     price: { $gte: minPrice, $lte: maxPrice },
                     displayStatus: "Show"
-                });
+                }) .skip(skip).limit(parseInt(perPage)).populate('category_id').populate('brand_id');
+
             } else if (categories == undefined && brands) {
-                console.log("d");
+
                 allPro = await product.find({
-                    brandName: { $in: brands },
+                    brand_id: { $in: brands },
                     price: { $gte: minPrice, $lte: maxPrice },
                     displayStatus: "Show"
-                });
+                }).skip(skip).limit(parseInt(perPage)).populate('category_id').populate('brand_id');
+
             } else if (brands == undefined && categories) {
-                console.log("e");
+
                 allPro = await product.find({
-                    category: { $in: categories },
+                    category_id: { $in: categories },
                     price: { $gte: minPrice, $lte: maxPrice },
                     displayStatus: "Show"
-                });
+                }).skip(skip).limit(parseInt(perPage)).populate('category_id').populate('brand_id');
 
             } else {
-                console.log("noo onee");
 
                 allPro = await product.find({
-                    category: { $in: categories },
-                    brandName: { $in: brands },
+                    category_id: { $in: categories },
+                    brand_id: { $in: brands },
                     price: { $gte: minPrice, $lte: maxPrice },
                     displayStatus: "Show"
-                });
+                }).skip(skip).limit(parseInt(perPage)).populate('category_id').populate('brand_id');
             }
 
+            const [allproCount, count, catgCount] = await Promise.all([
+                product.find().count(),
+                product.aggregate([
+                    { $group: { _id: "$brand_id", count: { $sum: 1 } } },
+                    {$lookup: { from: "brands",   localField: "_id", foreignField: "_id", as: "brand" } },
+                    { $unwind: "$brand"  }]),
+
+                product.aggregate([
+                    { $group: { _id: "$category_id", count: { $sum: 1 } } },
+                    { $lookup: { from: "categories", localField: "_id", foreignField: "_id", as: "category" } },
+                    { $unwind: "$category"  }])
+            ])
+
+            const totalPages = Math.ceil(allproCount / perPage);
 
 
-            const allproCount = await product.find().count()
-            const count = await product.aggregate([{ $group: { _id: "$brandName", count: { $sum: 1 } } }])
-            const catgCount = await product.aggregate([{ $group: { _id: "$category", count: { $sum: 1 } } }])
-
-
-            res.render('user/allProducts', { allPro, count, allproCount, check: req.session.name, catgCount, cartCount: req.session.cartCount })
+            res.render('user/allProducts', { allPro, count, allproCount, check: req.session.name, catgCount, cartCount: req.session.cartCount, 
+                totalPages, currentPage: parseInt(page), perPage: parseInt(perPage) })
 
         } catch (error) {
             console.log(error);
@@ -289,12 +301,19 @@ module.exports = {
     userProfile: async (req, res) => {
         try {
             const usrData = await user.findOne({ email: req.session.user })
-            const id = usrData._id
-            const adrs = await address.find({ userId: id })
-            const cupn = await coupon.find().sort({ _id: -1 })
 
+            const successMessage = req.session.successMessage;
+            const errorMessage = req.session.errorMessage;
+            delete req.session.successMessage;
+            delete req.session.errorMessage;
 
-            res.render('user/userProfile', { usrData, adrs, check: req.session.name, cupn, cartCount: req.session.cartCount })
+            const [ adrs, cupn, refInvt] = await Promise.all([
+                address.find({ userId: usrData._id }),
+                coupon.find().sort({ _id: -1 }),
+                wallet.findOne({userid:usrData._id}).populate('invited')
+            ])
+
+            res.render('user/userProfile', { usrData, adrs, check: req.session.name, cupn, cartCount: req.session.cartCount, refInvt, successMessage,  errorMessage})
 
         } catch (error) {
             console.log(error);
@@ -377,7 +396,7 @@ module.exports = {
         }
     },
 
-    
+
     //reset the password and redirect to userlogin page
     postResetPassword: async (req, res) => {
         try {
@@ -400,30 +419,30 @@ module.exports = {
 
     profileResetPassword: async (req, res) => {
         try {
-            const currPass = req.body.currentpassword
-            const passwrd = req.body.password
+
             const usrEmail = req.session.user
+            const { currentpassword: currPass, password: passwrd } = req.body
 
-            const data = await user.findOne({ email: usrEmail })
-
-            const usrData = await user.findOne({ email: req.session.user })
+            const [data, usrData] = await Promise.all([
+                user.findOne({ email: usrEmail }),
+                user.findOne({ email: req.session.user })
+            ])
             const id = usrData._id
             const adrs = await address.find({ userId: id })
 
             const bcrptPswd = data.password
             const isMatch = await verifyHashedData(currPass, bcrptPswd)
-            console.log(data);
-            console.log(isMatch);
+
             const cupn = await coupon.find().sort({ _id: -1 })
 
             if (isMatch) {
                 const hashPass = await hashData(passwrd)
                 await user.updateOne({ email: usrEmail }, { $set: { password: hashPass } })
-                const msg = "The password reset successfully"
-                res.render('user/userProfile', { msg, usrData, adrs, check: req.session.name, cupn, cartCount: req.session.cartCount })
+                req.session.successMessage = "The password reset successfully";
+                res.redirect('/userprofile')
             } else {
-                const msg = "The current password entered is incorrect"
-                res.render('user/userProfile', { msg, usrData, adrs, check: req.session.name, cupn, cartCount: req.session.cartCount })
+                req.session.errorMessage = "The current password entered is incorrect";
+                res.redirect('/userprofile')
             }
 
         } catch (error) {
@@ -437,15 +456,11 @@ module.exports = {
         try {
             const newUsrname = req.body.username
             await user.updateOne({ email: req.session.user }, { $set: { username: newUsrname } })
-            const msg = "The username updated successfully"
-            const usrData = await user.findOne({ email: req.session.user })
-            const id = usrData._id
-            const adrs = await address.find({ userId: id })
-            const cupn = await coupon.find().sort({ _id: -1 })
-
-
-
-            res.render('user/userProfile', { msg, usrData, adrs: req.session.address, adrs, cupn })
+            
+            req.session.name.username = newUsrname
+            req.session.successMessage = "Username updated successfully";
+            
+            res.redirect('/userprofile')
         } catch (error) {
             console.log(error);
         }
@@ -469,8 +484,10 @@ module.exports = {
     //user wallet 
     getWallet: async (req, res) => {
         try {
-            const Wallet = await wallet.findOne({ userid: req.session.name._id })
-            const waltHstry = await walletHistory.findOne({ userid: req.session.name._id })
+            const [Wallet, waltHstry] = await Promise.all([
+                wallet.findOne({ userid: req.session.name._id }),
+                walletHistory.findOne({ userid: req.session.name._id })
+            ])
             console.log(Wallet);
             console.log(waltHstry);
             res.render('user/myWallet', { check: req.session.name, Wallet, waltHstry, cartCount: req.session.cartCount })
@@ -480,6 +497,14 @@ module.exports = {
     },
 
 
+
+    getContactUs : async (req,res) => {
+        try {
+            res.render('user/contactUs',{check: req.session.name, cartCount: req.session.cartCount})
+        } catch (error) {
+            console.log(error);
+        }
+    },
 
 
 

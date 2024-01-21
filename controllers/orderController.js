@@ -11,6 +11,8 @@ const wallet = require('../models/walletModel');
 const walletHistory = require('../models/walletHistoryModel');
 const { log } = require('console');
 const { promise } = require('bcrypt/promises');
+const { generateInvoice } = require('../util/invoiceCreator')
+const fs = require('fs');
 
 
 module.exports = {
@@ -19,6 +21,12 @@ module.exports = {
 
     checkOutPage: async (req, res) => {
         try {
+            //for success alert
+            const successMessage = req.session.successMessage;
+            const errorMessage = req.session.errorMessage;
+            delete req.session.successMessage;
+            delete req.session.errorMessage;
+
             const [addrs, carts, orderss, cupnCount, walBalnc] = await Promise.all([
                 await address.find({ userId: req.session.name._id }),
                 await cart.findOne({ userId: req.session.name._id }),
@@ -28,7 +36,7 @@ module.exports = {
             ])
 
             if (carts) {
-                res.render('user/checkoutPage', { grandTotal: req.session.grandTotal, totalDiscount: req.session.totalDiscount, total: req.session.total, addrs, check: req.session.name, cpnMsg: req.session.cpnMsg, cupnDisc: req.session.cpnDiscount, cupnCount, orderss, cartCount: req.session.cartCount, walBalnc })
+                res.render('user/checkoutPage', { grandTotal: req.session.grandTotal, totalDiscount: req.session.totalDiscount, total: req.session.total, addrs, check: req.session.name, cpnMsg: req.session.cpnMsg, cupnDisc: req.session.cpnDiscount, cupnCount, orderss, cartCount: req.session.cartCount, walBalnc , errorMessage , successMessage })
             } else {
                 res.redirect('/userhome')
             }
@@ -76,8 +84,8 @@ module.exports = {
 
 
                 const [addrs, carts] = await Promise.all([
-                    await address.findOne({ _id: addressId }),
-                    await cart.findOne({ userId: usr._id })
+                    address.findOne({ _id: addressId }),
+                    cart.findOne({ userId: usr._id })
                 ])
 
 
@@ -295,8 +303,8 @@ module.exports = {
                     if (Wallet.wallet >= grandTotal) {
 
                         const [addrs, carts] = await Promise.all([
-                            await address.findOne({ _id: addressId }),
-                            await cart.findOne({ userId: usr._id })
+                            address.findOne({ _id: addressId }),
+                            cart.findOne({ userId: usr._id })
                         ])
 
 
@@ -436,23 +444,48 @@ module.exports = {
     },
 
 
+
+
+
+
     myOrders: async (req, res) => {
         try {
             const usr = await user.findOne({ email: req.session.user })
-
-            // Check if all products have a status of "Cancelled"
-
-            const orders = await order.find({ userid: usr._id }).populate("products.productid").sort({ orderDate: -1 })
-
-
-            const retns = await returns.find()
-
-            res.render('user/myOrders', { orders, check: req.session.name, retns, cartCount: req.session.cartCount })
+            const perPage = 6; // Set the number of orders per page
+    
+            const page = parseInt(req.query.page) || 1;
+            const skip = (page - 1) * perPage;
+    
+            const [orders, orderCount] = await Promise.all([
+                order.find({ userid: usr._id }).populate(
+                    { path: "products.productid", populate: 
+                    { path: 'category_id', model: 'category' } })
+                    .sort({ orderDate: -1 }).skip(skip).limit(perPage),
+                    
+                order.find({ userid: usr._id }).count()
+            ]);
+    
+            const totalPages = Math.ceil(orderCount / perPage);
+            
+            const paginationData = {
+                currentPage: page,
+                totalItems: orderCount,
+                totalPages: totalPages,
+                hasPrevPage: page > 1,
+                hasNextPage: page < totalPages,
+                prevPage: page - 1,
+                nextPage: page + 1
+            };
+    
+            const retns = await returns.find();
+    
+            res.render('user/myOrders', { orders, check: req.session.name, retns, cartCount: req.session.cartCount, paginationData });
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Internal Server Error' });
         }
     },
+    
 
 
 
@@ -500,7 +533,7 @@ module.exports = {
                         const date = new Date();
                         await walletHistory.updateOne(
                             { userid: ordr.userid },
-                            {$push: {refund: {amount: amount,reason: reason,type: type,date: date}}},
+                            { $push: { refund: { amount: amount, reason: reason, type: type, date: date } } },
                             { new: true }
                         );
                     } else {
@@ -510,7 +543,7 @@ module.exports = {
                         const date = new Date();
                         await walletHistory.create({
                             userid: ordr.userid,
-                            refund: [{amount: amount,reason: reason,type: type,date: date}],
+                            refund: [{ amount: amount, reason: reason, type: type, date: date }],
                         });
                     }
                 }
@@ -518,7 +551,7 @@ module.exports = {
 
             await order.updateOne(
                 { _id: orderId },
-                {$set: {'products.$[].status': 'Cancelled'}})
+                { $set: { 'products.$[].status': 'Cancelled' } })
 
 
             ordr.products.forEach(async data => {
@@ -541,7 +574,7 @@ module.exports = {
     cancelSingleProduct: async (req, res) => {
 
         try {
-            
+
             const { prodktid, orderid, index } = req.params;
             const prdkt = await product.findOne({ _id: prodktid });
             const odrDtls = await order.findOne({ _id: orderid });
@@ -573,7 +606,7 @@ module.exports = {
                         const date = new Date();
                         await walletHistory.updateOne(
                             { userid: odrDtls.userid },
-                            {$push: {refund: {amount: amount,reason: reason,type: type,date: date}}},
+                            { $push: { refund: { amount: amount, reason: reason, type: type, date: date } } },
                             { new: true }
                         );
                     } else {
@@ -582,24 +615,26 @@ module.exports = {
                         const type = "credit";
                         const date = new Date();
                         await walletHistory.create({
-                            userid: odrDtls.userid},
-                            {refund: [{amount: amount,reason: reason,type: type,date: date}],
-                        });
+                            userid: odrDtls.userid
+                        },
+                            {
+                                refund: [{ amount: amount, reason: reason, type: type, date: date }],
+                            });
                     }
                 }
             }
 
             order.updateOne(
                 { _id: orderid, 'products._id': odrDtls.products[index]._id },
-                {$set: {'products.$.status': 'Cancelled'},}
-                ).then(async (data) => {
+                { $set: { 'products.$.status': 'Cancelled' }, }
+            ).then(async (data) => {
 
                 const odrss = await order.findOne({ _id: orderid })
 
                 const allCancelled = odrss.products.every(data => data.status === "Cancelled");
 
                 // If all products are cancelled, update the order status to 'Cancelled'
-                if (allCancelled) { 
+                if (allCancelled) {
                     await order.updateOne({ _id: orderid }, { $set: { orderStatus: 'Cancelled' } })
                 }
             });
@@ -630,8 +665,8 @@ module.exports = {
             await returns.create(returnData)
             await order.updateOne(
                 { _id: orderId },
-                {$set: {'products.$[product].status': 'Return Requested'}},
-                {arrayFilters: [{ 'product.productid': productId }]}
+                { $set: { 'products.$[product].status': 'Return Requested' } },
+                { arrayFilters: [{ 'product.productid': productId }] }
             );
             res.redirect('/myorders')
 
@@ -653,7 +688,7 @@ module.exports = {
             const prdkt = await product.findOne({ _id: prdktId })
 
             var totalAmnt = prdkt.DiscountAmount * odrDtls.products[index].quantity;
-            
+
 
             if (status == "Approved") {
                 const WalletFind = await wallet.findOne({ userid: userId })
@@ -668,7 +703,7 @@ module.exports = {
                 }
 
                 //wallet history update
-                
+
                 const wallHstry = await walletHistory.findOne({ userid: odrDtls.userid })
                 if (wallHstry) {
                     const amount = totalAmnt;
@@ -677,7 +712,7 @@ module.exports = {
                     const date = new Date();
                     await walletHistory.updateOne(
                         { userid: odrDtls.userid },
-                        {$push: {refund: {amount: amount,reason: reason,type: type,date: date}}},
+                        { $push: { refund: { amount: amount, reason: reason, type: type, date: date } } },
                         { new: true }
                     );
                 } else {
@@ -687,10 +722,10 @@ module.exports = {
                     const date = new Date();
                     await walletHistory.create({
                         userid: odrDtls.userid,
-                        refund: [{amount: amount,reason: reason,type: type,date: date}],
+                        refund: [{ amount: amount, reason: reason, type: type, date: date }],
                     });
                 }
-                
+
 
 
                 await order.updateOne({ _id: orderId }, { $set: { PaymentStatus: "Refunded" } })
@@ -700,8 +735,8 @@ module.exports = {
 
             await order.updateOne(
                 { _id: orderId },
-                {$set: {'products.$[product].status': `Return ${status}`}},
-                {arrayFilters: [{ 'product.productid': prdktId }]}
+                { $set: { 'products.$[product].status': `Return ${status}` } },
+                { arrayFilters: [{ 'product.productid': prdktId }] }
             );
 
             res.json({ msg: `This return has been ${status}` });
@@ -718,9 +753,9 @@ module.exports = {
     //payment succes page after any payment
     paymentSuccessPage: async (req, res) => {
         try {
-            const ordr = await order.findOne({userid:req.session.name._id})
-            
-            res.render('user/paymentSuccess',{ordr})
+            const ordr = await order.findOne({ userid: req.session.name._id })
+
+            res.render('user/paymentSuccess', { ordr })
         } catch (error) {
             console.log(error);
             res.status(500).send('Internal Server Error');
@@ -761,6 +796,64 @@ module.exports = {
             console.log(error);
         }
     },
+
+
+
+    generateInvoices: async (req, res) => {
+        try {
+            const { orderId,index } = req.params
+
+            const orderDetails = await order.findOne({ _id: orderId }).populate('products.productid')
+            const deliveredProducts = orderDetails.products.filter(product => product.status === "Delivered");
+
+            if (orderDetails) {
+
+                const invoicePath = await generateInvoice(orderDetails,index,deliveredProducts)
+                res.json({ success: true, message: "Invoice generated successfully", invoicePath, });
+
+            } else {
+
+                res.status(500).json({ success: false, message: "Invoice generation failed" });
+            }
+
+        } catch (error) {
+
+            console.log(error);
+            res.status(500).json({ success: false, message: "Error in generating Invoice" });
+        }
+    },
+
+
+    downloadInvoice : async (req, res) => {
+        try {
+            const id = req.params.orderId;
+            console.log(id);
+            const filePath = `D:\\project\\ecommerce-1\\public\\invoPdf\\${id}.pdf`;
+
+            if (fs.existsSync(filePath)) {
+
+                const fileName = `Invoice_${id}.pdf`;
+    
+                res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+                res.setHeader('Content-Type', 'application/pdf');
+    
+                const fileStream = fs.createReadStream(filePath);
+                fileStream.pipe(res);
+    
+                fileStream.on('end', () => {
+                    console.log(`Invoice ${id} downloaded successfully.`);
+                });
+            } else {
+                // If the file doesn't exist
+                res.status(404).json({ success: false, message: "Invoice not found" });
+            }
+        } catch (error) {
+            console.error("Error in downloading the invoice:", error);
+            res.status(500).json({ success: false, message: "Error in downloading the invoice" });
+        }
+    },
+    
+
 
 
 

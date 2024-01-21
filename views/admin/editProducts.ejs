@@ -127,9 +127,9 @@
                 <div class="size-dropdown">
                     <div class="dropdown">
                         <label for="category">Category</label>
-                        <select id="category" name="category" required oninput="validateCategory()">
+                        <select id="category" name="category_id" required oninput="validateCategory()">
                             <% cat.forEach(ele => { %>
-                                <option <%-pdktDtls.category==ele.categoryName?'selected':""-%>><%-ele.categoryName-%></option>
+                                <option value="<%= ele._id %>" <%-pdktDtls.category_id.categoryName==ele.categoryName ? 'selected' : "" -%>><%-ele.categoryName-%></option>
                             <% }) %>
                         </select>
                         <div class="error-message text-danger" id="categoryError"></div>
@@ -137,9 +137,9 @@
         
                     <div class="dropdown">
                         <label for="brand">Brand</label>
-                        <select id="brand" name="brandName" required oninput="validateBrand()">
+                        <select id="brand" name="brand_id" required oninput="validateBrand()">
                             <% brnd.forEach(ele => { %>
-                                <option <%-pdktDtls.brandName==ele.brandName?'selected':""-%>><%-ele.brandName-%></option>
+                                <option value="<%= ele._id %>" <%-pdktDtls.brand_id.brandName==ele.brandName ? 'selected' : "" -%>><%-ele.brandName-%></option>
                             <% }) %>
                         </select>
                         <div class="error-message text-danger" id="brandError"></div>

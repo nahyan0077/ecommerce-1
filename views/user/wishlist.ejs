@@ -146,6 +146,8 @@
 
     <%- include('./layout/userHeaderNav') %>
 
+    <% if (wish!=null && wish.products.length!==0) { %>
+     
 
     <div class="container" style="margin-top: 100px;">
         <br>
@@ -172,8 +174,8 @@
                                         <i class="bx bxs-star text-warning"></i>
                                         <i class="bx bxs-star-half text-warning"></i>
                                     </p>
-                                    <p class="mb-0 mt-1">Category : <span class="fw-medium" style="font-weight: 500;"><%= data.productid.category %>
-                                    <p class="mb-0 mt-1">Brand : <span class="fw-medium" style="font-weight: 500;"><%= data.productid.brandName %>
+                                    <p class="mb-0 mt-1">Category : <span class="fw-medium" style="font-weight: 500;"><%= data.productid.category_id.categoryName %>
+                                    <p class="mb-0 mt-1">Brand : <span class="fw-medium" style="font-weight: 500;"><%= data.productid.brand_id.brandName %>
                                     </span></p>
                                 </div>
                                 <div class="flex-shrink-0">
@@ -215,28 +217,7 @@
               <% }) %>
               <!-- end card -->
 
-              <!-- <section class="h-100 h-custom" style="background-color: #eee;margin-top: 100px;"> 
-                <div class="container py-5 h-100">
-                  <div class="row d-flex justify-content-center align-items-center h-100">
-                    <div class="col">
-                      <div class="card">
-                        <div class="card-body p-4 d-flex justify-content-center align-items-center">
-              
-                         <div class="d-flex flex-column align-items-center">
-                            <img src="/images/nocart.webp" style="width: 260px;" alt=""><br><br>
-                            <h5 >You don't have any Orders yet!</h5>
-                            <p >Grab something right now.</p>
-                            <br>
-                            <a href="/allproducts"><button style="border-radius: 0px;width: 200px;" type="button" class="btn btn-success">Shop now</button></a>
-                         </div>
-                         
-              
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section> -->
+
     
     
 
@@ -251,6 +232,31 @@
         <!-- end row -->
       </div>
 
+      <% } else { %>
+       
+            <section class="h-100 h-custom" style="background-color: #eee;margin-top: 100px;"> 
+                <div class="container py-5 h-100">
+                  <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col">
+                      <div class="card">
+                        <div class="card-body p-4 d-flex justify-content-center align-items-center">
+              
+                         <div class="d-flex flex-column align-items-center">
+                            <img src="/images/nocart.webp" style="width: 260px;" alt=""><br><br>
+                            <h5 >You don't have any products in your wishlist yet!</h5>
+                            <p >Grab something right now.</p>
+                            <br>
+                            <a href="/allproducts"><button style="border-radius: 0px;width: 200px;" type="button" class="btn btn-success">Shop now</button></a>
+                         </div>
+                         
+              
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+      <% } %>
 
 
 

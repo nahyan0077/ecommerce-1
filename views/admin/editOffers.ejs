@@ -1,0 +1,223 @@
+<%- include('./partials/adminnav') %>
+
+
+    <div id="main">
+
+        <div class="head">
+            <div class="col-div-6">
+                <p class="nav"> Offers</p>
+
+            </div>
+
+            <div class="col-div-6">
+                <i class="fa fa-search search-icon"></i>
+
+
+                <i class="fa fa-bell noti-icon"></i>
+                <div class="notification-div">
+                    <p class="noti-head">Notification <span>2</span></p>
+                    <hr class="hr" />
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                    <p>Your Order is Placed
+                        <span>Lorem Ipsum is simply dummy </span>
+                    </p>
+                </div>
+                <div class="profile">
+
+                    <p><i class="fa-solid fa-user fa-xl"
+                            style="color: #7c4ff9;padding-right: 5px;margin-left: -15px;"></i> ADMIN <i
+                            class="fa fa-ellipsis-v dots" aria-hidden="true"></i></p>
+                    <div class="profile-div">
+                        <p><i class="fa fa-user"></i> Profile</p>
+                        <p><i class="fa fa-cogs"></i> Settings</p>
+                        <p><i class="fa fa-power-off"></i> <a href="/adminlogout" style="text-decoration: none;">Log
+                                Out</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+
+        <div class="clearfix"></div>
+        <br />
+
+
+
+
+        <!-- Edit offer form -->
+        <div class="container">
+            <form class="p-5" method="post" action="/editoffer" id="editOfferForm">
+                <!-- Add a hidden input for offer ID -->
+                <input type="hidden" name="offerid" id="editOfferID" value="<%= offr._id %>">
+                <input type="hidden" name="oldCategory" value="<%= offr.categoryName %>">
+                <div class="mb-3">
+                    <label for="categorySelect" class="col-form-label">Category:</label>
+                    <select class="form-select" id="categorySelect" name="categoryName" required >
+                        <% catgry.forEach(data => { %>
+                            <option <%= data.categoryName === offr.categoryName ? 'selected' : '' %>><%= data.categoryName %></option>
+                        <% }) %>
+                    </select>
+                    <small class="text-danger" id="categorySelectError"></small>
+                </div>
+                <div class="mb-3">
+                    <label for="offerPercentage" class="col-form-label">Offer Percentage:</label>
+                    <input type="number" class="form-control" name="offerPercentage" id="offerPercentage" placeholder="Enter Offer Percentage" value="<%= offr.offerPercentage %>" required>
+                    <small class="text-danger" id="offerPercentageError"></small>
+                </div>
+                <div class="mb-3">
+                    <label for="expiryDate" class="col-form-label">Expiry Date:</label>
+                    <input type="date" class="form-control" name="expiryDate" id="expiryDate" value="<%= offr.expiryDate.toISOString().split('T')[0] %>" required>
+                    <small class="text-danger" id="expiryDateError"></small>
+                </div>
+
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary" id="submitEditOfferBtn" disabled>Update</button>
+                </div>
+            </form>
+        </div>
+
+
+
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const categorySelect = document.getElementById('categorySelect');
+                const offerPercentageInput = document.getElementById('offerPercentage');
+                const expiryDateInput = document.getElementById('expiryDate');
+                const submitEditOfferBtn = document.getElementById('submitEditOfferBtn');
+        
+                // Store initial values for comparison
+                const initialCategory = categorySelect.value;
+                const initialOfferPercentage = offerPercentageInput.value;
+                const initialExpiryDate = expiryDateInput.value;
+        
+                // Event listener for category selection
+                categorySelect.addEventListener('change', function () {
+                    validateForm();
+                });
+        
+                // Event listener for offer percentage input
+                offerPercentageInput.addEventListener('input', function () {
+                    validateForm();
+                });
+        
+                // Event listener for expiry date input
+                expiryDateInput.addEventListener('input', function () {
+                    validateForm();
+                });
+        
+                // Event listener for form submission
+                document.getElementById('editOfferForm').addEventListener('submit', function (event) {
+                    if (!validateForm()) {
+                        event.preventDefault(); // Prevent form submission if validation fails
+                    }
+                });
+        
+                // Function to validate category selection
+                function validateCategory() {
+                    const selectedCategory = categorySelect.value;
+                    const categoryError = document.getElementById('categorySelectError');
+        
+                    if (selectedCategory === '') {
+                        categoryError.textContent = 'Please select a category.';
+                        return false;
+                    } else {
+                        categoryError.textContent = '';
+                        return true;
+                    }
+                }
+        
+                // Function to validate offer percentage
+                function validateOfferPercentage() {
+                    const offerPercentage = parseFloat(offerPercentageInput.value);
+                    const offerPercentageError = document.getElementById('offerPercentageError');
+        
+                    if (isNaN(offerPercentage) || offerPercentage <= 0) {
+                        offerPercentageError.textContent = 'Offer percentage must be greater than 0.';
+                        return false;
+                    } else {
+                        offerPercentageError.textContent = '';
+                        return true;
+                    }
+                }
+        
+                // Function to validate expiry date
+                function validateExpiryDate() {
+                    const expiryDate = new Date(expiryDateInput.value);
+                    const currentDate = new Date();
+                    const expiryDateError = document.getElementById('expiryDateError');
+        
+                    if (isNaN(expiryDate.getTime()) || expiryDate < currentDate) {
+                        expiryDateError.textContent = 'Expiry date must be greater than the present date.';
+                        return false;
+                    } else {
+                        expiryDateError.textContent = '';
+                        return true;
+                    }
+                }
+        
+                // Function to validate the entire form
+                function validateForm() {
+                    const isCategoryValid = validateCategory();
+                    const isOfferPercentageValid = validateOfferPercentage();
+                    const isExpiryDateValid = validateExpiryDate();
+        
+                    const isFormValid = isCategoryValid && isOfferPercentageValid && isExpiryDateValid;
+        
+                    // Enable the "Update" button only if there are changes and the form is valid
+                    submitEditOfferBtn.disabled = !(
+                        (categorySelect.value !== initialCategory) ||
+                        (offerPercentageInput.value !== initialOfferPercentage) ||
+                        (expiryDateInput.value !== initialExpiryDate)
+                    ) || !isFormValid;
+        
+                    return isFormValid;
+                }
+            });
+        </script>
+        
+
+
+
+
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $(".profile p").click(function () {
+                    $(".profile-div").toggle();
+
+                });
+                $(".noti-icon").click(function () {
+                    $(".notification-div").toggle();
+                });
+            });
+        </script>
+
+
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+        <script>
+
+            document.addEventListener("DOMContentLoaded", function () {
+                let table = new DataTable('#example');
+                let table1 = new DataTable('#example1');
+            });
+        </script>
+
+
+        </body>
+
+
+        </html>

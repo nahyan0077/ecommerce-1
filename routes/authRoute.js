@@ -114,6 +114,9 @@ router.post('/resetusername',userController.postEditUsername)
 //userProfile add address
 router.post('/postaddaddress',addressController.PostAddAddress)
 
+//checkout page add address------------
+router.post('/postaddaddress-checkout',addressController.PostAddAddressCheckout)
+
 //userProfile edit address
 router.post('/posteditaddress',addressController.postEditAddress)
 
@@ -201,7 +204,7 @@ router.post('/applycoupon',couponController.applyCoupon)
 
 //--------------apply filter--------------------
 
-router.post('/applyfilter',userController.allproducts)
+router.get('/applyfilter',userController.allproducts)
 
 
 
@@ -222,6 +225,20 @@ router.get('/removefromwishlist/:prdktid/:wishId',wishlistController.removeFromW
 router.get('/userwallet',middleware.verifyUser,userController.getWallet)
 
 
+
+//------------------order invoice genrate-------------
+
+router.get('/generateinvoice/:orderId/:index',orderController.generateInvoices)
+
+
+router.get('/downloadinvoice/:orderId',orderController.downloadInvoice)
+
+
+
+
+//------------------------contact us page----------------------
+
+router.get('/contactus',userController.getContactUs)
 
 
 
