@@ -43,8 +43,6 @@ module.exports = {
             const totalSales = sales[0] ? sales[0].totalSalesCount : 0;
             const totalRevenue = revenue[0] ? revenue[0].totalDiscountAmount : 0;
 
-
-
             res.render('admin/adminDashboard', { totalSales, totalRevenue, customers, recentOrders, topSelling })
 
 
@@ -201,7 +199,7 @@ module.exports = {
             let totalSales = 0;
 
             orders.forEach((order) => {
-              totalSales += order.totalAmount || 0;
+              totalSales += order.discountAmount || 0;
             });
 
             pdf.downloadReport(

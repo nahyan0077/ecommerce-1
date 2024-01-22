@@ -13,7 +13,7 @@ module.exports = {
             delete req.session.errorMessage;
 
             const [offers, catgry] = await Promise.all([
-                offer.find(),
+                offer.find().populate('category_id'),
                 category.find()
             ])
 
@@ -29,14 +29,14 @@ module.exports = {
     addOffers : async (req,res) => {
         try {
             console.log(req.body);
-            const {categoryName, offerPercentage, expiryDate} = req.body
+            const {category_id, offerPercentage, expiryDate} = req.body
 
-            const offerExist = await offer.findOne({categoryName:categoryName})
+            const offerExist = await offer.findOne({category_id:category_id})
 
             if(!offerExist){
                 await offer.create(req.body)
 
-                const catgryPrdkt = await product.find({category:categoryName})
+                const catgryPrdkt = await product.find({category_id:category_id})
                 const offerMultiplier = 1 - offerPercentage/100
                 
                 for(const prdkt of catgryPrdkt){
@@ -70,7 +70,7 @@ module.exports = {
             const {offerid} = req.params
 
             const [offr, catgry] = await Promise.all([
-                offer.findOne({_id:offerid}),
+                offer.findOne({_id:offerid}).populate('category_id'),
                 category.find()
             ])
 
@@ -82,19 +82,18 @@ module.exports = {
 
     postEditOffers : async (req,res) => {
         try {
-            console.log(req.body);
+            
+            const { offerid, oldCategory, category_id, offerPercentage, expiryDate } = req.body
 
-            const { offerid, oldCategory, categoryName, offerPercentage, expiryDate } = req.body
+            const offrExist = await offer.findOne({category_id:category_id}).populate('category_id')
 
-            const offrExist = await offer.findOne({categoryName:categoryName})
-
-            if(offrExist && oldCategory!=categoryName){
+            if(offrExist && oldCategory!=offrExist.category_id.categoryName){
                 req.session.errorMessage = 'Offer on this category already Exists';
             }else{
                 // updating the order
                 await offer.findByIdAndUpdate(
                     offerid,
-                    {categoryName, offerPercentage, expiryDate},
+                    {category_id, offerPercentage, expiryDate},
                     {new:true}
                 )
                 
@@ -110,7 +109,7 @@ module.exports = {
                 }
 
                 //updating offer details on the new offer products
-                const newPrdkts = await product.find({category:categoryName})
+                const newPrdkts = await product.find({category:category_id})
                 const offerMultiplier = 1 - offerPercentage/100
                 
                 for(const prdkt of newPrdkts){
@@ -138,7 +137,7 @@ module.exports = {
             const {offerid} = req.params
 
             const ofrData = await offer.findById(offerid)
-            const prdkts = await product.find({category:ofrData.categoryName})
+            const prdkts = await product.find({category_id:ofrData.category_id})
 
             for(const data of prdkts){
                 const beforeOffer = data.beforeOffer

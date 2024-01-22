@@ -9,8 +9,13 @@ const banner = require('../models/bannerModels')
 module.exports = {
     adminProducts: async (req, res) => {
         try {
+            const successMessage = req.session.successMessage;
+            const errorMessage = req.session.errorMessage;
+            delete req.session.successMessage;
+            delete req.session.errorMessage;
+
             let prdctData = await products.find().populate('brand_id').populate('category_id')
-            res.render('admin/adminProducts', { prdctData, successModal: req.session.modal1 })
+            res.render('admin/adminProducts', { prdctData, successModal: req.session.modal1, successMessage, errorMessage })
         } catch (error) {
             console.log(error);
         }
@@ -34,8 +39,11 @@ module.exports = {
             let images = [imgFiles.image1[0].filename, imgFiles.image2[0].filename, imgFiles.image3[0].filename, imgFiles.image4[0].filename]
             const prdcts = { ...prdctDtls, images }
             await products.create(prdcts)
+
+            req.session.successMessage = 'New product added successfully';
             res.redirect('/adminproducts')
         } catch (error) {
+            req.session.errorMessage = 'Error occured';
             console.log(error);
         }
     },
@@ -106,6 +114,10 @@ module.exports = {
 
             const update = await products.updateOne({ _id: id }, { $set: { ...updtPrdkts } })
             if (update) {
+                req.session.successMessage = 'product details updated successfully';
+                res.redirect("/adminproducts");
+            }else{
+                req.session.errorMessage = 'Error occured';
                 res.redirect("/adminproducts");
             }
 

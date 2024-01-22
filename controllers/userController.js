@@ -13,6 +13,7 @@ const coupon = require('../models/couponModel')
 const wallet = require('../models/walletModel')
 const walletHistory = require('../models/walletHistoryModel')
 const mongoose = require('mongoose');
+const offer = require('../models/offerModel');
 
 const JWT_SECRET = "jwt-secret-key"
 
@@ -22,12 +23,12 @@ module.exports = {
     renderSignup: async (req, res) => {
         try {
             const referId = req.query.refer;
-    
+
             let usr;
             if (mongoose.Types.ObjectId.isValid(referId)) {
                 usr = await user.findOne({ _id: referId });
             }
-    
+
             if (usr) {
                 res.render('user/userSignup', { refer: referId });
             } else {
@@ -41,15 +42,16 @@ module.exports = {
     //get guest home page
     renderHome: async (req, res) => {
         try {
-            const [prdktsData, bstdl, banners, sbanners] = await Promise.all([
-                product.find({  displayStatus: "Show" }).populate('category_id'),
+            const [prdktsData, bstdl, banners, sbanners, offers] = await Promise.all([
+                product.find({ displayStatus: "Show" }).populate('category_id'),
                 product.find({ Tags: "bestdeal", displayStatus: "Show" }).populate('category_id'),
                 banner.find(),
-                banner.find({ bannerName: /^subBanner/ })
+                banner.find({ bannerName: /^subBanner/ }),
+                offer.find().populate('category_id')
             ])
-          
+            console.log(offers);
 
-            res.render('user/guestHome', { prdktsData, banners, sbanners, bstdl, check: req.session.name })
+            res.render('user/guestHome', { prdktsData, banners, sbanners, bstdl, check: req.session.name, offers })
 
         } catch (error) {
             console.log(error);
@@ -62,15 +64,16 @@ module.exports = {
         try {
             const login = true
 
-            const [prdktsData, bstdl, banners, sbanners] = await Promise.all([
-                product.find({  displayStatus: "Show" }).populate('category_id'),
+            const [prdktsData, bstdl, banners, sbanners, offers] = await Promise.all([
+                product.find({ displayStatus: "Show" }).populate('category_id'),
                 product.find({ Tags: "bestdeal", displayStatus: "Show" }).populate('category_id'),
                 banner.find(),
-                banner.find({ bannerName: /^subBanner/ })
+                banner.find({ bannerName: /^subBanner/ }),
+                offer.find().populate('category_id')
             ])
 
 
-            res.render('user/userHome', { check: req.session.name, login, prdktsData, banners, sbanners, bstdl, cartCount: req.session.cartCount })
+            res.render('user/userHome', { check: req.session.name, login, prdktsData, banners, sbanners, bstdl, cartCount: req.session.cartCount, offers })
 
         } catch (error) {
             console.log(error);
@@ -184,7 +187,7 @@ module.exports = {
     // searching products
     searchProduct: async (req, res) => {
         try {
-            const searchTerm = req.query.search; 
+            const searchTerm = req.query.search;
 
             const [catgry, brnd] = await Promise.all([
                 category.findOne({ categoryName: { $regex: searchTerm, $options: "i" } }),
@@ -217,7 +220,7 @@ module.exports = {
     allproducts: async (req, res) => {
         try {
 
-            const { categories, brands, minPrice, maxPrice, page = 1, perPage = 9  } = req.query
+            const { categories, brands, minPrice, maxPrice, page = 1, perPage = 9 } = req.query
 
             const skip = (page - 1) * perPage;
 
@@ -240,7 +243,7 @@ module.exports = {
                     brand_id: { $in: brands },
                     price: { $gte: minPrice, $lte: maxPrice },
                     displayStatus: "Show"
-                }) .skip(skip).limit(parseInt(perPage)).populate('category_id').populate('brand_id');
+                }).skip(skip).limit(parseInt(perPage)).populate('category_id').populate('brand_id');
 
             } else if (categories == undefined && brands) {
 
@@ -272,20 +275,22 @@ module.exports = {
                 product.find().count(),
                 product.aggregate([
                     { $group: { _id: "$brand_id", count: { $sum: 1 } } },
-                    {$lookup: { from: "brands",   localField: "_id", foreignField: "_id", as: "brand" } },
-                    { $unwind: "$brand"  }]),
+                    { $lookup: { from: "brands", localField: "_id", foreignField: "_id", as: "brand" } },
+                    { $unwind: "$brand" }]),
 
                 product.aggregate([
                     { $group: { _id: "$category_id", count: { $sum: 1 } } },
                     { $lookup: { from: "categories", localField: "_id", foreignField: "_id", as: "category" } },
-                    { $unwind: "$category"  }])
+                    { $unwind: "$category" }])
             ])
 
             const totalPages = Math.ceil(allproCount / perPage);
 
 
-            res.render('user/allProducts', { allPro, count, allproCount, check: req.session.name, catgCount, cartCount: req.session.cartCount, 
-                totalPages, currentPage: parseInt(page), perPage: parseInt(perPage) })
+            res.render('user/allProducts', {
+                allPro, count, allproCount, check: req.session.name, catgCount, cartCount: req.session.cartCount,
+                totalPages, currentPage: parseInt(page), perPage: parseInt(perPage)
+            })
 
         } catch (error) {
             console.log(error);
@@ -307,13 +312,13 @@ module.exports = {
             delete req.session.successMessage;
             delete req.session.errorMessage;
 
-            const [ adrs, cupn, refInvt] = await Promise.all([
+            const [adrs, cupn, refInvt] = await Promise.all([
                 address.find({ userId: usrData._id }),
                 coupon.find().sort({ _id: -1 }),
-                wallet.findOne({userid:usrData._id}).populate('invited')
+                wallet.findOne({ userid: usrData._id }).populate('invited')
             ])
 
-            res.render('user/userProfile', { usrData, adrs, check: req.session.name, cupn, cartCount: req.session.cartCount, refInvt, successMessage,  errorMessage})
+            res.render('user/userProfile', { usrData, adrs, check: req.session.name, cupn, cartCount: req.session.cartCount, refInvt, successMessage, errorMessage })
 
         } catch (error) {
             console.log(error);
@@ -456,10 +461,10 @@ module.exports = {
         try {
             const newUsrname = req.body.username
             await user.updateOne({ email: req.session.user }, { $set: { username: newUsrname } })
-            
+
             req.session.name.username = newUsrname
             req.session.successMessage = "Username updated successfully";
-            
+
             res.redirect('/userprofile')
         } catch (error) {
             console.log(error);
@@ -498,9 +503,9 @@ module.exports = {
 
 
 
-    getContactUs : async (req,res) => {
+    getContactUs: async (req, res) => {
         try {
-            res.render('user/contactUs',{check: req.session.name, cartCount: req.session.cartCount})
+            res.render('user/contactUs', { check: req.session.name, cartCount: req.session.cartCount })
         } catch (error) {
             console.log(error);
         }

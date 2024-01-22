@@ -19,12 +19,6 @@ module.exports = {
 
             const id = usrData._id
 
-            const [adrs, cupn, refInvt] = await Promise.all([
-                address.find({ userId: id }),
-                coupon.find().sort({ _id: -1 }),
-                wallet.findOne({userid:usrData._id}).populate('invited')
-            ])
-
             //impp
             req.body.userId = usr._id
             console.log("postt");
@@ -55,12 +49,6 @@ module.exports = {
 
             const id = usrData._id
 
-            const [adrs, cupn, refInvt] = await Promise.all([
-                address.find({ userId: id }),
-                coupon.find().sort({ _id: -1 }),
-                wallet.findOne({userid:usrData._id}).populate('invited')
-            ])
-
             //impp
             req.body.userId = usr._id
             console.log("postt");
@@ -87,7 +75,6 @@ module.exports = {
 
             const usrData = await user.findOne({ email: req.session.user })
             const id = usrData._id
-            const adrs = await address.find({ userId: id })
 
             if (usrId != "") {
                 await address.updateOne({ _id: _Id }, { $set: { name: newAdrs.name, mobile: newAdrs.mobile, address: newAdrs.address, pincode: newAdrs.pincode, locality: newAdrs.locality, city: newAdrs.city, district: newAdrs.district, state: newAdrs.state } })
@@ -104,6 +91,8 @@ module.exports = {
             console.log(error);
         }
     },
+
+    
 
     deleteAddress: async (req, res) => {
         try {

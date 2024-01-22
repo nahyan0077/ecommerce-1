@@ -121,7 +121,7 @@ router.post('/postaddaddress-checkout',addressController.PostAddAddressCheckout)
 router.post('/posteditaddress',addressController.postEditAddress)
 
 //delete address
-router.get('/deleteaddress/:id',addressController.deleteAddress)
+router.delete('/deleteaddress/:id',addressController.deleteAddress)
 
 
 
@@ -138,16 +138,16 @@ router.get('/nocart',middleware.userExist,userController.noCart)
 router.get('/usercart',middleware.verifyUser,cartController.getCart)
 
 //add to cart 
-router.get('/addtocart/:id',cartController.addToCart)
+router.put('/addtocart/:id',cartController.addToCart)
 
 //update quantity in cart
-router.get('/updatequantity/:count/:prodId/:qty/:usrId',cartController.updateQuantity)
+router.patch('/updatequantity/:count/:prodId/:qty/:usrId',cartController.updateQuantity)
 
 //remove a product form cart
-router.get('/removecart/:prdktId',cartController.removeFromCart)
+router.delete('/removecart/:prdktId',cartController.removeFromCart)
 
 //clear all products in the cart
-router.get('/clearcart/:prdkid',cartController.clearCart)
+router.delete('/clearcart/:prdkid',cartController.clearCart)
 
 //rendring checkout page
 router.get('/checkout',middleware.verifyUser,orderController.checkOutPage)
@@ -174,10 +174,10 @@ router.get('/myorders',middleware.verifyUser,orderController.myOrders)
 router.get('/myorderdetails/:orderid',middleware.verifyUser,orderController.myOrderDetails)
 
 //cancel order
-router.get('/cancelorder/:orderid',orderController.cancelOrder)
+router.patch('/cancelorder/:orderid',orderController.cancelOrder)
 
 //cancel a single product form an order
-router.get('/cancelsingleproduct/:prodktid/:orderid/:index',orderController.cancelSingleProduct)
+router.patch('/cancelsingleproduct/:prodktid/:orderid/:index',orderController.cancelSingleProduct)
 
 //return single product 
 router.post('/returnrequest',orderController.returnProduct)
@@ -216,9 +216,10 @@ router.get('/wishlist',middleware.verifyUser,wishlistController.getWishlist)
 router.get('/addtowishlist/:prdktId',wishlistController.addToWishlist)
 
 //remove from wishlist 
-router.get('/removefromwishlist/:prdktid/:wishId',wishlistController.removeFromWishlist)
+router.delete('/removefromwishlist/:prdktid/:wishId',wishlistController.removeFromWishlist)
 
-
+//no wishlist
+router.get('/nowishlist',wishlistController.noWishlist)
 
 
 //usr wallet

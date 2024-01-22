@@ -153,6 +153,112 @@ margin: .1em;
 }
 </style>
 
+<style>
+    .button11 {
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .button11:before {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 150%;
+        height: 150%;
+        width: 100px;
+        -webkit-transform: rotate(45deg);
+        -moz-transform: rotate(45deg);
+        transform: rotate(45deg);
+        background: -moz-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+        background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(255, 255, 255, 0)), color-stop(50%, rgba(255, 255, 255, 1)), color-stop(100%, rgba(255, 255, 255, 0)));
+        background: -webkit-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+        background: -o-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+        background: -ms-linear-gradient(left, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+        background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#00ffffff', GradientType=1);
+        -webkit-animation: 1s myani linear infinite;
+        animation: 1s myani linear infinite;
+    }
+    
+    @-webkit-keyframes myani {
+        0% {
+            top: 100%;
+            left: 150%;
+        }
+        100% {
+            top: -150%;
+            left: -150%;
+        }
+    }
+    
+    @keyframes myani {
+        0% {
+            top: 100%;
+            left: 150%;
+        }
+        100% {
+            top: -150%;
+            left: -150%;
+        }
+    }
+    </style>
+
+<style>
+
+    .ribbon {
+        position: absolute;
+        left: -5px;
+        top: -5px;
+        z-index: 1;
+        overflow: hidden;
+        width: 75px;
+        height: 75px;
+        text-align: left; /* Align the text to the left */
+    }
+
+    .ribbon span {
+        font-size: 10px;
+        font-weight: bold;
+        color: #FFF;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 20px;
+        transform: rotate(-45deg); /* Rotate the text in the opposite direction */
+        -webkit-transform: rotate(-45deg);
+        width: 100px;
+        display: block;
+        background: #FF0000; /* Red background color */
+        box-shadow: 0 3px 10px -5px rgba(0, 0, 0, 1);
+        position: absolute;
+        top: 19px;
+        left: -21px; /* Adjust the position to the left */
+    }
+
+    .ribbon span::before {
+        content: "";
+        position: absolute;
+        left: 0px;
+        top: 100%;
+        z-index: -1;
+        border-left: 3px solid #FF0000; /* Red border color */
+        border-right: 3px solid transparent;
+        border-bottom: 3px solid transparent;
+        border-top: 3px solid #FF0000; /* Red border color */
+    }
+
+    .ribbon span::after {
+        content: "";
+        position: absolute;
+        right: 0px;
+        top: 100%;
+        z-index: -1;
+        border-left: 3px solid transparent;
+        border-right: 3px solid #FF0000; /* Red border color */
+        border-bottom: 3px solid transparent;
+        border-top: 3px solid #FF0000; /* Red border color */
+    }
+</style>
+
 
 
 </head>
@@ -175,8 +281,8 @@ margin: .1em;
 
             <div class="carousel-item active">
                 <div class="carousel-text" style="position: absolute;margin-top: 300px; margin-left:200px ;">
-                    <h1>Upto 40% offer</h1>
-                    <a href="/allproducts"><button class="shopnow" style="--c: #373B44;--b: 2px;--s:12px;font-size: 40px;">SHOP NOW</button></a>
+                    <h1 style="color: #ffffff;">Upto 50% offer</h1>
+                    <a href="/allproducts"><button class="shopnow" style="--c: #ffffff;--b: 2px;--s:12px;font-size: 40px;">SHOP NOW</button></a>
                 </div>
                 <img src="/product_images/<%=banners[0].bannerImage%>" class="d-block w-100" alt="...">
             </div>
@@ -185,6 +291,10 @@ margin: .1em;
 
 
                 <div class="carousel-item">
+                    <div class="carousel-text" style="position: absolute;margin-top: 300px; margin-left:200px ;">
+                        <h1 style="color: #ffffff;">New Arrivals</h1>
+                        <a href="/allproducts"><button class="shopnow" style="--c: #ffffff;--b: 2px;--s:12px;font-size: 40px;">SHOP NOW</button></a>
+                    </div>
                     <img src="/product_images/<%=sbnr.bannerImage%>" class="d-block w-100" alt="...">
                 </div>
 
@@ -210,7 +320,7 @@ margin: .1em;
                 <div class="col-lg-12">
                     <div class="section-heading text-center">
                         <h2>Best Deals</h2>
-                        <span>Details to details is what makes Hexashop different from the other themes.</span>
+                        <span>Unbeatable deals on a stylish and diverse collection of shoes </span>
                     </div>
                 </div>
             </div>
@@ -230,19 +340,16 @@ margin: .1em;
                                 </a>
                             </div>
 
-                            <button type="button" class="btn btn-danger"
-                                style="position: absolute; border-radius: 0px; font-size: x-small;">
-                                <% const discountPercentage=Math.round(((data.price - data.DiscountAmount) / data.price)
-                                    * 100); %>
-                                    <%= discountPercentage %>% OFF
-                            </button>
 
-
-                            <img src="/product_images/<%=data.images[0]%>" alt="">
+                            <div class="box">
+                                <img src="/product_images/<%=data.images[0]%>" alt="">
+                                <div class="ribbon"><span>Best Deal</span></div>
+                            </div>
+    
                         </div>
                         <br>
                         <h6><%-data.productName-%></h6>
-                        <p><%-data.category_id.catagoryName-%> SHOES</p>
+                        <p><%-data.category_id.categoryName-%> SHOES</p>
                         <p class="text-danger fw-bold">₹ <%-data.DiscountAmount-%></p>
                         <span class="me-1">
                             <del style="font-size: small;">₹ <%-data.price-%></del>
@@ -262,9 +369,15 @@ margin: .1em;
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
+                    <!-- //offers shining -->
+                    <% offers.forEach(data => { %>
+                        <% if (data.category_id.categoryName=='MENS') { %>
+                           <a href="" class="button11 badge bg-danger"><%= data.offerPercentage %>% offer</a>
+                        <% } %>
+                       <% }) %>
                     <div class="section-heading">
                         <h2>Men's Latest</h2>
-                        <span>Details to details is what makes Hexashop different from the other themes.</span>
+                        <span>Details to details is what makes DropShip different from the others.</span>
                     </div>
                 </div>
             </div>
@@ -329,9 +442,15 @@ margin: .1em;
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
+                    <!-- //offers shining -->
+                    <% offers.forEach(data => { %>
+                        <% if (data.category_id.categoryName=='WOMENS') { %>
+                           <a href="" class="button11 badge bg-danger"><%= data.offerPercentage %>% offer</a>
+                        <% } %>
+                       <% }) %>
                     <div class="section-heading">
                         <h2>Women's Latest</h2>
-                        <span>Details to details is what makes Hexashop different from the other themes.</span>
+                        <span>Details to details is what makes DropShip different from the others.</span>
                     </div>
                 </div>
             </div>
@@ -398,9 +517,15 @@ margin: .1em;
         <div class="container">
             <div class="row">
                 <div class="col-lg-6">
+                    <!-- //offers shining -->
+                    <% offers.forEach(data => { %>
+                        <% if (data.category_id.categoryName=='KIDS') { %>
+                           <a href="" class="button11 badge bg-danger"><%= data.offerPercentage %>% offer</a>
+                        <% } %>
+                       <% }) %>
                     <div class="section-heading">
                         <h2>Kid's Latest</h2>
-                        <span>Details to details is what makes Hexashop different from the other themes.</span>
+                        <span>Details to details is what makes DropShip different from the others.</span>
                     </div>
                 </div>
             </div>
@@ -575,6 +700,7 @@ margin: .1em;
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    
     <script>
         function confirmLogout() {
             Swal.fire({

@@ -28,11 +28,11 @@ module.exports = {
             delete req.session.errorMessage;
 
             const [addrs, carts, orderss, cupnCount, walBalnc] = await Promise.all([
-                await address.find({ userId: req.session.name._id }),
-                await cart.findOne({ userId: req.session.name._id }),
-                await order.findOne({ userId: req.session.name._id }),
-                await coupon.find().count(),
-                await wallet.findOne({ userid: req.session.name._id })
+                address.find({ userId: req.session.name._id }),
+                cart.findOne({ userId: req.session.name._id }),
+                order.findOne({ userId: req.session.name._id }),
+                coupon.find().count(),
+                wallet.findOne({ userid: req.session.name._id })
             ])
 
             if (carts) {
@@ -62,10 +62,12 @@ module.exports = {
     //to confirm and place the order
     confirmOrder: async (req, res) => {
         try {
-
             const paymntMthd = req.params.type
             const addressId = req.session.adrsId
             const userEmail = req.session.user
+            const total = req.session.total
+            const totalDiscount = req.session.totalDiscount
+            const grandTotal = req.session.grandTotal
 
             if (req.session.adrsId == null) {
 
@@ -73,44 +75,28 @@ module.exports = {
 
             } else if (paymntMthd == "cashOnDelivery" && req.session.adrsId != null) {
 
-                const paymntMthd = req.params.type
-                const addressId = req.session.adrsId
-                const userEmail = req.session.user
-                const total = req.session.total
-                const totalDiscount = req.session.totalDiscount
-                const grandTotal = req.session.grandTotal
-
                 const usr = await user.findOne({ email: userEmail })
-
 
                 const [addrs, carts] = await Promise.all([
                     address.findOne({ _id: addressId }),
                     cart.findOne({ userId: usr._id })
                 ])
 
-
                 // date setting------------------------------------------
-
                 const currentDate = new Date().toLocaleString("en-US", {
                     timeZone: "Asia/Kolkata",
                 });
 
-
-
                 // delivery date ----------------------------------------  
-
                 const deliveryDate = new Date(
                     Date.now() + 4 * 24 * 60 * 60 * 1000
                 ).toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 
-
                 //   if not coupen code ---------------------------------
-
                 let couponCode = "";
                 let couponDiscount = 0;
 
                 //   if coupen code--------------------------------------
-
                 if (req.session.cpnDiscount && req.session.couponCode) {
                     couponDiscount = req.session.cpnDiscount;
                     couponCode = req.session.couponCode;
@@ -155,9 +141,6 @@ module.exports = {
 
                         const stock = prdt.stockQuantity
                         const newStock = stock - ordrQty
-
-
-                        const test = await product.findOne({ _id: prdId })
 
                         await product.updateOne({ _id: prdId }, { $set: { stockQuantity: newStock } })
 
@@ -173,48 +156,29 @@ module.exports = {
 
             } else if (paymntMthd == "onlinePayment" && req.session.adrsId != null) {
 
-
-                const paymntMthd = req.params.type
-                const addressId = req.session.adrsId
-                const userEmail = req.session.user
-                const total = req.session.total
-                const totalDiscount = req.session.totalDiscount
-                const grandTotal = req.session.grandTotal
-
                 const usr = await user.findOne({ email: userEmail })
-
-
-
 
                 const [addrs, carts] = await Promise.all([
                     await address.findOne({ _id: addressId }),
                     await cart.findOne({ userId: usr._id })
                 ])
 
-
-
                 // date setting------------------------------------------
-
                 const currentDate = new Date().toLocaleString("en-US", {
                     timeZone: "Asia/Kolkata",
                 });
 
-
-
                 // delivery date ----------------------------------------  
-
                 const deliveryDate = new Date(
                     Date.now() + 4 * 24 * 60 * 60 * 1000
                 ).toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 
 
                 //   if not coupen code ---------------------------------
-
                 let couponCode = "";
                 let couponDiscount = 0;
 
                 //   if coupen code--------------------------------------
-
                 if (req.session.cpnDiscount && req.session.couponCode) {
                     couponDiscount = req.session.cpnDiscount;
                     couponCode = req.session.couponCode;
@@ -248,12 +212,7 @@ module.exports = {
 
                 const prdts = carts.products
 
-
-
-
-
                 //to update the quantity in inventory
-
                 for (const data of prdts) {
 
                     try {
@@ -265,11 +224,7 @@ module.exports = {
                         const stock = prdt.stockQuantity
                         const newStock = stock - ordrQty
 
-
-                        const test = await product.findOne({ _id: prdId })
-
                         await product.updateOne({ _id: prdId }, { $set: { stockQuantity: newStock } })
-
 
                     } catch (error) {
                         console.log(error);
@@ -282,19 +237,12 @@ module.exports = {
 
                 await cart.findByIdAndDelete(carts._id)
 
-
-
             } else if (paymntMthd == "walletPayment" && req.session.adrsId != null) {
 
-                const paymntMthd = req.params.type
-                const addressId = req.session.adrsId
-                const userEmail = req.session.user
-                const total = req.session.total
-                const totalDiscount = req.session.totalDiscount
-                const grandTotal = req.session.grandTotal
-
+            
                 const usr = await user.findOne({ email: userEmail })
                 const Wallet = await wallet.findOne({ userid: usr._id })
+       
 
                 if (Wallet) {
 
@@ -309,22 +257,17 @@ module.exports = {
 
 
                         // date setting------------------------------------------
-
                         const currentDate = new Date().toLocaleString("en-US", {
                             timeZone: "Asia/Kolkata",
                         });
 
-
-
                         // delivery date ----------------------------------------  
-
                         const deliveryDate = new Date(
                             Date.now() + 4 * 24 * 60 * 60 * 1000
                         ).toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
 
 
                         //   if not coupen code ---------------------------------
-
                         let couponCode = "";
                         let couponDiscount = 0;
 
@@ -334,7 +277,6 @@ module.exports = {
                             couponDiscount = req.session.cpnDiscount;
                             couponCode = req.session.couponCode;
                         }
-
 
                         let myOrders = {
                             userid: usr._id,
@@ -364,7 +306,6 @@ module.exports = {
                         const prdts = carts.products
 
                         //to update the quantity in inventory
-
                         for (const data of prdts) {
 
                             try {
@@ -375,9 +316,6 @@ module.exports = {
                                 const stock = prdt.stockQuantity
                                 const newStock = stock - ordrQty
 
-
-                                const test = await product.findOne({ _id: prdId })
-
                                 await product.updateOne({ _id: prdId }, { $set: { stockQuantity: newStock } })
 
                             } catch (error) {
@@ -385,8 +323,6 @@ module.exports = {
                             }
 
                         }
-
-                        const ordrr = await order.findOne().sort({ _id: -1 }).limit(1)
 
                         const WalHist = await walletHistory.findOne({ userid: usr._id })
 
@@ -397,8 +333,7 @@ module.exports = {
 
                             await walletHistory.updateOne(
                                 { userid: usr._id },
-                                {
-                                    $push: {
+                                { $push: {
                                         refund: {
                                             amount: grandTotal,
                                             reason: reason,
@@ -480,6 +415,7 @@ module.exports = {
             const retns = await returns.find();
     
             res.render('user/myOrders', { orders, check: req.session.name, retns, cartCount: req.session.cartCount, paginationData });
+            
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -492,10 +428,13 @@ module.exports = {
     myOrderDetails: async (req, res) => {
         try {
             const orderId = req.params.orderid
-            const usrOdr = await order.findOne({ _id: orderId }).populate("products.productid")
-            const retns = await returns.find({ orderId: orderId })
+            const [usrOdr, retns] = await Promise.all([
+                order.findOne({ _id: orderId }).populate("products.productid"),
+                returns.find({ orderId: orderId })
+            ])
 
             res.render('user/myOrderDetails', { usrOdr, check: req.session.name, retns, cartCount: req.session.cartCount })
+
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Internal Server Error' });
@@ -515,37 +454,34 @@ module.exports = {
                 const walletFind = await wallet.findOne({ userid: ordr.userid })
 
                 if (walletFind) {
-                    await wallet.updateOne({ userid: ordr.userid }, { $inc: { wallet: ordr.totalAmount } })
+                    await wallet.updateOne({ userid: ordr.userid }, { $inc: { wallet: ordr.discountAmount } })
                 } else {
                     await wallet.create({
                         userid: ordr.userid,
-                        wallet: ordr.totalAmount
+                        wallet: ordr.discountAmount
                     })
                 }
-
                 //wallet history update
-                if (ordr.paymentMethod == "walletPayment") {
-                    const wallHstry = await walletHistory.findOne({ userid: ordr.userid })
-                    if (wallHstry) {
-                        const amount = ordr.totalAmount;
-                        const reason = "Refund of cancelling order";
-                        const type = "credit";
-                        const date = new Date();
-                        await walletHistory.updateOne(
-                            { userid: ordr.userid },
-                            { $push: { refund: { amount: amount, reason: reason, type: type, date: date } } },
-                            { new: true }
-                        );
-                    } else {
-                        const amount = ordr.totalAmount;
-                        const reason = "Refund of cancelling order";
-                        const type = "credit";
-                        const date = new Date();
-                        await walletHistory.create({
-                            userid: ordr.userid,
-                            refund: [{ amount: amount, reason: reason, type: type, date: date }],
-                        });
-                    }
+                const wallHstry = await walletHistory.findOne({ userid: ordr.userid })
+                if (wallHstry) {
+                    const amount = ordr.discountAmount;
+                    const reason = "Refund of cancelling order";
+                    const type = "credit";
+                    const date = new Date();
+                    await walletHistory.updateOne(
+                        { userid: ordr.userid },
+                        { $push: { refund: { amount: amount, reason: reason, type: type, date: date } } },
+                        { new: true }
+                    );
+                } else {
+                    const amount = ordr.discountAmount;
+                    const reason = "Refund of cancelling order";
+                    const type = "credit";
+                    const date = new Date();
+                    await walletHistory.create({
+                        userid: ordr.userid,
+                        refund: [{ amount: amount, reason: reason, type: type, date: date }],
+                    });
                 }
             }
 
@@ -576,12 +512,13 @@ module.exports = {
         try {
 
             const { prodktid, orderid, index } = req.params;
-            const prdkt = await product.findOne({ _id: prodktid });
-            const odrDtls = await order.findOne({ _id: orderid });
 
+            const [prdkt, odrDtls] = await Promise.all([
+                product.findOne({ _id: prodktid }),
+                order.findOne({ _id: orderid })
+            ])
 
             const totalAmnt = prdkt.DiscountAmount * odrDtls.products[index].quantity;
-
 
             if (odrDtls.paymentMethod == "onlinePayment" && odrDtls.PaymentStatus == "Paid" || odrDtls.paymentMethod == "walletPayment") {
 
@@ -597,30 +534,26 @@ module.exports = {
                 }
 
                 //wallet history update
-                if (odrDtls.paymentMethod == "walletPayment") {
-                    const wallHstry = await walletHistory.findOne({ userid: odrDtls.userid })
-                    if (wallHstry) {
-                        const amount = totalAmnt;
-                        const reason = "Refund of cancelling a product";
-                        const type = "credit";
-                        const date = new Date();
-                        await walletHistory.updateOne(
-                            { userid: odrDtls.userid },
-                            { $push: { refund: { amount: amount, reason: reason, type: type, date: date } } },
-                            { new: true }
-                        );
-                    } else {
-                        const amount = totalAmnt;
-                        const reason = "Refund of cancelling a product";
-                        const type = "credit";
-                        const date = new Date();
-                        await walletHistory.create({
-                            userid: odrDtls.userid
-                        },
-                            {
-                                refund: [{ amount: amount, reason: reason, type: type, date: date }],
-                            });
-                    }
+                const wallHstry = await walletHistory.findOne({ userid: odrDtls.userid })
+                if (wallHstry) {
+                    const amount = totalAmnt;
+                    const reason = "Refund of cancelling a product";
+                    const type = "credit";
+                    const date = new Date();
+                    await walletHistory.updateOne(
+                        { userid: odrDtls.userid },
+                        { $push: { refund: { amount: amount, reason: reason, type: type, date: date } } },
+                        { new: true }
+                    );
+                } else {
+                    const amount = totalAmnt;
+                    const reason = "Refund of cancelling a product";
+                    const type = "credit";
+                    const date = new Date();
+                    await walletHistory.create({
+                        userid: odrDtls.userid,
+                        refund: [{ amount: amount, reason: reason, type: type, date: date }]
+                    })
                 }
             }
 
@@ -635,7 +568,7 @@ module.exports = {
 
                 // If all products are cancelled, update the order status to 'Cancelled'
                 if (allCancelled) {
-                    await order.updateOne({ _id: orderid }, { $set: { orderStatus: 'Cancelled' } })
+                    await order.updateOne({ _id: orderid }, { $set: { orderStatus: 'Cancelled', PaymentStatus: 'Refunded' } })
                 }
             });
 
@@ -726,8 +659,6 @@ module.exports = {
                     });
                 }
 
-
-
                 await order.updateOne({ _id: orderId }, { $set: { PaymentStatus: "Refunded" } })
             }
 
@@ -754,7 +685,6 @@ module.exports = {
     paymentSuccessPage: async (req, res) => {
         try {
             const ordr = await order.findOne({ userid: req.session.name._id })
-
             res.render('user/paymentSuccess', { ordr })
         } catch (error) {
             console.log(error);

@@ -104,7 +104,7 @@
     </style>
     <style>
         body {
-            background: rgb(230, 230, 230);
+            background: rgb(246 246 246);
         }
 
         .example {
@@ -213,6 +213,53 @@
             }
             
         </style>
+           <style>
+            .button {
+                position: relative;
+
+                overflow: hidden;
+                display: inline-block; /* Ensure inline display */
+            }
+    
+            .button:before {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 150%;
+                height: 150%;
+                width: 100px;
+                -webkit-transform: rotate(45deg);
+                -moz-transform: rotate(45deg);
+                transform: rotate(45deg);
+                background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 0) 100%);
+                -webkit-animation: myani 1s linear infinite;
+                animation: myani 1s linear infinite;
+            }
+    
+            @-webkit-keyframes myani {
+                0% {
+                    top: 100%;
+                    left: 150%;
+                }
+    
+                100% {
+                    top: -150%;
+                    left: -150%;
+                }
+            }
+    
+            @keyframes myani {
+                0% {
+                    top: 100%;
+                    left: 150%;
+                }
+    
+                100% {
+                    top: -150%;
+                    left: -150%;
+                }
+            }
+        </style>
 
 </head>
 
@@ -225,7 +272,7 @@
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
                         <a href="index.html" class="logo">
-                            <img src="/images/ds_blk.png" style="max-width: 120px;margin-left: -260px;">
+                            <img src="/images/ds_blk.png" style="max-width: 100px;margin-left: -260px;">
                         </a>
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
@@ -237,16 +284,16 @@
                                     <button class="search-btn" id="search-inp-btn">&#x027A4;</button>
                                 </form>
                             </div>
-                            <li class="scroll-to-section"><a href="/" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="/" >Home</a></li>
                             <li class="scroll-to-section"><a href="/#men">Men's</a></li>
                             <li class="scroll-to-section"><a href="/#women">Women's</a></li>
                             <li class="scroll-to-section"><a href="/#kids">Kid's</a></li>
                             <li class="submenu">
                                 <a href="javascript:;">Pages</a>
                                 <ul>
-                                    <li><a href="about.html">About Us</a></li>
-                                    <li><a href="products.html">Products</a></li>
-                                    <li><a href="contact.html">Contact Us</a></li>
+                                    <li><a href="">About Us</a></li>
+                                    <li><a href="">Products</a></li>
+                                    <li><a href="/contactus">Contact Us</a></li>
                                 </ul>
                             </li>
 
@@ -273,7 +320,40 @@
 
                             </li>
                             <li><a href=""><i class="fa-solid fa-heart" style="color: #000000;cursor: pointer;"></i></a></li>
-                            <li><a href="/nocart"><i class="fa-solid fa-cart-shopping" style="color: #000000;cursor: pointer;"></i></a>
+                           
+                            <% if (check) { %>
+
+                             
+                                <li><a href="/usercart">
+                                      
+                                      <div class="cart">
+                                          <span class="count" style="position: absolute;
+                                          margin-left: 10px;
+                                          z-index: 2;
+                                          font-size: 11px;
+                                          border-radius: 50%;
+                                          background: #d60b28;
+                                          width: 16px;
+                                          height: 16px;
+                                          line-height:16px;
+                                          display: block;
+                                          text-align: center;
+                                          color: white;
+                                          font-family: 'Roboto', sans-serif;
+                                          font-weight: bold;"><%= cartCount %></span>
+                                          <!--   <span class="count">1</span> -->
+                                          <i class="fa-solid fa-cart-shopping" style="color: #000000; cursor: pointer;"></i>
+                                        </div>
+                                  </a></li>
+                              <% } else { %>
+                                  <li><a href="/nocart"><i class="fa-solid fa-cart-shopping" style="color: #000000;cursor: pointer;"></i></a>
+                                  </li>
+                                  
+                              <% } %>
+
+
+
+
                             </li>
                             <% if (check) { %>
                                 <div class="" style="color: #000000;text-transform: capitalize;margin-top: 7px;cursor: pointer;">Hello,
@@ -294,17 +374,17 @@
 
 
     <div class="container mt-5">
-        <div class="row">
+        <div class="row shadow p-3 mb-5 bg-white rounded">
             <div class="preview col">
 
 
                 <div class="app-figure" id="zoom-fig">
-                    <a id="Zoom-1" class="MagicZoom" title="Show your product in stunning detail with Magic Zoom Plus."
+                    <a id="Zoom-1" class="MagicZoom " title="Show your product in stunning detail with Magic Zoom Plus.  "
                         href="/product_images/<%= data.images[0] %>"
                         data-zoom-image-2x="/product_images/<%= data.images[0] %>"
-                        data-image-2x="/product_images/<%= data.images[0] %>?"
+                        data-image-2x="/product_images/<%= data.images[0] %>"
                     >
-                        <img src="/product_images/<%= data.images[0] %>" srcset="/product_images/<%= data.images[0] %> "
+                        <img src="/product_images/<%= data.images[0] %>" srcset="/product_images/<%= data.images[0] %>"
                             alt=""/>
                     </a>
                     <div class="selectors" style="height: 150px;margin-top: 5px;">
@@ -313,12 +393,12 @@
                         
                         <a
                             data-zoom-id="Zoom-1"
-                            href="/product_images/<%= image %>?h=1400"
-                            data-image="/product_images/<%= image %>?h=400"
-                            data-zoom-image-2x="/product_images/<%= image %>?h=2800"
-                            data-image-2x="/product_images/<%= image %>?h=800"
+                            href="/product_images/<%= image %>"
+                            data-image="/product_images/<%= image %>"
+                            data-zoom-image-2x="/product_images/<%= image %>"
+                            data-image-2x="/product_images/<%= image %>"
                         >
-                            <img srcset="/product_images/<%= image %>?h=120 2x" src="/product_images/<%= image %>?h=60" style="height: 80px;width: 80px;border: 1px solid black;" />
+                            <img srcset="/product_images/<%= image %>" src="/product_images/<%= image %>" style="height: 80px;width: 80px;border: 1px solid black;" />
                         </a>
 
                         <% }) %>
@@ -328,8 +408,11 @@
             
             
             </div>
-
+           
+            
             <div class="col-lg-6">
+                
+                
                 <!-- Product Information -->
                 <a href="" class="badge bg-dark"><%= data.brand_id.brandName %></a>
                 <h2 class="mb-3"><%-data.productName-%></h2>

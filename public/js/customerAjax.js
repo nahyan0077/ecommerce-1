@@ -17,7 +17,7 @@ function block_unblock(id) {
             console.log("ajax working ");
             $.ajax({
                 url: "/blockuser/" + `${id}`,
-                method: "get",
+                method: "patch",
                 success: function (response) {
                     Swal.fire({
                         text: response.msg,
@@ -64,7 +64,7 @@ function delete_category(id) {
             // User clicked 'Yes', proceed with the deletion
             $.ajax({
                 url: "/deletecategory/" + id,
-                method: "get",
+                method: "delete",
                 success: function (response) {
                     Swal.fire({
                         text: response.msg,
@@ -109,7 +109,7 @@ function delete_Brand(id) {
             // User clicked 'Yes', proceed with the deletion
             $.ajax({
                 url: "/deletebrand/" + id,
-                method: "get",
+                method: "delete",
                 success: function (response) {
                     Swal.fire({
                         text: response.msg,
@@ -153,7 +153,7 @@ function show_hide(id) {
             // User clicked 'Yes', proceed with changing visibility
             $.ajax({
                 url: "/showorhide/" + `${id}`,
-                method: "get",
+                method: "patch",
                 success: function (response) {
                     Swal.fire({
                         text: response.msg,
@@ -200,7 +200,7 @@ function deleteProduct(id) {
             // User clicked 'Yes', proceed with product deletion
             $.ajax({
                 url: "/deleteproduct/" + id,
-                method: "get",
+                method: "delete",
                 success: function (response) {
                     Swal.fire({
                         text: response.msg,
@@ -247,7 +247,7 @@ function deleteAddress(id) {
             console.log("ajjaxxxxx");
             $.ajax({
                 url: "/deleteaddress/" + id,
-                method: "get",
+                method: "delete",
                 success: function (response) {
                     Swal.fire({
                         text: response.msg,
@@ -282,7 +282,7 @@ function addToCart(id) {
     console.log("ajax working ");
     $.ajax({
         url: "/addtocart/" + `${id}`,
-        method: "get",
+        method: "put",
         success: function (response) {
             Toastify({
                 text: response.msg,
@@ -296,7 +296,7 @@ function addToCart(id) {
             // Reload the page after 3 seconds
             setTimeout(function () {
                 window.location.reload();
-            }, 1000);
+            }, 500);
         },
         error: function (err) {
             Toastify({
@@ -321,7 +321,7 @@ function updateQuantity(count,prodId,qty,usrId){
         
         url:"/updatequantity/"+`${count}/${prodId}/${qty}/${usrId}`,
         
-        method:"get",
+        method:"patch",
         success:function (response){
             Toastify({
                 text: "Product quantity updated",
@@ -335,7 +335,7 @@ function updateQuantity(count,prodId,qty,usrId){
               // Delay the reload by 3 seconds (3000 milliseconds)
               setTimeout(function () {
                 window.location.reload();
-              }, 1000);
+              }, 500);
         },
         error:function (err){
             alert("Something Error")
@@ -359,7 +359,7 @@ function removeCart(prdktId) {
         if (result.isConfirmed) {
             $.ajax({
                 url: "/removecart/" + `${prdktId}`,
-                method: "get",
+                method: "delete",
                 success: function (response) {
                     Toastify({
                         text: response.msg,
@@ -373,7 +373,7 @@ function removeCart(prdktId) {
                     // Reload the page after 3 seconds
                     setTimeout(function () {
                         window.location.reload();
-                    }, 1000);
+                    }, 500);
                 },
                 error: function (err) {
                     Toastify({
@@ -404,7 +404,7 @@ function removeCart(prdktId) {
         if (result.isConfirmed) {
             $.ajax({
                 url: "/clearcart/" + `${prdktid}`,
-                method: "get",
+                method: "delete",
                 success: function (response) {
                     Toastify({
                         text: response.msg,
@@ -540,12 +540,12 @@ function createRazorpay(order){
       currency: 'INR',
       name: 'DropShip',
       description: 'Test Transaction',
-      image: '/assets/images/ds_blk.png',
+      image: '../images/ds_blk.png',
       order_id: id,
       handler: function (response) {
 
-        alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
         verifyPayment(response,order)
        
       },
@@ -604,7 +604,7 @@ function updateOrderStatus(orderid, status) {
             // User clicked 'Yes', proceed with the status update
             $.ajax({
                 url: `/updateorderstatus/${orderid}/${status}`,
-                method: 'get',
+                method: 'put',
                 success: function (response) {
                     Swal.fire({
                         text: response.msg,
@@ -659,7 +659,7 @@ function cancelOrder(orderid) {
             // If confirmed, proceed with the cancellation
             $.ajax({
                 url: "/cancelorder/" + `${orderid}`,
-                method: "get",
+                method: "patch",
                 success: function (response) {
                     window.location.reload();
                     // Show success notification using Toastify
@@ -708,7 +708,7 @@ function cancelSingleProduct(prodktid, orderid, index) {
             // If confirmed, proceed with the cancellation
             $.ajax({
                 url: "/cancelsingleproduct/" + `${prodktid}/${orderid}/${index}`,
-                method: "get",
+                method: "patch",
                 success: function (response) {
                     window.location.reload();
                     // Show success notification using Toastify
@@ -953,7 +953,7 @@ function removeFromWishlist(prdktid, wishId) {
         if (result.isConfirmed) {
             $.ajax({
                 url: "/removefromwishlist/" + `${prdktid}/${wishId}`,
-                method: "get",
+                method: "delete",
                 success: function (response) {
                     Toastify({
                         text: response.msg,
@@ -967,7 +967,7 @@ function removeFromWishlist(prdktid, wishId) {
                     // Reload the page after 3 seconds
                     setTimeout(function () {
                         location.reload();
-                    }, 1000);
+                    }, 500);
                 },
                 error: function (err) {
                     Toastify({

@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router()
-
 const adminController = require('../controllers/adminController')
 const middleware = require('../middlewares/session')
 const multerUpload = require('../middlewares/multer');
@@ -39,7 +38,7 @@ router.post('/adminloginpost',adminController.adminLoginPost)
 router.get('/admincustomers',middleware.verifyAdmin,adminController.adminCustomers)
 
 //admin block and unblock customers
-router.get('/blockuser/:id',middleware.verifyAdmin,adminController.block_Unbock_User)
+router.patch('/blockuser/:id',middleware.verifyAdmin,adminController.block_Unbock_User)
 
 
 
@@ -61,7 +60,7 @@ router.get('/addcategorypage',middleware.verifyAdmin,adminController.getAddCateg
 router.post('/addcategory',adminController.addCategory)
 
 //admin delete catagories
-router.get('/deletecategory/:id',middleware.verifyAdmin,adminController.deleteCategory)
+router.delete('/deletecategory/:id',middleware.verifyAdmin,adminController.deleteCategory)
 
 //admin edit catagories page
 router.get('/editcategory/:id',adminController.editCategory)
@@ -92,7 +91,7 @@ router.post('/addbrand',adminController.addBrands)
 
 
 //admin delete brands
-router.get('/deletebrand/:id',adminController.deleteBrands)
+router.delete('/deletebrand/:id',adminController.deleteBrands)
 
 
 //admin edit brands
@@ -135,13 +134,13 @@ router.get('/addproductspage',middleware.verifyAdmin,productController.adminAddP
 router.post('/addproducts',multerUpload.fields(uploadFields),productController.postAddProducts) 
 
 //show or hide product for the list of products
-router.get('/showorhide/:id',productController.showHideProduct)
+router.patch('/showorhide/:id',productController.showHideProduct)
 
 //delete product 
 router.get('/deleteproduct/:id',productController.deleteProduct)
 
 //edit product details page
-router.get('/editproducts/:id',productController.editProduct)
+router.delete('/editproducts/:id',productController.editProduct)
 
 //update product
 router.post('/updateproducts/:id',multerUpload.any(),productController.postEditProducts)
@@ -162,7 +161,7 @@ router.get('/adminorders',middleware.verifyAdmin,adminController.adminOrders)
 router.get('/orderlist1/:ids/:idk',adminController.orderList)
 
 //update order status by admin
-router.get('/updateorderstatus/:orderid/:status',adminController.orderStatus)
+router.put('/updateorderstatus/:orderid/:status',adminController.orderStatus)
 
 
 
@@ -205,6 +204,9 @@ router.get('/editcoupon/:id',couponController.getEditCoupon)
 
 //post edit coupon
 router.post('/posteditcoupon/:id',couponController.postEditCoupon)
+
+
+
 
 
 

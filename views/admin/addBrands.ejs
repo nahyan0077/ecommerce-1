@@ -105,6 +105,24 @@
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+
+<script>
+    function confirmLogout() {
+        Swal.fire({
+            title: 'Are you sure you want to logout?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/adminlogout';
+            }
+        });
+    }
+</script>
+
 <script>
     function validateBrandName() {
         const brandNameInput = document.getElementById('categoryName1');

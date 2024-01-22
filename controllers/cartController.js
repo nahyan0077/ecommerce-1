@@ -14,12 +14,11 @@ module.exports = {
             const cartData = await cart.findOne({ userId: id._id })
             req.session.cartId = id._id
 
-
-            if (cartData != null && cartData.products.length!=0) {
+            if (cartData != null && cartData.products.length != 0) {
 
                 //populating product details
                 const kart = await cart.findOne({ userId: id._id }).populate(
-                    {path: "products.productid", populate: { path: 'category_id', model: 'category' }});
+                    { path: "products.productid", populate: { path: 'category_id', model: 'category' } });
 
                 const carts = kart.products
 
@@ -74,70 +73,47 @@ module.exports = {
                     product.findOne({ _id: req.params.id })
                 ])
 
-                console.log("stock", prdkt.stockQuantity);
-
                 if (prdkt.stockQuantity != 0) {
                     if (Cart == null) {
-                        console.log("cart1");
+
                         const cartData = {
                             userId: usr._id,
-                            products: [
-                                {
-                                    productid: req.params.id,
-                                    quantity: 1
-                                }
-                            ]
+                            products: [{ productid: req.params.id, quantity: 1 }]
                         }
                         await cart.create(cartData)
+
                         res.json({ msg: "Product added to cart Successfully" })
                     } else {
-                        console.log("cart2");
 
                         const existPrdkt = await cart.findOne({ userId: usr._id, 'products.productid': req.params.id })
 
                         if (existPrdkt) {
-                            console.log("cart3");
+
                             await cart.updateOne(
-                                {
-                                    userId: usr._id, 'products.productid': req.params.id
-                                },
-                                {
-                                    $inc: {
-                                        'products.$.quantity': 1
-                                    }
-                                }
+                                { userId: usr._id, 'products.productid': req.params.id },
+                                { $inc: { 'products.$.quantity': 1 } }
                             )
+
                             res.json({ msg: "Product quantity updated" })
+
                         } else {
 
 
                             await cart.updateOne(
-                                {
-                                    userId: usr._id
-                                },
-                                {
-                                    $push:
-                                    {
-                                        products:
-                                        {
-                                            productid: req.params.id,
-                                            quantity: 1
-                                        }
-                                    }
-                                }
+                                { userId: usr._id },
+                                { $push: { products: { productid: req.params.id, quantity: 1 } } }
                             )
+
                             res.json({ msg: "New product added" })
                         }
                     }
                 } else {
                     res.json({ msg: "This product is out of stock" })
                 }
-
-
-
             } else {
                 res.json({ msg: "No user found" })
             }
+
         } catch (error) {
             console.log(error);
         }

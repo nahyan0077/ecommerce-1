@@ -60,11 +60,7 @@ module.exports = {
                 }else{
                     const wishData = {
                         userid : usr._id,
-                        products : [
-                            {
-                                productid : req.params.prdktId,
-                            }
-                        ]
+                        products : [ { productid : req.params.prdktId }]
                     }
                     await wishlist.create(wishData)
                     res.json({prdktExist:false,userr:true})
@@ -84,6 +80,14 @@ module.exports = {
 
             await wishlist.updateOne({_id:wishId},{$pull:{products:{productid:prdktid.trim()}}})
             res.json({msg:"Product removed from wishlist successfully"})
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    noWishlist : (req,res) => {
+        try {
+            res.render('user/noWishlist')
         } catch (error) {
             console.log(error);
         }

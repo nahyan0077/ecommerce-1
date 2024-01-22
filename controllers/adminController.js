@@ -315,26 +315,26 @@ module.exports = {
         try {
             const imgFiles = req?.files
             const details = req.body
-            
+
 
             let bannerImage = imgFiles.banner[0].filename
             const bannerDtls = { ...details, bannerImage }
 
-            const bannerExist = await banner.findOne({bannerName:req.body.bannerName})
+            const bannerExist = await banner.findOne({ bannerName: req.body.bannerName })
 
-            if(!bannerExist){
+            if (!bannerExist) {
 
                 req.session.successMessage = 'New Banner Added successfully';
                 await banner.create(bannerDtls)
                 res.redirect('/adminbanner')
-            }else{
-                await banner.updateOne({bannerName:req.body.bannerName},{$set:{bannerImage:bannerImage}})
+            } else {
+                await banner.updateOne({ bannerName: req.body.bannerName }, { $set: { bannerImage: bannerImage } })
                 req.session.errorMessage = 'Existing Banner is replaced';
                 res.redirect('/adminbanner')
             }
 
-            
-            
+
+
         } catch (error) {
             console.log(error);
         }
@@ -356,22 +356,9 @@ module.exports = {
 
 
             const orders = await order.aggregate([
-                {
-                    $lookup: {
-                        from: 'users',
-                        localField: 'userid',
-                        foreignField: '_id',
-                        as: 'userName'
-                    }
-                },
-                {
-                    $unwind: '$userName'
-                },
-                {
-                    $sort: {
-                        orderDate: -1 // Sort by orderDate in descending order
-                    }
-                },
+                { $lookup: { from: 'users', localField: 'userid', foreignField: '_id', as: 'userName' } },
+                { $unwind: '$userName' },
+                { $sort: { orderDate: -1 } },
                 {
                     $project: {
                         username: "$userName.username",
@@ -397,7 +384,7 @@ module.exports = {
             const retns = await returns.find()
 
             res.render('admin/adminOrders', { orders, retns })
-            
+
         } catch (error) {
             console.log(error);
         }
@@ -409,9 +396,6 @@ module.exports = {
         try {
             const odrId = req.params.ids
             const ordrs = await order.findOne({ _id: odrId }).populate("products.productid")
-
-            console.log("ujguj", odrId);
-            console.log("addtaa", ordrs);
 
             const retns = await returns.find({ orderId: odrId })
 
@@ -427,36 +411,35 @@ module.exports = {
         try {
             const orderId = req.params.orderid
             const status = req.params.status
-            console.log(orderId, status);
 
             const currentDate = new Date().toLocaleString("en-US", {
                 timeZone: "Asia/Kolkata",
             });
 
-            const ordr = await order.findOne({_id:orderId})
+            const ordr = await order.findOne({ _id: orderId })
 
 
             if (status == "Order Confirmed") {
                 await order.updateOne({ _id: orderId.trim() }, { $set: { orderStatus: status.trim() } })
-                ordr.products.forEach(async (data,index) => {
-                    if(data.status!="Cancelled"){
-                        await order.updateOne({ _id: orderId.trim() }, { $set: {  [`products.${index}.status`]: "Confirmed" } })
+                ordr.products.forEach(async (data, index) => {
+                    if (data.status != "Cancelled") {
+                        await order.updateOne({ _id: orderId.trim() }, { $set: { [`products.${index}.status`]: "Confirmed" } })
                     }
                 });
 
             } else if (status == "Order Shipped") {
-                await order.updateOne({ _id: orderId.trim() }, { $set: { orderStatus: status.trim()} })
-                ordr.products.forEach(async (data,index) => {
-                    if(data.status!="Cancelled"){
-                        await order.updateOne({ _id: orderId.trim() }, { $set: {  [`products.${index}.status`]: "Confirmed" } })
+                await order.updateOne({ _id: orderId.trim() }, { $set: { orderStatus: status.trim() } })
+                ordr.products.forEach(async (data, index) => {
+                    if (data.status != "Cancelled") {
+                        await order.updateOne({ _id: orderId.trim() }, { $set: { [`products.${index}.status`]: "Confirmed" } })
                     }
                 });
 
             } else if (status == "Order Delivered") {
-                await order.updateOne({ _id: orderId.trim() }, { $set: { orderStatus: status.trim(), deliveryDate: currentDate, PaymentStatus: "Paid"} })
-                ordr.products.forEach(async (data,index) => {
-                    if(data.status!="Cancelled"){
-                        await order.updateOne({ _id: orderId.trim() }, { $set: {  [`products.${index}.status`]: "Delivered" } })
+                await order.updateOne({ _id: orderId.trim() }, { $set: { orderStatus: status.trim(), deliveryDate: currentDate, PaymentStatus: "Paid" } })
+                ordr.products.forEach(async (data, index) => {
+                    if (data.status != "Cancelled") {
+                        await order.updateOne({ _id: orderId.trim() }, { $set: { [`products.${index}.status`]: "Delivered" } })
                     }
                 });
             }

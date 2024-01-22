@@ -44,10 +44,11 @@ module.exports = {
     //delete a coupon
     deleteCoupon: async (req, res) => {
         try {
-            console.log(req.params);
 
             await coupon.deleteOne({ _id: req.params.cupnId })
+            
             res.json({ msg: "Coupon deleted successfully" })
+
         } catch (error) {
             console.log(error);
         }
@@ -105,10 +106,8 @@ module.exports = {
     // apply coupon
     applyCoupon: async (req, res) => {
         try {
-            console.log(req.body.couponCode);
-            console.log(req.session.grandTotal);
 
-            const couponCode = req.body.couponCode;
+            const { couponCode } = req.body
             const grandTotal = req.session.grandTotal;
             const date = new Date();
 

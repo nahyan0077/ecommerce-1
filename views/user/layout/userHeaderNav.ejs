@@ -5,7 +5,7 @@
                 <nav class="main-nav">
                     <!-- ***** Logo Start ***** -->
                     <a href="index.html" class="logo">
-                        <img src="/images/ds_blk.png" style="max-width: 120px;margin-left: -260px;">
+                        <img src="/images/ds_blk.png" style="max-width: 100px;margin-left: -260px;">
                     </a>
                     <!-- ***** Logo End ***** -->
                     <!-- ***** Menu Start ***** -->
@@ -52,8 +52,12 @@
                             <% } %>
 
                         </li>
-
+                        <% if (check) { %>
                             <li><a href="/wishlist"><i class="fa-solid fa-heart" style="color: #000000;cursor: pointer;"></i></a></li>
+                         <% } else { %>
+                            <li><a href="/nowishlist"><i class="fa-solid fa-heart" style="color: #000000;cursor: pointer;"></i></a></li>
+                        <% } %>
+                            
 
                         
 

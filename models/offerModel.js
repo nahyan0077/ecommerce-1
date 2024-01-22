@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const OfferSchema = new Schema({
-    categoryName: {
-        type:String
+    category_id: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'category',
     },
     offerPercentage: {
         type:Number,

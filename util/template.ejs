@@ -28,7 +28,7 @@
 <body>
     <div class="d-flex justify-content-center align-items-center">
 
-        <h1 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Sales Report <%= `      ${startDate}    to      ${endDate}` %></h1>
+        <h2 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;">Sales Report <%= `      ${startDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}    to      ${endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}` %></h2>
     </div>
 
     <table>
@@ -46,8 +46,8 @@
                 <tr>
                     <td><%= order.userid %></td>
                     <td><%= order._id %></td>
-                    <td><%= order.OrderDate %></td>
-                    <td><%= order.totalAmount %></td>
+                    <td><%= order.orderDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+                    <td><%= order.discountAmount %></td>
                     <td><%= order.paymentMethod %></td>
                 </tr>
             <% }); %>

@@ -194,7 +194,7 @@
                                     <ul class="address-list">
                                         <!-- Sample address item -->
                                         <li class="address-item">
-                                            <button type="button" class="btn btn-info btn-sm"
+                                            <button type="button" class="badge badge-dark"
                                                 style="border-radius: 10px; height: 25px; font-size: 12px;">
                                                 <%= addrs[0].addressType %>
                                             </button><br><br>
@@ -223,7 +223,7 @@
                                         <ul class="address-list">
                                             <!-- Sample address item -->
                                             <li class="address-item">
-                                                <button type="button" class="btn btn-info btn-sm"
+                                                <button type="button" class="badge badge-dark"
                                                     style="border-radius: 10px; height: 25px; font-size: 12px;">
                                                     <%= addrs[i].addressType %>
                                                 </button><br><br>
@@ -335,7 +335,7 @@
                                         <input type="text" class="form-control border" name="couponCode" id="couponCode" placeholder="Coupon code" required oninput="this.value = this.value.toUpperCase()"/>
                                         <button type="button" class="btn btn-light border" onclick="applyCoupon()">Apply</button>
                                     </div>
-                                    <a href="/userprofile#coupons" style="color: blue;font-size: 14px;cursor: pointer;"><%= cupnCount%>  coupons available</a><br>
+                                    <a href="/userprofile/#coupons" style="color: blue;font-size: 14px;cursor: pointer;"><%= cupnCount%>  coupons available</a><br>
                                     
                                     <% if (cpnMsg) { %>
                                         <% if (cpnMsg!=false) { %>
