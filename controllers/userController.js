@@ -67,7 +67,7 @@ module.exports = {
             const [prdktsData, bstdl, banners, sbanners, offers] = await Promise.all([
                 product.find({ displayStatus: "Show" }).populate('category_id'),
                 product.find({ Tags: "bestdeal", displayStatus: "Show" }).populate('category_id'),
-                banner.find(),
+                banner.findOne({ bannerName: /^mainBanner/ }),
                 banner.find({ bannerName: /^subBanner/ }),
                 offer.find().populate('category_id')
             ])
@@ -356,7 +356,7 @@ module.exports = {
                     id: check._id
                 }
                 const token = jwt.sign(payload, secret, { expiresIn: '5m' })
-                const link = `http://localhost:3000/resetpassword/${check._id}/${token}`
+                const link = `http://drop-ship.shop/resetpassword/${check._id}/${token}`
 
                 console.log(link);
 

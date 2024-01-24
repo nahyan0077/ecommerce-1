@@ -1,6 +1,5 @@
 node_modules
-.env
 
-public/images/*
+
 public/product_images/*
 
