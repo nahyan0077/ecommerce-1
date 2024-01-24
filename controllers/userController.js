@@ -203,7 +203,7 @@ module.exports = {
                 displayStatus: "Show"
             };
 
-            const searchResults = await product.find(searchOptions);
+            const searchResults = await product.find(searchOptions).populate('category_id');
 
             res.render('user/searchProducts', { check: req.session.user, searchResults, searchTerm, cartCount: req.session.cartCount });
         } catch (err) {

@@ -315,14 +315,14 @@ function addToCart(id) {
 
 
 //update quantity count in cart
-function updateQuantity(count,prodId,qty,usrId){
+function updateQuantity(count, prodId, qty, usrId) {
     console.log("ajax okkk");
     $.ajax({
-        
-        url:"/updatequantity/"+`${count}/${prodId}/${qty}/${usrId}`,
-        
-        method:"patch",
-        success:function (response){
+
+        url: "/updatequantity/" + `${count}/${prodId}/${qty}/${usrId}`,
+
+        method: "patch",
+        success: function (response) {
             Toastify({
                 text: "Product quantity updated",
                 duration: 1000,
@@ -330,14 +330,14 @@ function updateQuantity(count,prodId,qty,usrId){
                 position: "center",
                 backgroundColor: "blue",
                 stopOnFocus: true,
-              }).showToast();
-        
-              // Delay the reload by 3 seconds (3000 milliseconds)
-              setTimeout(function () {
-                window.location.reload();
-              }, 500);
+            }).showToast();
+
+            // Delay the reload by 3 seconds (3000 milliseconds)
+            setTimeout(function () {
+                location.reload();
+            }, 500);
         },
-        error:function (err){
+        error: function (err) {
             alert("Something Error")
             console.log(err);
         }
@@ -391,7 +391,7 @@ function removeCart(prdktId) {
 }
 
 
-  function clearCart(prdktid) {
+function clearCart(prdktid) {
     Swal.fire({
         title: 'Are you sure?',
         text: 'This will remove all items from your cart.',
@@ -505,7 +505,7 @@ function confirmOrder(type) {
 
                 console.log("onlin", res.order);
                 createRazorpay(res.order);
-            } else if(res.payMthd == "wallet"){
+            } else if (res.payMthd == "wallet") {
                 console.log("waltt");
 
                 location.href = "/paymentsuccesspage";
@@ -529,56 +529,56 @@ function confirmOrder(type) {
 
 
 //   create razorpaay-------------------
-function createRazorpay(order){
-    
+function createRazorpay(order) {
+
     const id = order.id;
     const total = order.amount;
-    console.log("kujghio",id,total);
+    console.log("kujghio", id, total);
     var options = {
-      key:'rzp_test_EIu4LwyKLdhV1J',
-      amount: total,
-      currency: 'INR',
-      name: 'DropShip',
-      description: 'Test Transaction',
-      image: '../images/ds_blk.png',
-      order_id: id,
-      handler: function (response) {
+        key: 'rzp_test_EIu4LwyKLdhV1J',
+        amount: total,
+        currency: 'INR',
+        name: 'DropShip',
+        description: 'Test Transaction',
+        image: '../images/ds_blk.png',
+        order_id: id,
+        handler: function (response) {
 
-        // alert(response.razorpay_payment_id);
-        // alert(response.razorpay_order_id);
-        verifyPayment(response,order)
-       
-      },
-      theme: {
-        color: '#3c3c3c'
-      }
+            // alert(response.razorpay_payment_id);
+            // alert(response.razorpay_order_id);
+            verifyPayment(response, order)
+
+        },
+        theme: {
+            color: '#3c3c3c'
+        }
     }
     var rzp1 = new Razorpay(options);
     rzp1.open();
 }
 
 
-  // verify payment -----------------------------
-  function verifyPayment(payment,order){
+// verify payment -----------------------------
+function verifyPayment(payment, order) {
     $.ajax({
-        
-      url:'/verifypayment',
-      method:"post",
-      data:{
-        payment,
-        order
-      },
-      success:function (response){
-        if(response.success){
-          location.href='/paymentsuccesspage'
-        }    
-      },
-      error:function (err){
-          alert("Something Error")
-  
-      }
-  })
-  }
+
+        url: '/verifypayment',
+        method: "post",
+        data: {
+            payment,
+            order
+        },
+        success: function (response) {
+            if (response.success) {
+                location.href = '/paymentsuccesspage'
+            }
+        },
+        error: function (err) {
+            alert("Something Error")
+
+        }
+    })
+}
 
 
 
@@ -615,7 +615,7 @@ function updateOrderStatus(orderid, status) {
                     setTimeout(() => {
                         window.location.reload();
                     }, 1000);
-                    
+
                 },
                 error: function (err) {
                     Swal.fire({
@@ -842,7 +842,7 @@ function applyCoupon() {
         data: { couponCode: couponCode }, // Pass the coupon code to the server
         success: function (response) {
             // Show success notification using SweetAlert
-            if(response.msg){
+            if (response.msg) {
                 Swal.fire({
                     icon: 'success',
                     title: 'Coupon Applied',
@@ -850,7 +850,7 @@ function applyCoupon() {
                     showConfirmButton: false,
                     timer: 3000
                 });
-            }else if(response.errMsg){
+            } else if (response.errMsg) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Coupon not Applied',
@@ -881,9 +881,9 @@ function applyCoupon() {
 
 
 
- 
-  
-  
+
+
+
 
 
 
@@ -894,7 +894,7 @@ function addToWishlist(prddktId) {
         url: "/addtowishlist/" + `${prddktId}`,
         method: "get",
         success: function (res) {
-            if(res.userr == false){
+            if (res.userr == false) {
                 Toastify({
                     text: 'No user Found Please Login',
                     duration: 3000,
@@ -903,7 +903,7 @@ function addToWishlist(prddktId) {
                     backgroundColor: 'red',
                     stopOnFocus: true,
                 }).showToast();
-            }else if (res.prdktExist == false && res.userr == true) {
+            } else if (res.prdktExist == false && res.userr == true) {
                 // Show success notification using Toastify
                 Toastify({
                     text: 'Product added to wishlist',
@@ -922,7 +922,7 @@ function addToWishlist(prddktId) {
                     showConfirmButton: false,
                     timer: 3000
                 });
-            } 
+            }
         },
         error: function (err) {
             // Show error notification using SweetAlert
@@ -963,7 +963,7 @@ function removeFromWishlist(prdktid, wishId) {
                         backgroundColor: 'green',
                         stopOnFocus: true,
                     }).showToast();
-                    
+
                     // Reload the page after 3 seconds
                     setTimeout(function () {
                         location.reload();
@@ -1032,79 +1032,79 @@ function delete_offer(offerid) {
 
 function updatecount(id) {
     $.ajax({
-      url:id,
-      method: 'get',
-      success: (res) => {
-        new Chart("reportsChart", {
-          type: "line",
-          data: {
-            labels: res.labelsByCount,
-            datasets: [{
-              label: "Sales by orders",
-              data: res.dataByCount,
-              borderColor: "blue",
-              fill: false
-            }]
-          },
-          options: {
-            legend: { display: true },
-            text: "Sales by Amount"
-          }
-        });
-  
-        var barColors = ["red", "green", "blue", "orange", "brown","blue",
-        "#00aba9",
-        "#2b5797",
-        "#e8c3b9",
-        "#1e7145",
-        "red", "green"];
-  
-        new Chart("barChart", {
-          type: "bar",
-          data: {
-            labels: res.labelsByAmount,
-            datasets: [{
-              backgroundColor: barColors,
-              data: res.dataByAmount
-            }]
-          },
-          options: {
-            legend: { display: false },
-            title: {
-              display: true,
-              text: "Sales by Amount"
-            }
-          }
-        });
-  
-        var barColors = [
-          "blue",
-          "#00aba9",
-          "#2b5797",
-          "#e8c3b9",
-          "#1e7145",
-          "red", "green", "blue", "orange", "brown","yellow"
-        ];
-  
-        new Chart("pieChart", {
-          type: "pie",
-          data: {
-            labels: res.labelsByCount,
-            datasets: [{
-              backgroundColor: barColors,
-              data: res.dataByCount
-            }]
-          },
-          options: {
-            title: {
-              display: true,
-              text: "sales by order"
-            }
-          }
-        });
-      }
+        url: id,
+        method: 'get',
+        success: (res) => {
+            new Chart("reportsChart", {
+                type: "line",
+                data: {
+                    labels: res.labelsByCount,
+                    datasets: [{
+                        label: "Sales by orders",
+                        data: res?.dataByCount,
+                        borderColor: "blue",
+                        fill: false
+                    }]
+                },
+                options: {
+                    legend: { display: true },
+                    text: "Sales by Amount"
+                }
+            });
+
+            var barColors = ["red", "green", "blue", "orange", "brown", "blue",
+                "#00aba9",
+                "#2b5797",
+                "#e8c3b9",
+                "#1e7145",
+                "red", "green"];
+
+            new Chart("barChart", {
+                type: "bar",
+                data: {
+                    labels: res.labelsByAmount,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: res?.dataByAmount
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Sales by Amount"
+                    }
+                }
+            });
+
+            var barColors = [
+                "blue",
+                "#00aba9",
+                "#2b5797",
+                "#e8c3b9",
+                "#1e7145",
+                "red", "green", "blue", "orange", "brown", "yellow"
+            ];
+
+            new Chart("pieChart", {
+                type: "pie",
+                data: {
+                    labels: res.labelsByCount,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: res.dataByCount
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "sales by order"
+                    }
+                }
+            });
+        }
     });
-  }
+}
 
 
 

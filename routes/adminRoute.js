@@ -137,10 +137,10 @@ router.post('/addproducts',multerUpload.fields(uploadFields),productController.p
 router.patch('/showorhide/:id',productController.showHideProduct)
 
 //delete product 
-router.get('/deleteproduct/:id',productController.deleteProduct)
+router.delete('/deleteproduct/:id',productController.deleteProduct)
 
 //edit product details page
-router.delete('/editproducts/:id',productController.editProduct)
+router.get('/editproducts/:id',productController.editProduct)
 
 //update product
 router.post('/updateproducts/:id',multerUpload.any(),productController.postEditProducts)

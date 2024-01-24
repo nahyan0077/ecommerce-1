@@ -65,9 +65,8 @@ module.exports = {
     addToCart: async (req, res) => {
         try {
             const usr = await user.findOne({ email: req.session.user })
-            console.log("usr", usr);
-            if (usr) {
 
+            if (usr) {
                 const [Cart, prdkt] = await Promise.all([
                     cart.findOne({ userId: usr._id }),
                     product.findOne({ _id: req.params.id })
@@ -136,7 +135,7 @@ module.exports = {
                 }
 
 
-                //to reduce the quantity of products
+            //to reduce the quantity of products
             } else {
                 await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.prodId }, { $inc: { 'products.$.quantity': -1 } })
 

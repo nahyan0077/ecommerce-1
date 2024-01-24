@@ -173,11 +173,12 @@
                             </div>
                         </div>
                         <div class="col-lg-2 col-sm-6 col-6 d-flex flex-row flex-lg-column flex-xl-row text-nowrap">
-                          <div class="d-flex align-items-center">
-                            <button class="btn btn-light border" onclick="updateQuantity(-1,'<%-data.productid._id-%>','<%-data.quantity-%>','<%-data._id-%>')" <% if (data.quantity === 1) { %>disabled<% } %> >-</button>
-                            <input type="number" style="width: 50px;" class="form-control border text-center" value="<%= data.quantity %>" readonly />
-                            <button class="btn btn-light border" onclick="updateQuantity(+1,'<%-data.productid._id-%>','<%-data.quantity-%>','<%-data._id-%>')" <% if (data.quantity === 5) { %>disabled<% } %> >+</button>
-                        </div>
+                            <div class="d-flex align-items-center">
+                                <button class="btn btn-light border" onclick="updateQuantity(-1, '<%= data.productid._id %>', '<%= data.quantity %>', '<%= data._id %>')" <% if (data.quantity === 1) { %>disabled<% } %> >-</button>
+                                <input type="number" id="quantity-<%= data.productid._id %>" style="width: 50px;" class="form-control border text-center" value="<%= data.quantity %>" readonly />
+                                <button class="btn btn-light border" onclick="updateQuantity(+1, '<%= data.productid._id %>', '<%= data.quantity %>', '<%= data._id %>')" <% if (data.quantity === 5) { %>disabled<% } %> >+</button>
+                            </div>
+                            
                             <div class="" style="margin-left: 62px;margin-top: 30px;">
                                 <text class="h6">₹  <%-data.productid.DiscountAmount-%></text> <br />
                                 <del class="text-muted text-nowrap" style="font-size: small;">₹  <%-data.productid.price-%></del>

@@ -18,7 +18,7 @@ module.exports = {
 
             const [sales, revenue, customers, recentOrders, topSelling] = await Promise.all([
                 order.aggregate([
-                    { $match: { orderStatus: { $nin: ["Order Rejected", "Cancelled"] } } },
+                    { $match: { orderStatus: "Order Delivered" } },
                     { $group: { _id: null, totalSalesCount: { $sum: 1 } } }]),
 
                 order.aggregate([

@@ -79,6 +79,7 @@ module.exports = {
 
     editProduct: async (req, res) => {
         try {
+            
             let id = req.params.id
             let edtPrdkt = await products.find({ _id: id }).populate('brand_id').populate('category_id')
             const brnd = await brand.find()
