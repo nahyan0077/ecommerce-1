@@ -45,11 +45,11 @@ module.exports = {
             const [prdktsData, bstdl, banners, sbanners, offers] = await Promise.all([
                 product.find({ displayStatus: "Show" }).populate('category_id'),
                 product.find({ Tags: "bestdeal", displayStatus: "Show" }).populate('category_id'),
-                banner.find(),
+                banner.find({ bannerName: /^mainBanner/ }),
                 banner.find({ bannerName: /^subBanner/ }),
                 offer.find().populate('category_id')
             ])
-            console.log(offers);
+ 
 
             res.render('user/guestHome', { prdktsData, banners, sbanners, bstdl, check: req.session.name, offers })
 
@@ -67,7 +67,7 @@ module.exports = {
             const [prdktsData, bstdl, banners, sbanners, offers] = await Promise.all([
                 product.find({ displayStatus: "Show" }).populate('category_id'),
                 product.find({ Tags: "bestdeal", displayStatus: "Show" }).populate('category_id'),
-                banner.findOne({ bannerName: /^mainBanner/ }),
+                banner.find({ bannerName: /^mainBanner/ }),
                 banner.find({ bannerName: /^subBanner/ }),
                 offer.find().populate('category_id')
             ])
