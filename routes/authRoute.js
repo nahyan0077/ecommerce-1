@@ -138,7 +138,7 @@ router.get('/nocart',middleware.userExist,userController.noCart)
 router.get('/usercart',middleware.verifyUser,cartController.getCart)
 
 //add to cart 
-router.put('/addtocart/:id',cartController.addToCart)
+router.put('/addtocart/:id/:discPrice',cartController.addToCart)
 
 //update quantity in cart
 router.patch('/updatequantity/:count/:prodId/:qty/:usrId',cartController.updateQuantity)

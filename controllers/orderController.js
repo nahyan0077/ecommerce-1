@@ -454,17 +454,17 @@ module.exports = {
                 const walletFind = await wallet.findOne({ userid: ordr.userid })
 
                 if (walletFind) {
-                    await wallet.updateOne({ userid: ordr.userid }, { $inc: { wallet: ordr.discountAmount } })
+                    await wallet.updateOne({ userid: ordr.userid }, { $inc: { wallet: ordr.totalAmount } })
                 } else {
                     await wallet.create({
                         userid: ordr.userid,
-                        wallet: ordr.discountAmount
+                        wallet: ordr.totalAmount
                     })
                 }
                 //wallet history update
                 const wallHstry = await walletHistory.findOne({ userid: ordr.userid })
                 if (wallHstry) {
-                    const amount = ordr.discountAmount;
+                    const amount = ordr.totalAmount;
                     const reason = "Refund of cancelling order";
                     const type = "credit";
                     const date = new Date();
@@ -474,7 +474,7 @@ module.exports = {
                         { new: true }
                     );
                 } else {
-                    const amount = ordr.discountAmount;
+                    const amount = ordr.totalAmount;
                     const reason = "Refund of cancelling order";
                     const type = "credit";
                     const date = new Date();
@@ -483,6 +483,8 @@ module.exports = {
                         refund: [{ amount: amount, reason: reason, type: type, date: date }],
                     });
                 }
+
+                await order.updateOne({_id: orderId},{$set: { PaymentStatus: "Refunded" } })
             }
 
             await order.updateOne(
@@ -616,9 +618,10 @@ module.exports = {
         try {
             console.log(req.body);
             const { prdktId, orderId, userId, status, index } = req.body
-
-            const odrDtls = await order.findOne({ _id: orderId })
-            const prdkt = await product.findOne({ _id: prdktId })
+            const [odrDtls, prdkt] = Promise.all([
+                order.findOne({ _id: orderId }),
+                product.findOne({ _id: prdktId })
+            ])
 
             var totalAmnt = prdkt.DiscountAmount * odrDtls.products[index].quantity;
 
@@ -739,7 +742,7 @@ module.exports = {
             if (orderDetails) {
 
                 const invoicePath = await generateInvoice(orderDetails,index,deliveredProducts)
-                res.json({ success: true, message: "Invoice generated successfully", invoicePath, });
+                res.json({ success: true, message: "Invoice generated successfully", invoicePath });
 
             } else {
 
@@ -760,23 +763,24 @@ module.exports = {
             console.log(id);
             const filePath = `D:\\project\\ecommerce-1\\public\\invoPdf\\${id}.pdf`;
 
-            if (fs.existsSync(filePath)) {
+            // if (fs.existsSync(filePath)) {
 
-                const fileName = `Invoice_${id}.pdf`;
+            //     const fileName = `Invoice_${id}.pdf`;
     
-                res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-                res.setHeader('Content-Type', 'application/pdf');
+            //     res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+            //     res.setHeader('Content-Type', 'application/pdf');
     
-                const fileStream = fs.createReadStream(filePath);
-                fileStream.pipe(res);
+            //     const fileStream = fs.createReadStream(filePath);
+            //     fileStream.pipe(res);
     
-                fileStream.on('end', () => {
-                    console.log(`Invoice ${id} downloaded successfully.`);
-                });
-            } else {
-                // If the file doesn't exist
-                res.status(404).json({ success: false, message: "Invoice not found" });
-            }
+            //     fileStream.on('end', () => {
+            //         console.log(`Invoice ${id} downloaded successfully.`);
+            //     });
+            // } else {
+            //     // If the file doesn't exist
+            //     res.status(404).json({ success: false, message: "Invoice not found" });
+            // }
+            res.download(filePath,`invoice_${id}.pdf`)
         } catch (error) {
             console.error("Error in downloading the invoice:", error);
             res.status(500).json({ success: false, message: "Error in downloading the invoice" });

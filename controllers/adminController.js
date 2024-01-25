@@ -431,7 +431,7 @@ module.exports = {
                 await order.updateOne({ _id: orderId.trim() }, { $set: { orderStatus: status.trim() } })
                 ordr.products.forEach(async (data, index) => {
                     if (data.status != "Cancelled") {
-                        await order.updateOne({ _id: orderId.trim() }, { $set: { [`products.${index}.status`]: "Confirmed" } })
+                        await order.updateOne({ _id: orderId.trim() }, { $set: { [`products.${index}.status`]: "Shipped" } })
                     }
                 });
 

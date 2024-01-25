@@ -84,6 +84,7 @@
     </style>
 
     <style>
+
         *::selection {
             background-color: transparent;
         }
@@ -95,11 +96,8 @@
 
 
 
-
-
         .contenir {
-            width: 740px;
-            height: 50px;
+
             display: flex;
             justify-content: center;
             align-items: center;
@@ -634,7 +632,7 @@
                                         </p><br>
                                         <div class="container" style="display: flex; align-items: center;">
                                             <input type="text" id="linkText"
-                                                value="http://drop-ship.shop/usersignup/?refer=<%= usrData._id %>"
+                                                value="https://drop-ship.shop/usersignup/?refer=<%= usrData._id %>"
                                                 style="flex: 1; font-size: 14px; padding: 10px; border-radius: 20px; background-color: #d9d8ff; margin-left: 100px; max-width: 415px;"
                                                 readonly />
                                             <button onclick="copyLink('linkText', 'copyButton')" id="copyButton"

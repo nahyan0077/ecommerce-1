@@ -356,9 +356,7 @@ module.exports = {
                     id: check._id
                 }
                 const token = jwt.sign(payload, secret, { expiresIn: '5m' })
-                const link = `http://drop-ship.shop/resetpassword/${check._id}/${token}`
-
-                console.log(link);
+                const link = `https://drop-ship.shop/resetpassword/${check._id}/${token}`
 
                 sendResetEmail(check.email, link)
                 const msg = "Password reset link has been sent to your Email"
@@ -379,8 +377,7 @@ module.exports = {
         try {
             const { id, token } = req.params
             const userId = await user.findOne({ _id: id })
-            console.log(id);
-            console.log(token);
+
             if (userId == null) {
                 const msg = "invalid link"
                 res.render('user/verifyEmail', { msg })

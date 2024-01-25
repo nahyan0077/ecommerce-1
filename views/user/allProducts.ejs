@@ -45,8 +45,7 @@
 
 
     .contenir {
-      width: 740px;
-      height: 50px;
+
       display: flex;
       justify-content: center;
       align-items: center;
@@ -448,8 +447,12 @@
                             <%= discountPercentage %>% OFF
                     </button>
                     <% } %>
+                    <% if (locals.check) { %> 
+                      <a href="/singleproduct/<%-data._id-%>"><img src="/product_images/<%= data.images[0] %>" class="inner-img card-img-top" /></a>
+                  <% } else { %>
+                    <a href="/singleproductnouser/<%-data._id-%>"><img src="/product_images/<%= data.images[0] %>" class="inner-img card-img-top" /></a>
+                  <% } %>
                     
-                    <img src="/product_images/<%= data.images[0] %>" class="inner-img card-img-top" />
                     <div class="card-body">
                       <h6 style="font-size: 18px;"><%-data.productName-%></h6><br>
                       <div class="d-flex flex-row">

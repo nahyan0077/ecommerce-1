@@ -64,12 +64,13 @@ module.exports = {
     //add a product to cart
     addToCart: async (req, res) => {
         try {
+            const {id, discPrice} = req.params
             const usr = await user.findOne({ email: req.session.user })
 
             if (usr) {
                 const [Cart, prdkt] = await Promise.all([
                     cart.findOne({ userId: usr._id }),
-                    product.findOne({ _id: req.params.id })
+                    product.findOne({ _id: id })
                 ])
 
                 if (prdkt.stockQuantity != 0) {
@@ -77,7 +78,7 @@ module.exports = {
 
                         const cartData = {
                             userId: usr._id,
-                            products: [{ productid: req.params.id, quantity: 1 }]
+                            products: [{ productid: req.params.id, quantity: 1, price: discPrice }]
                         }
                         await cart.create(cartData)
 
@@ -100,7 +101,7 @@ module.exports = {
 
                             await cart.updateOne(
                                 { userId: usr._id },
-                                { $push: { products: { productid: req.params.id, quantity: 1 } } }
+                                { $push: { products: { productid: req.params.id, quantity: 1, price: discPrice } } }
                             )
 
                             res.json({ msg: "New product added" })
@@ -127,6 +128,8 @@ module.exports = {
             //to add prduct quantity
             if (req.params.count == 1) {
 
+                
+
                 if (prdkt.stockQuantity == req.params.qty) {
                     res.json({ msg: "Product stock limit has reached" })
                 } else {
@@ -134,12 +137,22 @@ module.exports = {
                     res.json({ msg: "Product Quantity Updated" })
                 }
 
+                if(req.params.qty >= 5){
+                    await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.prodId }, { $set: { 'products.$.quantity': 5 } })
+                    res.json({ msg: "Product Quantity limit exceeded" })
+                }
+
 
             //to reduce the quantity of products
             } else {
                 await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.prodId }, { $inc: { 'products.$.quantity': -1 } })
 
-                res.json({ msg: "Product Quantity Updated" })
+
+                if(req.params.qty <= 0){
+                    await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.prodId }, { $set: { 'products.$.quantity': 1 } })
+                    res.json({ msg: "Product Quantity can't be less than zero " })
+                }
+
             }
         } catch (error) {
             console.log(error);

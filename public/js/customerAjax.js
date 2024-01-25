@@ -278,10 +278,10 @@ function deleteAddress(id) {
 
 
 //add to cart 
-function addToCart(id) {
+function addToCart(id,discPrice) {
     console.log("ajax working ");
     $.ajax({
-        url: "/addtocart/" + `${id}`,
+        url: "/addtocart/" + `${id}/${discPrice}`,
         method: "put",
         success: function (response) {
             Toastify({
@@ -323,6 +323,7 @@ function updateQuantity(count, prodId, qty, usrId) {
 
         method: "patch",
         success: function (response) {
+            location.reload()
             Toastify({
                 text: "Product quantity updated",
                 duration: 1000,

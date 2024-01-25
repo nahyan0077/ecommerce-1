@@ -17,7 +17,7 @@ module.exports = {
             const { username, email, password } = req.body;
             if (existinguser) {
                 const userExist = true
-                res.render('user/userSignup', { userExist })
+                res.render('user/userSignup', { userExist, refer: '' })
                 console.log("user exist");
             } else {
 

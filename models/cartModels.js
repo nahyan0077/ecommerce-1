@@ -10,6 +10,7 @@ var cartSchema = new mongoose.Schema(
             {
                 productid:{type: mongoose.Schema.Types.ObjectId, ref: "productDetails"},
                 quantity: { type: Number },
+                price: { type: Number }
             }
         ]
     }
