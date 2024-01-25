@@ -85,8 +85,6 @@ module.exports = {
                 res.redirect('/admincoupon')
             }
 
-
-
         } catch (error) {
             console.log(error);
         }

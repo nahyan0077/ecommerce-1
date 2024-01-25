@@ -36,7 +36,7 @@ module.exports = {
             ])
 
             if (carts) {
-                res.render('user/checkoutPage', { grandTotal: req.session.grandTotal, totalDiscount: req.session.totalDiscount, total: req.session.total, addrs, check: req.session.name, cpnMsg: req.session.cpnMsg, cupnDisc: req.session.cpnDiscount, cupnCount, orderss, cartCount: req.session.cartCount, walBalnc , errorMessage , successMessage })
+                res.render('user/checkoutPage', { grandTotal: req.session.grandTotal, totalDiscount: req.session.totalDiscount, total: req.session.total, addrs, check: req.session.name, cpnMsg: req.session.cpnMsg, cupnDisc: req.session.cpnDiscount, cupnCount, orderss, cartCount: req.session.cartCount, walBalnc , errorMessage , successMessage, addrSlct: req.session.adrsId })
             } else {
                 res.redirect('/userhome')
             }

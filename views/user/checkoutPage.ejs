@@ -140,730 +140,782 @@
 
     <%- include('./layout/userHeaderNav') %>
 
-    <% if (successMessage || errorMessage) { %>
-        <div class="position-fixed top-0 start-50 translate-middle-x" style="z-index: 1000; width: 300px;">
-            <div class="alert alert-dismissible fade show <% if (successMessage) { %>alert-success<% } else { %>alert-danger<% } %>" role="alert">
-                <%= successMessage || errorMessage %>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
-    
-        <script>
-            // Hide the message after 5 seconds
-            setTimeout(function() {
-                document.querySelector('.alert')?.remove();
-            }, 5000);
-        </script>
-    <% } %>
-
-
-
-    <!-- cart + summary -->
-    <section class="bg-light my-5" style="padding-top: 100px;">
-        <div class="container">
-            <div class="row">
-
-
-                <!-- Addresses -->
-
-                <div class="col-lg-9">
-                    <div class="card-header">
-                        <a  class="btn btn-primary float-end" onclick="openModal()">Add Address</a>
-                        <h4 class="card-title ">Delivery Address</h4>
-                    </div>
-
-
-                    <% if (addrs[0]!=null) { %>
-                     
-                    
-
-                    <div class="card border shadow-0" id="addressCard0">
-                        <div class="m-4">
-
-                            <!-- Container to display existing addresses -->
-                            <div id="existingAddressesContainer">
-
-                                <!-- Display the first address -->
-                                <div class="form-check mb-2">
-                                    <!-- Container for selected label -->
-                                        <div id="selectedLabelContainer" class="float-end"></div>
-
-                                    <input class="form-check-input" type="radio" name="existingAddress" id="address0">
-
-                                    <ul class="address-list">
-                                        <!-- Sample address item -->
-                                        <li class="address-item">
-                                            <button type="button" class="badge badge-dark"
-                                                style="border-radius: 10px; height: 25px; font-size: 12px;">
-                                                <%= addrs[0].addressType %>
-                                            </button><br><br>
-                                            <p style="font-weight: bold;"><%-addrs[0].name-%></p>
-                                            <p>
-                                                <%= addrs[0].address %>, <%= addrs[0].locality %>, <%= addrs[0].city %>,
-                                                            <%= addrs[0].district %>, <%= addrs[0].state %>
-                                            </p>
-                                            <p><%-addrs[0].mobile-%></p>
-                                            <p><%-addrs[0].pincode-%></p>
-                                            <br>
-                                            <button type="button" class="btn btn-success btn-sm d-none"
-                                                id="deliverHereBtn0" onclick="selectAddress('<%-addrs[0]._id-%>')">Deliver
-                                                Here</button>
-                                        </li>
-                                    </ul>
-                                    <hr style="color: #9a9a9a;">
-                                </div>
-
-                                <!-- Display remaining addresses initially hidden -->
-                                <% for (let i=1; i < addrs.length; i++) { %>
-                                    <div class="form-check mb-2 hidden-address">
-                                        <input class="form-check-input" type="radio" name="existingAddress"
-                                            id=<%="address" +i%>>
-
-                                        <ul class="address-list">
-                                            <!-- Sample address item -->
-                                            <li class="address-item">
-                                                <button type="button" class="badge badge-dark"
-                                                    style="border-radius: 10px; height: 25px; font-size: 12px;">
-                                                    <%= addrs[i].addressType %>
-                                                </button><br><br>
-                                                <p style="font-weight: bold;"><%-addrs[i].name-%></p>
-                                                <p>
-                                                    <%= addrs[i].address %>, <%= addrs[i].locality %>, <%= addrs[i].city
-                                                                %>, <%= addrs[i].district %>, <%= addrs[i].state %>
-                                                </p>
-                                                <p><%-addrs[i].mobile-%></p>
-                                                <p><%-addrs[i].pincode-%></p>
-                                                <br>
-                                                <a type="button" class="btn btn-success btn-sm d-none"
-                                                    id=<%="deliverHereBtn" +i%> onclick="selectAddress('<%-addrs[i]._id-%>')">Deliver
-                                                    Here</a>
-                                            </li>
-                                        </ul>
-                                        <hr style="color: #9a9a9a;">
-                                    </div>
-                                    <% } %>
-
-                                        <!-- Show/Hide button for additional addresses -->
-                                        <% if (addrs.length> 1) { %>
-                                            <div class="text-end">
-                                                <a href="#" class="show-all-addresses"
-                                                    onclick="toggleHiddenAddresses()">Show All</a>
-                                            </div>
-                                            <% } %>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <% } %>
-
-                    <br>
-
-                    <!-- Payment Options -->
-                    <div class="card-header" id="paymentt">
-                        <h4 class="card-title ">Payment Options</h4>
-                    </div>
-
-
-
-                    <!-- Payment Options -->
-                    <div class="card border shadow-0">
-                        <div class="m-4" style="padding-left: 30px">
-
-                            <!-- Radio buttons for payment options -->
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="paymentOption" id="onlinePayment"
-                                    value="onlinePayment">
-                                <label class="form-check-label" for="onlinePayment" style="font-weight: bold;">
-                                    Online Payment
-                                </label>
-                            </div>
-
-                            <br>
-
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="paymentOption" id="cashOnDelivery"
-                                    value="cashOnDelivery">
-                                <label class="form-check-label" for="cashOnDelivery" style="font-weight: bold;" >
-                                    Cash on Delivery
-                                </label>
-                            </div>
-
-                            <br>
-
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="radio" name="paymentOption" id="walletPayment"
-                                    value="walletPayment">
-                                <label class="form-check-label" for="walletPayment" style="font-weight: bold;">
-                                    Wallet Payment
-                                </label>
-                                <br>
-                                <% if (walBalnc) { %>
-                                    <p id="walletBalance"  class="text-bg-dark" style="margin-left: 10px;">Balance: <span style="margin-left: 10px;color: green;">₹ <%= walBalnc.wallet %></span> </p>
-                                <% } %>
-                                
-
-                            </div>
-
-                            <!-- Confirm Order button -->
-                            <button type="button" class="btn btn-primary mt-3 float-end" id="confirmOrderBtn" onclick="performAjax()" disabled>
-                                Confirm Order
-                            </button>
-
-                        </div>
-                    </div>
-
-
-                </div>
-
-
-
-
-
-
-                <!-- summary -->
-                <div class="col-lg-3">
-                    <div class="card mb-3 border shadow-0">
-                        <div class="card-body">
-                            <form id="couponForm" method="post">
-                                <div class="form-group">
-                                    <label class="form-label">Have coupon?</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control border" name="couponCode" id="couponCode" placeholder="Coupon code" required oninput="this.value = this.value.toUpperCase()"/>
-                                        <button type="button" class="btn btn-light border" onclick="applyCoupon()">Apply</button>
-                                    </div>
-                                    <a href="/userprofile/#coupons" style="color: blue;font-size: 14px;cursor: pointer;"><%= cupnCount%>  coupons available</a><br>
-                                    
-                                    <% if (cpnMsg) { %>
-                                        <% if (cpnMsg!=false) { %>
-                                            <small style="color: rgb(30, 179, 30);">Coupon applied successfully</small>
-                                        <% } else { %>
-                                            <small style="color: red;">Invalid Coupon Code or Coupon Expired</small>
-                                        <% } %>
-                                    <% } %>
-                                    
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    
-
-
-
-                    <div class="card shadow-0 border">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-2">Total price:</p>
-                                <p class="mb-2">₹ <%= total%>
-                                </p>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-2">Discount:</p>
-                                <p class="mb-2 text-success">-₹ <%= totalDiscount %>
-                                </p>
-                            </div>
-
-                            <% if (cupnDisc) { %>
-
-                                <div class="d-flex justify-content-between">
-                                    <p class="mb-2">Coupon Discount:</p>
-                                    <p class="mb-2 text-success">-₹ <%= cupnDisc %>
-                                    </p>
-                                </div>
-
-                            <% } %>
-
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-2">Delivery charges:</p>
-                                <span style="font-size: small;color: green;">Free</span><del
-                                    class="text-muted text-nowrap" style="font-size: small;">₹ 40 </del>
-                            </div>
-                            <hr />
-                            <div class="d-flex justify-content-between">
-                                <p class="mb-2">Total price:</p>
-                                <p class="mb-2 fw-bold">₹ <%= grandTotal%>
-                                </p>
-                            </div>
-
-                            <!-- <div class="mt-3">
-                                <a href="#" class="btn btn-success w-100 shadow-0 mb-2"> Place Order </a>
-                                <a href="/allproducts" class="btn btn-light w-100 border mt-2"> Back to shop </a>
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
-                <!-- summary -->
-            </div>
-        </div>
-    </section>
-    <!-- cart + summary -->
-
-
-        <!-- address-modal -->
-        <div class="modal" id="addressModal" style="max-height: 700px;margin-top: 10px;margin-left: 500px;">
-            <div class="modal-content" style="height: 800px; max-width: 700px;">
-                <!-- Inside the <div class="modal-content"> -->
-                <div class="modal-body"
-                    style="max-width: 500px; margin: 0 auto; width: 530px; ">
-                    <button type="button" class="close" aria-label="Close" onclick="closeModal()">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h2 class="text-center mb-4">Add New Address</h2>
-                    <form class="needs-validation" action="/postaddaddress-checkout" method="post" novalidate>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="name">Name:</label>
-                                <input type="text" class="form-control" id="name" name="name" oninput="validateName(); updateAddAddressBtnState()" required>
-                                <p style="color: red;" id="name-error" class="error-message"></p>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="phone">Phone No:</label>
-                                <input type="tel" class="form-control" id="phone" name="mobile" pattern="[0-9]{10}" oninput="validatePhone(); updateAddAddressBtnState()" required>
-                                <p style="color: red;" id="phone-error" class="error-message"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="address">Address:</label>
-                            <textarea class="form-control" id="address" name="address" rows="3" oninput="validateField('address', 'address-error', 'Address is required'); updateAddAddressBtnState()" required></textarea>
-                            <p style="color: red;" id="address-error" class="error-message"></p>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="city">City:</label>
-                                <input type="text" class="form-control" id="city" name="city" oninput="validateField('city', 'city-error', 'City is required'); updateAddAddressBtnState()" required>
-                                <p style="color: red;" id="city-error" class="error-message"></p>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="pincode">Pincode:</label>
-                                <input type="text" class="form-control" id="pincode" name="pincode" pattern="[0-9]{6}" oninput="validatePincode(); updateAddAddressBtnState()" required>
-                                <p style="color: red;" id="pincode-error" class="error-message"></p>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-md-6">
-                                <label for="district">District:</label>
-                                <input type="text" class="form-control" id="district" name="district" oninput="validateField('district', 'district-error', 'District is required'); updateAddAddressBtnState()" required>
-                                <p style="color: red;" id="district-error" class="error-message"></p>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="state">State:</label>
-                                <input type="text" class="form-control" id="state" name="state" oninput="validateField('state', 'state-error', 'State is required'); updateAddAddressBtnState()" required>
-                                <p style="color: red;" id="state-error" class="error-message"></p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="locality">Locality:</label>
-                            <input type="text" class="form-control" id="locality" name="locality" oninput="validateField('locality', 'locality-error', 'Locality is required'); updateAddAddressBtnState()" required>
-                            <p style="color: red;" id="locality-error" class="error-message"></p>
-                        </div>
-                        <div class="form-group">
-                            <label>Address Type:</label>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="addressType" id="homeType" value="Home" checked oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
-                                <label style="margin-top: -17px;" class="form-check-label" for="homeType">Home</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="addressType" id="workType" value="Work" oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
-                                <label style="margin-top: -17px;" class="form-check-label" for="workType">Work</label>
-                            </div>
-                            <p style="color: red;" id="addressType-error" class="error-message"></p>
-                        </div>
-        
-                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Add Address</button>
-        
-                    </form>
+        <% if (successMessage || errorMessage) { %>
+            <div class="position-fixed top-0 start-50 translate-middle-x" style="z-index: 1000; width: 300px;">
+                <div class="alert alert-dismissible fade show <% if (successMessage) { %>alert-success<% } else { %>alert-danger<% } %>"
+                    role="alert">
+                    <%= successMessage || errorMessage %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
-        </div>
 
-
-
-
-
-
-
-
-
-
-    <!-- ***** Footer Start ***** -->
-    <footer>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="first-item">
-                        <div class="logo">
-                            <img src="/images/ds_wht.png" alt="hexashop ecommerce templatemo" style="max-width: 120px;">
-                        </div>
-                        <ul>
-                            <li><a href="#">16501 Collins Ave, Sunny Isles Beach, FL 33160, India</a></li>
-                            <li><a href="#">dropship@company.com</a></li>
-                            <li><a href="#">010-020-0340</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-3">
-                    <h4>Shopping &amp; Categories</h4>
-                    <ul>
-                        <li><a href="#">Men’s Shopping</a></li>
-                        <li><a href="#">Women’s Shopping</a></li>
-                        <li><a href="#">Kid's Shopping</a></li>
-                        <li><a href="#">Sports Shopping</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3">
-                    <h4>Useful Links</h4>
-                    <ul>
-                        <li><a href="#">Homepage</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3">
-                    <h4>Help &amp; Information</h4>
-                    <ul>
-                        <li><a href="#">Help</a></li>
-                        <li><a href="#">FAQ's</a></li>
-                        <li><a href="#">Shipping</a></li>
-                        <li><a href="#">Tracking ID</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-12">
-                    <div class="under-footer">
-                        <p>Copyright © 2023 DropShip Co., Ltd. All Rights Reserved.
-
-                            <br>
-                        <ul>
-                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                            <li><a href="#"><i class="fa fa-behance"></i></a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-    <script>
-        $(document).ready(function () {
-            // Initially hide the <p> element
-            $('#walletBalance').hide();
-    
-            // Add an event listener to the radio buttons
-            $('input[name="paymentOption"]').change(function () {
-                // Check if the selected option is 'walletPayment'
-                if ($(this).val() === 'walletPayment') {
-                    // If 'walletPayment' is selected, show the <p> element
-                    $('#walletBalance').show();
-                } else {
-                    // If any other option is selected, hide the <p> element
-                    $('#walletBalance').hide();
-                }
-            });
-        });
-    </script>
-
-
-
-
-
-<script>
-    function openModal() {
-        document.getElementById('addressModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('addressModal').style.display = 'none';
-    }
-</script>
-
-
-<script>
-
-    function validateForm() {
-            const nameIsValid = validateName();
-            const phoneIsValid = validatePhone();
-            const addressIsValid = validateField('address', 'address-error', 'Address is required');
-            const cityIsValid = validateField('city', 'city-error', 'City is required');
-            const pincodeIsValid = validatePincode();
-            const districtIsValid = validateField('district', 'district-error', 'District is required');
-            const stateIsValid = validateField('state', 'state-error', 'State is required');
-            const localityIsValid = validateField('locality', 'locality-error', 'Locality is required');
-            const addressTypeIsValid = validateRadio('addressType', 'addressType-error', 'Please select an Address Type');
-    
-            // Enable/disable submit button based on all validations
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = !(nameIsValid && phoneIsValid && addressIsValid && cityIsValid &&
-                pincodeIsValid && districtIsValid && stateIsValid && localityIsValid && addressTypeIsValid);
-    
-            return !submitBtn.disabled; // Return true if the form is valid and can be submitted
-        }
-    
-        function validateName() {
-            const nameInput = document.getElementById('name');
-            const nameError = document.getElementById('name-error');
-    
-            const namePattern = /^[a-zA-Z\s]{1,}$/;
-    
-            if (!namePattern.test(nameInput.value.trim())) {
-                nameError.textContent = 'Invalid name. Only letters and spaces allowed.';
-                return false;
-            } else {
-                nameError.textContent = '';
-                return true;
-            }
-        }
-    
-        function validatePhone() {
-            const phoneInput = document.getElementById('phone');
-            const phoneError = document.getElementById('phone-error');
-    
-            const phonePattern = /^[0-9]{10}$/;
-    
-            if (!phonePattern.test(phoneInput.value.trim())) {
-                phoneError.textContent = 'Invalid phone number. Must be 10 digits.';
-                return false;
-            } else {
-                phoneError.textContent = '';
-                return true;
-            }
-        }
-    
-        function validatePincode() {
-            const pincodeInput = document.getElementById('pincode');
-            const pincodeError = document.getElementById('pincode-error');
-    
-            const pincodePattern = /^[0-9]{6}$/;
-    
-            if (!pincodePattern.test(pincodeInput.value.trim())) {
-                pincodeError.textContent = 'Invalid pincode. Must be 6 digits.';
-                return false;
-            } else {
-                pincodeError.textContent = '';
-                return true;
-            }
-        }
-    
-        function validateField(fieldName, errorId, errorMessage) {
-            const fieldInput = document.getElementById(fieldName);
-            const errorElement = document.getElementById(errorId);
-    
-            if (fieldInput.value.trim() === '' || fieldInput.value.trim().split(/\s+/).length > 4) {
-                errorElement.textContent = errorMessage;
-                return false;
-            } else {
-                errorElement.textContent = '';
-                return true;
-            }
-        }
-    
-        function validateRadio(fieldName, errorId, errorMessage) {
-            const radioInputs = document.getElementsByName(fieldName);
-            const errorElement = document.getElementById(errorId);
-    
-            for (const radio of radioInputs) {
-                if (radio.checked) {
-                    errorElement.textContent = '';
-                    return true;
-                }
-            }
-    
-            errorElement.textContent = errorMessage;
-            return false;
-        }
-    
-        function updateAddAddressBtnState() {
-            validateForm(); // Update the button state on each input change
-        }
-    </script>
-
-
-
-<script>
-    // Enable Confirm Order button when a payment option is selected
-    document.querySelectorAll('input[name="paymentOption"]').forEach(function (radio) {
-        radio.addEventListener('change', function () {
-            document.getElementById('confirmOrderBtn').disabled = false;
-        });
-    });
-</script>
-
-
-
-
-<script>
-    function deliverHere(address) {
-        // Implement the logic to handle delivery for the selected address
-        console.log("Deliver Here clicked for address:", address);
-    }
-
-    function toggleHiddenAddresses() {
-        // Implement the logic to toggle hidden addresses
-        console.log("Show All clicked");
-    }
-
-    document.querySelectorAll('input[name="existingAddress"]').forEach(function (radio) {
-        radio.addEventListener('change', function () {
-            // Get the index from the radio button's ID
-            var index = parseInt(this.id.replace('address', ''));
-
-            // Hide all "Deliver Here" buttons
-            document.querySelectorAll('[id^="deliverHereBtn"]').forEach(function (btn) {
-                btn.classList.add('d-none');
-            });
-
-            // Show the selected "Deliver Here" button
-            var deliverHereBtn = document.getElementById('deliverHereBtn' + index);
-            if (deliverHereBtn) {
-                deliverHereBtn.classList.remove('d-none');
-            }
-        });
-    });
-</script>
-
-
-<!-- Add this script below your existing scripts -->
-<script>
-    function toggleHiddenAddresses() {
-        // Toggle the visibility of hidden addresses
-        var hiddenAddresses = document.querySelectorAll('.hidden-address');
-        hiddenAddresses.forEach(address => {
-            address.classList.toggle('d-none');
-        });
-    }
-</script>
-
-
-<script>
-    function performAjax() {
-        // Get the selected payment option
-        var selectedPaymentOption = document.querySelector('input[name="paymentOption"]:checked');
-
-        // Check if a payment option is selected
-        if (selectedPaymentOption) {
-            // Log or use the selected payment option value
-            console.log("Selected Payment Option: " + selectedPaymentOption.value);
-            confirmOrder(selectedPaymentOption.value);
-            $('#paymentSuccessModal').modal('show');
-            // Continue with other logic for Confirm Order
-            // Example: Submit the form or perform other actions
-        } else {
-            // Handle the case where no payment option is selected
-            alert("Please select a payment option before confirming the order.");
-        }
-    }
-</script>
-
-
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-
-
-<% if (locals.logout) { %>
-    <script>
-        alert("Log out succesfully")
-    </script>
-    <% } %>
-
-
-
-        <% if (locals.login) { %>
             <script>
-                alert("Log out succesfully")
+                // Hide the message after 5 seconds
+                setTimeout(function () {
+                    document.querySelector('.alert')?.remove();
+                }, 5000);
             </script>
             <% } %>
 
 
 
-                <!-- jQuery -->
-                <script src="/js/jquery-2.1.0.min.js"></script>
+                <!-- cart + summary -->
+                <section class="bg-light my-5" style="padding-top: 100px;">
+                    <div class="container">
+                        <div class="row">
 
-                <!-- Bootstrap -->
-                <script src="/js/popper.js"></script>
-                <script src="/js/bootstrap.min.js"></script>
 
-                <!-- Plugins -->
-                <script src="/js/owl-carousel.js"></script>
-                <script src="/js/accordions.js"></script>
-                <script src="/js/datepicker.js"></script>
-                <script src="/js/scrollreveal.min.js"></script>
-                <script src="/js/waypoints.min.js"></script>
-                <script src="/js/jquery.counterup.min.js"></script>
-                <script src="/js/imgfix.min.js"></script>
-                <script src="/js/slick.js"></script>
-                <script src="/js/lightbox.js"></script>
-                <script src="/js/isotope.js"></script>
+                            <!-- Addresses -->
 
-                <!-- Global Init -->
-                <script src="/js/custom.js"></script>
+                            <div class="col-lg-9">
+                                <div class="card-header">
+                                    <a class="btn btn-primary float-end" onclick="openModal()">Add Address</a>
+                                    <h4 class="card-title ">Delivery Address</h4>
+                                </div>
+
+
+                                <% if (addrs[0]!=null) { %>
+
+
+
+                                    <div class="card border shadow-0" id="addressCard0">
+                                        <div class="m-4">
+
+                                            <!-- Container to display existing addresses -->
+                                            <div id="existingAddressesContainer">
+
+                                                <!-- Display the first address -->
+                                                <div class="form-check mb-2">
+                                                    <!-- Container for selected label -->
+                                                    <div id="selectedLabelContainer" class="float-end"></div>
+
+                                                    <input class="form-check-input" type="radio" name="existingAddress"
+                                                        id="address0">
+
+                                                    <ul class="address-list">
+                                                        <!-- Sample address item -->
+                                                        <li class="address-item">
+                                                            <button type="button" class="badge badge-dark"
+                                                                style="border-radius: 10px; height: 25px; font-size: 12px;">
+                                                                <%= addrs[0].addressType %>
+                                                            </button>
+                                                            <br><br>
+                                                            <% if (addrSlct==addrs[0]._id) { %>
+                                                                <div class="text-end">
+                                                                    <i class="fa-solid fa-circle-check text-success"
+                                                                        style="font-size: 24px;position: absolute;margin-left: -40px;"></i>
+                                                                </div>
+                                                                <% } %>
+                                                                    <p style="font-weight: bold;"><%-addrs[0].name-%>
+                                                                    </p>
+                                                                    <p>
+                                                                        <%= addrs[0].address %>, <%= addrs[0].locality
+                                                                                %>, <%= addrs[0].city %>,
+                                                                                    <%= addrs[0].district %>, <%=
+                                                                                            addrs[0].state %>
+                                                                    </p>
+                                                                    <p><%-addrs[0].mobile-%></p>
+                                                                    <p><%-addrs[0].pincode-%></p>
+                                                                    <br>
+
+                                                                    <button type="button"
+                                                                        class="btn btn-success btn-sm d-none"
+                                                                        id="deliverHereBtn0"
+                                                                        onclick="selectAddress('<%-addrs[0]._id-%>')">Deliver
+                                                                        Here</button>
+                                                        </li>
+                                                    </ul>
+                                                    <hr style="color: #9a9a9a;">
+                                                </div>
+
+                                                <!-- Display remaining addresses initially hidden -->
+                                                <% for (let i=1; i < addrs.length; i++) { %>
+                                                    <div class="form-check mb-2 hidden-address">
+                                                        <input class="form-check-input" type="radio"
+                                                            name="existingAddress" id=<%="address" +i%>>
+
+                                                        <ul class="address-list">
+                                                            <!-- Sample address item -->
+                                                            <li class="address-item">
+                                                                <button type="button" class="badge badge-dark"
+                                                                    style="border-radius: 10px; height: 25px; font-size: 12px;">
+                                                                    <%= addrs[i].addressType %>
+                                                                </button><br><br>
+                                                                <% if (addrSlct==addrs[i]._id) { %>
+                                                                    <div class="text-end">
+                                                                        <i class="fa-solid fa-circle-check text-success"
+                                                                            style="font-size: 24px;position: absolute;margin-left: -40px;"></i>
+                                                                    </div>
+                                                                    <% } %>
+                                                                        <p style="font-weight: bold;">
+                                                                            <%-addrs[i].name-%></p>
+                                                                        <p>
+                                                                            <%= addrs[i].address %>, <%=
+                                                                                    addrs[i].locality %>, <%=
+                                                                                        addrs[i].city %>, <%=
+                                                                                            addrs[i].district %>, <%=
+                                                                                                addrs[i].state %>
+                                                                        </p>
+                                                                        <p><%-addrs[i].mobile-%></p>
+                                                                        <p><%-addrs[i].pincode-%></p>
+                                                                        <br>
+                                                                        <a type="button"
+                                                                            class="btn btn-success btn-sm d-none"
+                                                                            id=<%="deliverHereBtn" +i%>
+                                                                            onclick="selectAddress('<%-addrs[i]._id-%>')">Deliver
+                                                                                Here</a>
+                                                            </li>
+                                                        </ul>
+                                                        <hr style="color: #9a9a9a;">
+                                                    </div>
+                                                    <% } %>
+
+                                                        <!-- Show/Hide button for additional addresses -->
+                                                        <% if (addrs.length> 1) { %>
+                                                            <div class="text-end">
+                                                                <a href="#" class="show-all-addresses"
+                                                                    onclick="toggleHiddenAddresses()">Show All</a>
+                                                            </div>
+                                                            <% } %>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                    <% } %>
+
+                                        <br>
+
+                                        <!-- Payment Options -->
+                                        <div class="card-header" id="paymentt">
+                                            <h4 class="card-title ">Payment Options</h4>
+                                        </div>
+
+
+
+                                        <!-- Payment Options -->
+                                        <div class="card border shadow-0">
+                                            <div class="m-4" style="padding-left: 30px">
+
+                                                <!-- Radio buttons for payment options -->
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="radio" name="paymentOption"
+                                                        id="onlinePayment" value="onlinePayment">
+                                                    <label class="form-check-label" for="onlinePayment"
+                                                        style="font-weight: bold;">
+                                                        Online Payment
+                                                    </label>
+                                                </div>
+
+                                                <br>
+
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="radio" name="paymentOption"
+                                                        id="cashOnDelivery" value="cashOnDelivery">
+                                                    <label class="form-check-label" for="cashOnDelivery"
+                                                        style="font-weight: bold;">
+                                                        Cash on Delivery
+                                                    </label>
+                                                </div>
+
+                                                <br>
+
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="radio" name="paymentOption"
+                                                        id="walletPayment" value="walletPayment">
+                                                    <label class="form-check-label" for="walletPayment"
+                                                        style="font-weight: bold;">
+                                                        Wallet Payment
+                                                    </label>
+                                                    <br>
+                                                    <% if (walBalnc) { %>
+                                                        <p id="walletBalance" class="text-bg-dark"
+                                                            style="margin-left: 10px;">Balance: <span
+                                                                style="margin-left: 10px;color: green;">₹ <%=
+                                                                    walBalnc.wallet %></span> </p>
+                                                        <% } %>
+
+
+                                                </div>
+
+                                                <!-- Confirm Order button -->
+                                                <button type="button" class="btn btn-primary mt-3 float-end"
+                                                    id="confirmOrderBtn" onclick="performAjax()" disabled>
+                                                    Confirm Order
+                                                </button>
+
+                                            </div>
+                                        </div>
+
+
+                            </div>
+
+
+
+
+
+
+                            <!-- summary -->
+                            <div class="col-lg-3">
+                                <div class="card mb-3 border shadow-0">
+                                    <div class="card-body">
+                                        <form id="couponForm" method="post">
+                                            <div class="form-group">
+                                                <label class="form-label">Have coupon?</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control border" name="couponCode"
+                                                        id="couponCode" placeholder="Coupon code" required
+                                                        oninput="this.value = this.value.toUpperCase()" />
+                                                    <button type="button" class="btn btn-light border"
+                                                        onclick="applyCoupon()">Apply</button>
+                                                </div>
+                                                <a href="/userprofile/#coupons"
+                                                    style="color: blue;font-size: 14px;cursor: pointer;">
+                                                    <%= cupnCount%> coupons available
+                                                </a><br>
+
+                                                <% if (cpnMsg) { %>
+                                                    <% if (cpnMsg!=false) { %>
+                                                        <small style="color: rgb(30, 179, 30);">Coupon applied
+                                                            successfully</small>
+                                                        <% } else { %>
+                                                            <small style="color: red;">Invalid Coupon Code or Coupon
+                                                                Expired</small>
+                                                            <% } %>
+                                                                <% } %>
+
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+
+
+
+                                <div class="card shadow-0 border">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between">
+                                            <p class="mb-2">Total price:</p>
+                                            <p class="mb-2">₹ <%= total%>
+                                            </p>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <p class="mb-2">Discount:</p>
+                                            <p class="mb-2 text-success">-₹ <%= totalDiscount %>
+                                            </p>
+                                        </div>
+
+                                        <% if (cupnDisc) { %>
+
+                                            <div class="d-flex justify-content-between">
+                                                <p class="mb-2">Coupon Discount:</p>
+                                                <p class="mb-2 text-success">-₹ <%= cupnDisc %>
+                                                </p>
+                                            </div>
+
+                                            <% } %>
+
+                                                <div class="d-flex justify-content-between">
+                                                    <p class="mb-2">Delivery charges:</p>
+                                                    <span style="font-size: small;color: green;">Free</span><del
+                                                        class="text-muted text-nowrap" style="font-size: small;">₹ 40
+                                                    </del>
+                                                </div>
+                                                <hr />
+                                                <div class="d-flex justify-content-between">
+                                                    <p class="mb-2">Total price:</p>
+                                                    <p class="mb-2 fw-bold">₹ <%= grandTotal%>
+                                                    </p>
+                                                </div>
+
+                                                <!-- <div class="mt-3">
+                                <a href="#" class="btn btn-success w-100 shadow-0 mb-2"> Place Order </a>
+                                <a href="/allproducts" class="btn btn-light w-100 border mt-2"> Back to shop </a>
+                            </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- summary -->
+                        </div>
+                    </div>
+                </section>
+                <!-- cart + summary -->
+
+
+                <!-- address-modal -->
+                <div class="modal" id="addressModal" style="max-height: 700px;margin-top: 10px;margin-left: 500px;">
+                    <div class="modal-content" style="height: 800px; max-width: 700px;">
+                        <!-- Inside the <div class="modal-content"> -->
+                        <div class="modal-body" style="max-width: 500px; margin: 0 auto; width: 530px; ">
+                            <button type="button" class="close" aria-label="Close" onclick="closeModal()">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h2 class="text-center mb-4">Add New Address</h2>
+                            <form class="needs-validation" action="/postaddaddress-checkout" method="post" novalidate>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="name">Name:</label>
+                                        <input type="text" class="form-control" id="name" name="name"
+                                            oninput="validateName(); updateAddAddressBtnState()" required>
+                                        <p style="color: red;" id="name-error" class="error-message"></p>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="phone">Phone No:</label>
+                                        <input type="tel" class="form-control" id="phone" name="mobile"
+                                            pattern="[0-9]{10}" oninput="validatePhone(); updateAddAddressBtnState()"
+                                            required>
+                                        <p style="color: red;" id="phone-error" class="error-message"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Address:</label>
+                                    <textarea class="form-control" id="address" name="address" rows="3"
+                                        oninput="validateField('address', 'address-error', 'Address is required'); updateAddAddressBtnState()"
+                                        required></textarea>
+                                    <p style="color: red;" id="address-error" class="error-message"></p>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="city">City:</label>
+                                        <input type="text" class="form-control" id="city" name="city"
+                                            oninput="validateField('city', 'city-error', 'City is required'); updateAddAddressBtnState()"
+                                            required>
+                                        <p style="color: red;" id="city-error" class="error-message"></p>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="pincode">Pincode:</label>
+                                        <input type="text" class="form-control" id="pincode" name="pincode"
+                                            pattern="[0-9]{6}" oninput="validatePincode(); updateAddAddressBtnState()"
+                                            required>
+                                        <p style="color: red;" id="pincode-error" class="error-message"></p>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="district">District:</label>
+                                        <input type="text" class="form-control" id="district" name="district"
+                                            oninput="validateField('district', 'district-error', 'District is required'); updateAddAddressBtnState()"
+                                            required>
+                                        <p style="color: red;" id="district-error" class="error-message"></p>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="state">State:</label>
+                                        <input type="text" class="form-control" id="state" name="state"
+                                            oninput="validateField('state', 'state-error', 'State is required'); updateAddAddressBtnState()"
+                                            required>
+                                        <p style="color: red;" id="state-error" class="error-message"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="locality">Locality:</label>
+                                    <input type="text" class="form-control" id="locality" name="locality"
+                                        oninput="validateField('locality', 'locality-error', 'Locality is required'); updateAddAddressBtnState()"
+                                        required>
+                                    <p style="color: red;" id="locality-error" class="error-message"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Address Type:</label>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="addressType" id="homeType"
+                                            value="Home" checked
+                                            oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
+                                        <label style="margin-top: -17px;" class="form-check-label"
+                                            for="homeType">Home</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="addressType" id="workType"
+                                            value="Work"
+                                            oninput="validateRadio('addressType', 'addressType-error', 'Please select an Address Type'); updateAddAddressBtnState()">
+                                        <label style="margin-top: -17px;" class="form-check-label"
+                                            for="workType">Work</label>
+                                    </div>
+                                    <p style="color: red;" id="addressType-error" class="error-message"></p>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" id="submitBtn" disabled>Add
+                                    Address</button>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+                <!-- ***** Footer Start ***** -->
+                <footer>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <div class="first-item">
+                                    <div class="logo">
+                                        <img src="/images/ds_wht.png" alt="hexashop ecommerce templatemo"
+                                            style="max-width: 120px;">
+                                    </div>
+                                    <ul>
+                                        <li><a href="#">16501 Collins Ave, Sunny Isles Beach, FL 33160, India</a></li>
+                                        <li><a href="#">dropship@company.com</a></li>
+                                        <li><a href="#">010-020-0340</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <h4>Shopping &amp; Categories</h4>
+                                <ul>
+                                    <li><a href="#">Men’s Shopping</a></li>
+                                    <li><a href="#">Women’s Shopping</a></li>
+                                    <li><a href="#">Kid's Shopping</a></li>
+                                    <li><a href="#">Sports Shopping</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-3">
+                                <h4>Useful Links</h4>
+                                <ul>
+                                    <li><a href="#">Homepage</a></li>
+                                    <li><a href="#">About Us</a></li>
+                                    <li><a href="#">Help</a></li>
+                                    <li><a href="#">Contact Us</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-3">
+                                <h4>Help &amp; Information</h4>
+                                <ul>
+                                    <li><a href="#">Help</a></li>
+                                    <li><a href="#">FAQ's</a></li>
+                                    <li><a href="#">Shipping</a></li>
+                                    <li><a href="#">Tracking ID</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="under-footer">
+                                    <p>Copyright © 2023 DropShip Co., Ltd. All Rights Reserved.
+
+                                        <br>
+                                    <ul>
+                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+
+
+                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+                <script>
+                    $(document).ready(function () {
+                        // Initially hide the <p> element
+                        $('#walletBalance').hide();
+
+                        // Add an event listener to the radio buttons
+                        $('input[name="paymentOption"]').change(function () {
+                            // Check if the selected option is 'walletPayment'
+                            if ($(this).val() === 'walletPayment') {
+                                // If 'walletPayment' is selected, show the <p> element
+                                $('#walletBalance').show();
+                            } else {
+                                // If any other option is selected, hide the <p> element
+                                $('#walletBalance').hide();
+                            }
+                        });
+                    });
+                </script>
+
+
+
+
+
+                <script>
+                    function openModal() {
+                        document.getElementById('addressModal').style.display = 'flex';
+                    }
+
+                    function closeModal() {
+                        document.getElementById('addressModal').style.display = 'none';
+                    }
+                </script>
+
 
                 <script>
 
-                    $(function () {
-                        var selectedClass = "";
-                        $("p").click(function () {
-                            selectedClass = $(this).attr("data-rel");
-                            $("#portfolio").fadeTo(50, 0.1);
-                            $("#portfolio div").not("." + selectedClass).fadeOut();
-                            setTimeout(function () {
-                                $("." + selectedClass).fadeIn();
-                                $("#portfolio").fadeTo(50, 1);
-                            }, 500);
+                    function validateForm() {
+                        const nameIsValid = validateName();
+                        const phoneIsValid = validatePhone();
+                        const addressIsValid = validateField('address', 'address-error', 'Address is required');
+                        const cityIsValid = validateField('city', 'city-error', 'City is required');
+                        const pincodeIsValid = validatePincode();
+                        const districtIsValid = validateField('district', 'district-error', 'District is required');
+                        const stateIsValid = validateField('state', 'state-error', 'State is required');
+                        const localityIsValid = validateField('locality', 'locality-error', 'Locality is required');
+                        const addressTypeIsValid = validateRadio('addressType', 'addressType-error', 'Please select an Address Type');
 
-                        });
-                    });
+                        // Enable/disable submit button based on all validations
+                        const submitBtn = document.getElementById('submitBtn');
+                        submitBtn.disabled = !(nameIsValid && phoneIsValid && addressIsValid && cityIsValid &&
+                            pincodeIsValid && districtIsValid && stateIsValid && localityIsValid && addressTypeIsValid);
 
+                        return !submitBtn.disabled; // Return true if the form is valid and can be submitted
+                    }
+
+                    function validateName() {
+                        const nameInput = document.getElementById('name');
+                        const nameError = document.getElementById('name-error');
+
+                        const namePattern = /^[a-zA-Z\s]{1,}$/;
+
+                        if (!namePattern.test(nameInput.value.trim())) {
+                            nameError.textContent = 'Invalid name. Only letters and spaces allowed.';
+                            return false;
+                        } else {
+                            nameError.textContent = '';
+                            return true;
+                        }
+                    }
+
+                    function validatePhone() {
+                        const phoneInput = document.getElementById('phone');
+                        const phoneError = document.getElementById('phone-error');
+
+                        const phonePattern = /^[0-9]{10}$/;
+
+                        if (!phonePattern.test(phoneInput.value.trim())) {
+                            phoneError.textContent = 'Invalid phone number. Must be 10 digits.';
+                            return false;
+                        } else {
+                            phoneError.textContent = '';
+                            return true;
+                        }
+                    }
+
+                    function validatePincode() {
+                        const pincodeInput = document.getElementById('pincode');
+                        const pincodeError = document.getElementById('pincode-error');
+
+                        const pincodePattern = /^[0-9]{6}$/;
+
+                        if (!pincodePattern.test(pincodeInput.value.trim())) {
+                            pincodeError.textContent = 'Invalid pincode. Must be 6 digits.';
+                            return false;
+                        } else {
+                            pincodeError.textContent = '';
+                            return true;
+                        }
+                    }
+
+                    function validateField(fieldName, errorId, errorMessage) {
+                        const fieldInput = document.getElementById(fieldName);
+                        const errorElement = document.getElementById(errorId);
+
+                        if (fieldInput.value.trim() === '' || fieldInput.value.trim().split(/\s+/).length > 4) {
+                            errorElement.textContent = errorMessage;
+                            return false;
+                        } else {
+                            errorElement.textContent = '';
+                            return true;
+                        }
+                    }
+
+                    function validateRadio(fieldName, errorId, errorMessage) {
+                        const radioInputs = document.getElementsByName(fieldName);
+                        const errorElement = document.getElementById(errorId);
+
+                        for (const radio of radioInputs) {
+                            if (radio.checked) {
+                                errorElement.textContent = '';
+                                return true;
+                            }
+                        }
+
+                        errorElement.textContent = errorMessage;
+                        return false;
+                    }
+
+                    function updateAddAddressBtnState() {
+                        validateForm(); // Update the button state on each input change
+                    }
                 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-<script>
-    function confirmLogout() {
-        Swal.fire({
-            title: 'Are you sure you want to logout?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, logout!',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/logout';
-            }
-        });
-    }
-</script>
+
+
+                <script>
+                    // Enable Confirm Order button when a payment option is selected
+                    document.querySelectorAll('input[name="paymentOption"]').forEach(function (radio) {
+                        radio.addEventListener('change', function () {
+                            document.getElementById('confirmOrderBtn').disabled = false;
+                        });
+                    });
+                </script>
+
+
+
+
+                <script>
+                    function deliverHere(address) {
+                        // Implement the logic to handle delivery for the selected address
+                        console.log("Deliver Here clicked for address:", address);
+                    }
+
+                    function toggleHiddenAddresses() {
+                        // Implement the logic to toggle hidden addresses
+                        console.log("Show All clicked");
+                    }
+
+                    document.querySelectorAll('input[name="existingAddress"]').forEach(function (radio) {
+                        radio.addEventListener('change', function () {
+                            // Get the index from the radio button's ID
+                            var index = parseInt(this.id.replace('address', ''));
+
+                            // Hide all "Deliver Here" buttons
+                            document.querySelectorAll('[id^="deliverHereBtn"]').forEach(function (btn) {
+                                btn.classList.add('d-none');
+                            });
+
+                            // Show the selected "Deliver Here" button
+                            var deliverHereBtn = document.getElementById('deliverHereBtn' + index);
+                            if (deliverHereBtn) {
+                                deliverHereBtn.classList.remove('d-none');
+                            }
+                        });
+                    });
+                </script>
+
+
+                <!-- Add this script below your existing scripts -->
+                <script>
+                    function toggleHiddenAddresses() {
+                        // Toggle the visibility of hidden addresses
+                        var hiddenAddresses = document.querySelectorAll('.hidden-address');
+                        hiddenAddresses.forEach(address => {
+                            address.classList.toggle('d-none');
+                        });
+                    }
+                </script>
+
+
+            <script>
+                function performAjax() {
+                    // Get the selected payment option
+                    var selectedPaymentOption = document.querySelector('input[name="paymentOption"]:checked');
+
+                    // Check if a payment option is selected
+                    if (selectedPaymentOption) {
+                        // Log or use the selected payment option value
+                        console.log("Selected Payment Option: " + selectedPaymentOption.value);
+                        confirmOrder(selectedPaymentOption.value);
+                        $('#paymentSuccessModal').modal('show');
+                        // Continue with other logic for Confirm Order
+                        // Example: Submit the form or perform other actions
+                    } else {
+                        // Handle the case where no payment option is selected
+                        alert("Please select a payment option before confirming the order.");
+                    }
+                }
+            </script>
+
+
+
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+
+
+            <!-- jQuery -->
+            <script src="/js/jquery-2.1.0.min.js"></script>
+
+            <!-- Bootstrap -->
+            <script src="/js/popper.js"></script>
+            <script src="/js/bootstrap.min.js"></script>
+
+            <!-- Plugins -->
+            <script src="/js/owl-carousel.js"></script>
+            <script src="/js/accordions.js"></script>
+            <script src="/js/datepicker.js"></script>
+            <script src="/js/scrollreveal.min.js"></script>
+            <script src="/js/waypoints.min.js"></script>
+            <script src="/js/jquery.counterup.min.js"></script>
+            <script src="/js/imgfix.min.js"></script>
+            <script src="/js/slick.js"></script>
+            <script src="/js/lightbox.js"></script>
+            <script src="/js/isotope.js"></script>
+
+            <!-- Global Init -->
+            <script src="/js/custom.js"></script>
+
+            <script>
+
+                $(function () {
+                    var selectedClass = "";
+                    $("p").click(function () {
+                        selectedClass = $(this).attr("data-rel");
+                        $("#portfolio").fadeTo(50, 0.1);
+                        $("#portfolio div").not("." + selectedClass).fadeOut();
+                        setTimeout(function () {
+                            $("." + selectedClass).fadeIn();
+                            $("#portfolio").fadeTo(50, 1);
+                        }, 500);
+
+                    });
+                });
+
+            </script>
+
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+            <script>
+                function confirmLogout() {
+                    Swal.fire({
+                        title: 'Are you sure you want to logout?',
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Yes, logout!',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '/logout';
+                        }
+                    });
+                }
+            </script>
 
 
 
 
 
 
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-                    crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
-                    integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
-                    crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-                    integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-                    crossorigin="anonymous"></script>
+            <script
+                src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+                integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+                integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+                crossorigin="anonymous"></script>
 
 
-                <!-- Bootstrap JavaScript and Popper.js -->
-                <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-                    integrity="sha384-sZBJY3n9QFiOfj0z8wA54PzxN+FdoZ9wea4z+9rrpJKY1cZ3gWAg7jPV6BD1KqVd"
-                    crossorigin="anonymous"></script>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-                    integrity="sha384-A1DlJ1RQyZR6WjqJOQoKsU97A1HAj/poo/n8mzKbkgsQPZsJ8B9z9xgv76fqcQ1"
-                    crossorigin="anonymous"></script>
+            <!-- Bootstrap JavaScript and Popper.js -->
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+                integrity="sha384-sZBJY3n9QFiOfj0z8wA54PzxN+FdoZ9wea4z+9rrpJKY1cZ3gWAg7jPV6BD1KqVd"
+                crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+                integrity="sha384-A1DlJ1RQyZR6WjqJOQoKsU97A1HAj/poo/n8mzKbkgsQPZsJ8B9z9xgv76fqcQ1"
+                crossorigin="anonymous"></script>
 </body>
+
 </html>
