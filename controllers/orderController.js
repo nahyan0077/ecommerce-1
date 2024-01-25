@@ -761,7 +761,7 @@ module.exports = {
         try {
             const id = req.params.orderId;
             console.log(id);
-            const filePath = `root/ecommerce-1-DropShip/public/invoPdf/${id}.pdf`;
+            const filePath = `public/invoPdf/${id}.pdf`;
 
             // if (fs.existsSync(filePath)) {
 
