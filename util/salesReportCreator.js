@@ -17,21 +17,8 @@ module.exports = {
         const template = fs.readFileSync('util/template.ejs', 'utf-8');
         const html = ejs.render(template, { orders, startDate, endDate, totalAmount });
         
-        if (downloadformat === 'pdf') {
-          const browser = await puppeteer.launch();
-          const page = await browser.newPage();
-          
-          await page.setContent(html);
-          
-          const pdfOptions = {
-              format: 'Letter',
-              path: `public/salesPdf/sales-report-${formattedStartDate}-${formattedEndDate}.pdf`,
-          };
-          
-          await page.pdf(pdfOptions);
-          await browser.close();
-          res.status(200).download(pdfOptions.path);
-        } else if (downloadformat === 'excel') {
+
+        if (downloadformat === 'excel') {
           const workbook = new exceljs.Workbook();
           const worksheet = workbook.addWorksheet('Sales Report');
   

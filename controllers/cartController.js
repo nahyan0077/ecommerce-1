@@ -146,7 +146,7 @@ module.exports = {
             //to reduce the quantity of products
             } else {
                 await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.prodId }, { $inc: { 'products.$.quantity': -1 } })
-
+                res.json({ msg: "Product Quantity Updated" })
 
                 if(req.params.qty <= 0){
                     await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.prodId }, { $set: { 'products.$.quantity': 1 } })

@@ -3,7 +3,7 @@ const order = require('../models/orderModels');
 const product = require('../models/productModels');
 const { orderList } = require('./adminController');
 var moment = require('moment');
-const {generateSalesPDF}= require('../util/salesPdfCreator')
+const { generateSalesPDF } = require('../util/salesPdfCreator')
 const pdf = require("../util/salesReportCreator");
 const { format } = require("date-fns");
 
@@ -185,37 +185,90 @@ module.exports = {
     },
 
 
-    downloadSalesReport : async (req,res) => {
-        try {
+    // downloadSalesReport : async (req,res) => {
+    //     try {
 
-            const {startdate, enddate, downloadformat} = req.body
+    //         const {startdate, enddate, downloadformat} = req.body
+    //         let startDate = new Date(startdate)
+    //         let endDate = new Date(enddate)
+    //         endDate.setHours(23, 59, 59, 999);
+
+    //         const orders = await order.find({PaymentStatus:"Paid", orderDate: {$gte:startDate, $lte:endDate}}).populate('products.productid')
+    //         console.log(orders);
+
+    //         let totalSales = 0;
+
+    //         orders.forEach((order) => {
+    //           totalSales += order.discountAmount || 0;
+    //         });
+
+    //         pdf.downloadReport(
+    //             req,
+    //             res,
+    //             orders,
+    //             startDate,
+    //             endDate,
+    //             totalSales.toFixed(2),
+    //             downloadformat
+    //         );
+
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
+
+    downloadSalesReport: async (req, res) => {
+        try {
+            const { startdate, enddate, downloadformat } = req.body
             let startDate = new Date(startdate)
             let endDate = new Date(enddate)
             endDate.setHours(23, 59, 59, 999);
+            const orders = await order.find(
+                { PaymentStatus: "Paid", orderDate: { $gte: startDate, $lte: endDate, } }).populate("products.productid");
 
-            const orders = await order.find({PaymentStatus:"Paid", orderDate: {$gte:startDate, $lte:endDate}}).populate('products.productid')
-            console.log(orders);
+            if(downloadformat == 'pdf'){
+                const pdfBuffer = await generateSalesPDF(orders, startDate, endDate);
 
-            let totalSales = 0;
+                // Set headers for the response
+                res.setHeader("Content-Type", "application/pdf");
+                res.setHeader(
+                    "Content-Disposition",
+                    "attachment; filename=sales Report.pdf"
+                );
 
-            orders.forEach((order) => {
-              totalSales += order.discountAmount || 0;
-            });
+                res.status(200).end(pdfBuffer);
+            }else{
 
-            pdf.downloadReport(
-                req,
-                res,
-                orders,
-                startDate,
-                endDate,
-                totalSales.toFixed(2),
-                downloadformat
-            );
+                let totalSales = 0;
+
+                orders.forEach((order) => {
+                    totalSales += order.discountAmount || 0;
+                });
+
+                pdf.downloadReport(
+                    req,
+                    res,
+                    orders,
+                    startDate,
+                    endDate,
+                    totalSales.toFixed(2),
+                    downloadformat
+                );
+            }
+            
+
+
+
+
+
+            
 
         } catch (error) {
             console.log(error);
+
+
         }
-    }
+    },
 
 
 }
