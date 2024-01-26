@@ -316,38 +316,82 @@ function addToCart(id,discPrice) {
 
 //update quantity count in cart
 function updateQuantity(count, prodId, qty, usrId) {
-    console.log("ajax okkk");
+    console.log("ajax okkk", prodId);
     $.ajax({
-
         url: "/updatequantity/" + `${count}/${prodId}/${qty}/${usrId}`,
-
         method: "patch",
         success: function (res) {
+            if (res.success == true) {
+                const quantityInput = $(`#quantity-${prodId}`);
+                const currentQuantity = parseInt(quantityInput.val());
+                console.log("dfgd",res.prdktQty);
+               
+                if (res.count == 1) {
+                    const newQuantity = currentQuantity + 1;
+                    quantityInput.val(newQuantity);
+                    
+                    // Check if the stock limit has been reached
+                    if (res.prdktQty <= newQuantity) {
+                        Toastify({
+                            text: "Product stock limit has reached",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "center",
+                            backgroundColor: "red",
+                            stopOnFocus: true,
+                        }).showToast();
+                        const plusButton = quantityInput.next('button');
+                        plusButton.prop('disabled', true);
+                        location.reload()
+                    }
 
-            if(res.success==true){
-                location.reload();
-            }else if(res.success==false){
+                    // Update the +/- button disable attribute
+                    const minusButton = quantityInput.prev('button');
+                    minusButton.prop('disabled', newQuantity === 1);
+                } else {
+                    // Decrement the quantity
+                    const newQuantity = Math.max(currentQuantity - 1, 1);
+                    quantityInput.val(newQuantity);
+
+                    // Update the +/- button disable attribute
+                    const minusButton = quantityInput.prev('button');
+                    const plusButton = quantityInput.next('button');
+                    minusButton.prop('disabled', newQuantity === 1);
+                    plusButton.prop('disabled', newQuantity === 5);
+                }
+
+                // Update the total and grand total on the client side
+                $('#total-price').text(`₹ ${res.total}`);
+                $('#grand-total').text(`₹ ${res.grandTotal}`);
+                $('#totalDiscount').text(`₹ ${res.totalDiscount}`);
+            } else if (res.success == false) {
                 Toastify({
                     text: res.msg,
-                    duration: 1000,
+                    duration: 3000,
                     gravity: "top",
                     position: "center",
                     backgroundColor: "red",
                     stopOnFocus: true,
                 }).showToast();
-    
-                // Delay the reload by 3 seconds (3000 milliseconds)
+
+                // Reload the page after 3 seconds
                 setTimeout(function () {
-                    location.reload();
+                    window.location.reload();
                 }, 500);
             }
         },
         error: function (err) {
-            alert("Something Error")
+            alert("Something Error");
             console.log(err);
         }
-    })
+    });
 }
+
+
+
+
+
+
 
 
 //remove product from cart

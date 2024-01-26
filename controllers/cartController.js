@@ -124,15 +124,34 @@ module.exports = {
             console.log(req.params);
 
             const prdkt = await product.findOne({ _id: req.params.prodId })
-            
+
+
             //to add prduct quantity
             if (req.params.count == 1) {
-                console.log("aa");
                 if (prdkt.stockQuantity == req.params.qty) {
                     res.json({ success : false, msg: "Product stock limit has reached" })
                 } else {
                     await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.prodId }, { $inc: { 'products.$.quantity': 1 } })
-                    res.json({ success : true })
+                    const kart = await cart.findOne({ userId: req.session.cartId }).populate(
+                        { path: "products.productid", populate: { path: 'category_id', model: 'category' } });
+    
+                    const carts = kart.products
+    
+                    let total = 0;
+                    let grandTotal = 0;
+    
+    
+                    carts.forEach(item => {
+                        //discount amount sum
+                        grandTotal = grandTotal + item.quantity * item.productid.DiscountAmount
+    
+                        //real price sum
+                        total = total + item.quantity * item.productid.price
+                        prdktQty = item.productid.stockQuantity
+                    })
+                    let totalDiscount = total - grandTotal
+                    
+                    res.json({ success : true, grandTotal, total, quantity:req.params.qty, count:req.params.count, totalDiscount, prdktQty })
                 }
 
                 if(req.params.qty >= 5){
@@ -144,10 +163,29 @@ module.exports = {
             //to reduce the quantity of products
             } else {
                 await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.prodId }, { $inc: { 'products.$.quantity': -1 } })
-                res.json({ success : true })
+                const kart = await cart.findOne({ userId: req.session.cartId }).populate(
+                    { path: "products.productid", populate: { path: 'category_id', model: 'category' } });
+
+                const carts = kart.products
+
+                let total = 0;
+                let grandTotal = 0;
+
+
+                carts.forEach(item => {
+                    //discount amount sum
+                    grandTotal = grandTotal + item.quantity * item.productid.DiscountAmount
+
+                    //real price sum
+                    total = total + item.quantity * item.productid.price
+                    prdktQty = item.productid.stockQuantity
+                })
+                let totalDiscount = total - grandTotal
+                res.json({ success : true, grandTotal, total, quantity:req.params.qty, count:req.params.count, totalDiscount, prdktQty })
+
 
                 if(req.params.qty <= 0){
-                    await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.prodId }, { $set: { 'products.$.quantity': 1 } })
+                    await cart.updateOne({ userId: req.session.cartId, 'products.productid': req.params.count }, { $set: { 'products.$.quantity': 1 } })
                     res.json({ success : false, msg: "Product Quantity can't be less than zero " })
                 }
 
@@ -161,7 +199,7 @@ module.exports = {
         try {
             console.log(req.params.prdktId);
             await cart.updateOne({ userId: req.session.cartId }, { $pull: { products: { productid: req.params.prdktId.trim() } } })
-            res.json({ msg: "Product removed from cart successfullly" })
+            res.json({ msg: "Product removed from cart successfully" })
         } catch (error) {
             console.log(error);
         }

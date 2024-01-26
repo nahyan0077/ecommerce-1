@@ -14,7 +14,7 @@
   padding: 45px;
   text-align: center;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-  background-color: rgba(255, 255, 255, 0.411);
+  background-color: rgba(49, 47, 47, 0.411);
   border-radius: 10px;
 }
 .form input {
@@ -102,7 +102,7 @@ body {
   height: 810px;
   padding: 0;
   background-repeat: no-repeat;
-  background-color: #828282;
+  background-image: url(/images/2881078.jpg);
 }
 .logo{
   width: 138px;
