@@ -50,7 +50,7 @@ module.exports = {
     getAddressId: (req, res) => {
         try {
             const addrsId = req.params.adrsid
-            console.log(addrsId);
+            console.log("sdf",addrsId);
             req.session.adrsId = addrsId
             res.json({ msg: "Order will be delivered to this address" })
 
@@ -68,6 +68,8 @@ module.exports = {
             const total = req.session.total
             const totalDiscount = req.session.totalDiscount
             const grandTotal = req.session.grandTotal
+
+            console.log("sdsssss",addressId);
 
             if (req.session.adrsId == null) {
 

@@ -322,21 +322,25 @@ function updateQuantity(count, prodId, qty, usrId) {
         url: "/updatequantity/" + `${count}/${prodId}/${qty}/${usrId}`,
 
         method: "patch",
-        success: function (response) {
-            location.reload()
-            Toastify({
-                text: "Product quantity updated",
-                duration: 1000,
-                gravity: "top",
-                position: "center",
-                backgroundColor: "blue",
-                stopOnFocus: true,
-            }).showToast();
+        success: function (res) {
 
-            // Delay the reload by 3 seconds (3000 milliseconds)
-            setTimeout(function () {
+            if(res.success==true){
                 location.reload();
-            }, 500);
+            }else if(res.success==false){
+                Toastify({
+                    text: res.msg,
+                    duration: 1000,
+                    gravity: "top",
+                    position: "center",
+                    backgroundColor: "red",
+                    stopOnFocus: true,
+                }).showToast();
+    
+                // Delay the reload by 3 seconds (3000 milliseconds)
+                setTimeout(function () {
+                    location.reload();
+                }, 500);
+            }
         },
         error: function (err) {
             alert("Something Error")

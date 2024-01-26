@@ -124,9 +124,9 @@ module.exports = {
                         const reason = "Bonus for referring an user";
                         const type = "credit";
                         const date = new Date();
-                        await walletHistory.create(
-                            {userid:referral},
-                            {$push:{refund:{amount:amount,reason:reason,type:type,date:date}}})
+                        await walletHistory.create({
+                            userid:referral,
+                            refund:[{amount:amount,reason:reason,type:type,date:date}]})
                     }
 
 
