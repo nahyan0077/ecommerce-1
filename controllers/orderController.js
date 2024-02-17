@@ -620,10 +620,9 @@ module.exports = {
         try {
             console.log(req.body);
             const { prdktId, orderId, userId, status, index } = req.body
-            const [odrDtls, prdkt] = Promise.all([
-                order.findOne({ _id: orderId }),
-                product.findOne({ _id: prdktId })
-            ])
+
+            const odrDtls = await order.findById(orderId)
+            const prdkt = await product.findById(prdktId)
 
             var totalAmnt = prdkt.DiscountAmount * odrDtls.products[index].quantity;
 

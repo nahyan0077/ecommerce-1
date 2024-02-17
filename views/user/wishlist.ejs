@@ -160,11 +160,11 @@
     
                         <div class="d-flex align-items-start border-bottom pb-3">
                             <div class="me-4">
-                                <a href="/singleproduct/<%-data.productid._id-%>" ><img src="/product_images/<%=data.productid.images[0]%>" alt="" class="avatar-lg rounded" style="width: 100px;"></a>
+                                <a href="/singleproduct/<%-data?.productid?._id-%>" ><img src="/product_images/<%=data?.productid?.images[0]%>" alt="" class="avatar-lg rounded" style="width: 100px;"></a>
                             </div>
                             <div class="flex-grow-1 align-self-center overflow-hidden">
                                 <div>
-                                    <h5 class="text-truncate font-size-18"><a href="#" class="text-dark"><%= data.productid.productName %>
+                                    <h5 class="text-truncate font-size-18"><a href="#" class="text-dark"><%= data?.productid?.productName %>
                                     </a></h5>
                                     <p class="text-muted mb-0">
                                         <i class="bx bxs-star text-warning"></i>
@@ -173,15 +173,15 @@
                                         <i class="bx bxs-star text-warning"></i>
                                         <i class="bx bxs-star-half text-warning"></i>
                                     </p>
-                                    <p class="mb-0 mt-1">Category : <span class="fw-medium" style="font-weight: 500;"><%= data.productid.category_id.categoryName %>
-                                    <p class="mb-0 mt-1">Brand : <span class="fw-medium" style="font-weight: 500;"><%= data.productid.brand_id.brandName %>
+                                    <p class="mb-0 mt-1">Category : <span class="fw-medium" style="font-weight: 500;"><%= data?.productid?.category_id?.categoryName %>
+                                    <p class="mb-0 mt-1">Brand : <span class="fw-medium" style="font-weight: 500;"><%= data?.productid?.brand_id?.brandName %>
                                     </span></p>
                                 </div>
                                 <div class="flex-shrink-0">
-                                    <% if (data.productid.stockQuantity > 10) { %>
+                                    <% if (data?.productid?.stockQuantity > 10) { %>
                                         <span class="badge rounded-pill bg-success">In Stock</span>
-                                    <% } else if (data.productid.stockQuantity > 0) { %>
-                                        <span class="badge rounded-pill bg-warning">only <%= data.productid.stockQuantity %> left</span>
+                                    <% } else if (data?.productid?.stockQuantity > 0) { %>
+                                        <span class="badge rounded-pill bg-warning">only <%= data?.productid?.stockQuantity %> left</span>
                                     <% } else { %>
                                         <span class="badge rounded-pill bg-danger">Out of Stock</span>
                                     <% } %>
@@ -195,12 +195,12 @@
                                             <i class="fas fa-shopping-cart"></i> Go to Cart
                                         </a>
                                     <% } else { %>
-                                        <button class="add-to-cart-button" onclick="addToCart('<%-data.productid._id-%>')">
+                                        <button class="add-to-cart-button" onclick="addToCart('<%-data?.productid?._id-%>')">
                                             <i class="fas fa-shopping-cart"></i> Add to Cart
                                         </button>
                                     <% } %>
                                     <li class="list-inline-item">
-                                        <button type="button" class="btn btn-outline-danger btn-sm btn-remove-wishlist" onclick="removeFromWishlist('<%-data.productid._id-%>','<%-wish._id-%>')">
+                                        <button type="button" class="btn btn-outline-danger btn-sm btn-remove-wishlist" onclick="removeFromWishlist('<%-data?.productid?._id-%>','<%-wish._id-%>')">
                                             <i class="fa-solid fa-trash"></i> Remove
                                         </button>
                                     </li>

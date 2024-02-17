@@ -255,13 +255,6 @@ module.exports = {
                     downloadformat
                 );
             }
-            
-
-
-
-
-
-            
 
         } catch (error) {
             console.log(error);
