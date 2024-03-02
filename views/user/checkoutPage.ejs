@@ -824,6 +824,23 @@
                         alert("Please select a payment option before confirming the order.");
                     }
                 }
+
+
+
+
+                document.addEventListener("DOMContentLoaded", function() {
+                // Check if the page has been reloaded already
+                const reloaded = localStorage.getItem("reloaded");
+                if (!reloaded) {
+                    // Reload the page
+                    localStorage.setItem("reloaded", "true");
+                    window.location.reload();
+                } else {
+                    // Clear the "reloaded" flag from local storage
+                    localStorage.removeItem("reloaded");
+                }
+            });
+
             </script>
 
 

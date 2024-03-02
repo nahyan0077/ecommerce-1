@@ -324,12 +324,12 @@ function updateQuantity(count, prodId, qty, usrId) {
             if (res.success == true) {
                 const quantityInput = $(`#quantity-${prodId}`);
                 const currentQuantity = parseInt(quantityInput.val());
-                console.log("dfgd",res.prdktQty);
-               
+                console.log("dfgd", res.prdktQty);
+
                 if (res.count == 1) {
                     const newQuantity = currentQuantity + 1;
                     quantityInput.val(newQuantity);
-                    
+
                     // Check if the stock limit has been reached
                     if (res.prdktQty <= newQuantity) {
                         Toastify({

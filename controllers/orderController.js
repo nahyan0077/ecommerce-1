@@ -68,7 +68,7 @@ module.exports = {
             const total = req.session.total
             const totalDiscount = req.session.totalDiscount
             const grandTotal = req.session.grandTotal
-
+            console.log(grandTotal);
             console.log("sdsssss",addressId);
 
             if (req.session.adrsId == null) {
@@ -247,10 +247,13 @@ module.exports = {
        
 
                 if (Wallet) {
+                    
 
-                    await wallet.updateOne({ userid: usr._id }, { $inc: { wallet: -grandTotal } })
+                    
 
                     if (Wallet.wallet >= grandTotal) {
+
+                        await wallet.updateOne({ userid: usr._id }, { $inc: { wallet: -grandTotal } })
 
                         const [addrs, carts] = await Promise.all([
                             address.findOne({ _id: addressId }),

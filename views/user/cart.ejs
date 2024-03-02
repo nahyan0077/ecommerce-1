@@ -242,7 +242,7 @@
                 </div>
       
                   <div class="mt-3">
-                    <a href="/checkout" class="btn btn-success w-100 shadow-0 mb-2"> Place Order </a>
+                    <a href="#" class="btn btn-success w-100 shadow-0 mb-2" id="placeOrderBtn"> Place Order </a>
                     <a href="/allproducts" class="btn btn-light w-100 border mt-2"> Back to shop </a>
                   </div>
                 </div>
@@ -389,6 +389,30 @@
                               }
                           });
                       }
+
+
+
+                      //reload the cart page before redirecting to update the price
+
+                      $(document).ready(function() {
+                        $('#placeOrderBtn').click(function(event) {
+                            event.preventDefault(); // Prevent default behavior of the link
+                            
+                            // Reload the current page
+                            location.reload();
+                            
+                            // Redirect to /checkout after reloading
+                            setTimeout(function() {
+                                window.location.href = "/checkout";
+                            }, 100); // Adjust delay as needed
+                        });
+                    });
+
+
+
+
+
+
                   </script>
               
 
