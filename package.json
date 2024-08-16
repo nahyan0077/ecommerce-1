@@ -31,7 +31,6 @@
     "nodemailer": "^6.9.7",
     "otp-generator": "^4.0.1",
     "pdfkit": "^0.14.0",
-    "puppeteer": "^21.7.0",
     "razorpay": "^2.9.2",
     "sweetalert2": "^11.6.13",
     "toastr": "^2.1.4",
