@@ -356,7 +356,7 @@ module.exports = {
                     id: check._id
                 }
                 const token = jwt.sign(payload, secret, { expiresIn: '5m' })
-                const link = `https://drop-ship.shop/resetpassword/${check._id}/${token}`
+                const link = `https://dropship-ecom.onrender.com/resetpassword/${check._id}/${token}`
 
                 sendResetEmail(check.email, link)
                 const msg = "Password reset link has been sent to your Email"
